@@ -31,5 +31,4 @@ class HospitalAppointment(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     preferred_doctor = models.ForeignKey('doctor.Doctor', on_delete=models.SET_NULL, null=True, blank=True, related_name='preferred_doctor')
-    assigned_doctor = models.ForeignKey('doctor.Doctor', on_delete=models.CASCADE, null=True, blank=True, related_name='assigned_doctor')
     status = models.CharField(max_length=50, choices=Choices.appointment_status)
