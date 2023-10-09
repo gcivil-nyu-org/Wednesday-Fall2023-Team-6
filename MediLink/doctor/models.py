@@ -21,7 +21,7 @@ class Doctor(models.Model):
     practice_name = models.CharField(max_length=100)
     primary_speciality = models.CharField(max_length=50)
     site_name = models.CharField(max_length=100)
-    practice_borough = models.CharField(max_length=50)  # Assuming boroughs are similar to the hospital model
+    practice_borough = models.CharField(max_length=50)  
     practice_mailing_address = models.CharField(max_length=200)
     practice_phone_number = models.CharField(max_length=12)
     organization_type = models.CharField(max_length=100)
