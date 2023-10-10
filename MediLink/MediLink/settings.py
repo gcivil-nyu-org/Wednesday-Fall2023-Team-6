@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+STATIC_ROOT = '/doctor'
 
 # Application definition
 
