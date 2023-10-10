@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-z2if98e5x^l*zx4!r(72d^(_+ax0pwsflq_s)0pqiey(t_d3lv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['medilink-integration.eba-eh6g3vfq.us-east-1.elasticbeanstalk.com', '127.0.0.1']
 
 
 # Application definition
@@ -119,6 +119,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
