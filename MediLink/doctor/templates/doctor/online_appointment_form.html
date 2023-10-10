@@ -26,8 +26,8 @@
           <input class="formbold-form-input" type="tel" id="phone" name="phone" required><br>
         </fieldset>
 
-        <!-- Doctor Specialization -->
-        <fieldset class="formbold-mb-5">
+        <!-- Doctor Specialization ### COMMENTING FOR NOW-->
+        {% comment %} <fieldset class="formbold-mb-5">
           <legend class="formbold-form-label">Doctor Specialization:</legend>
           <select class="formbold-form-input" id="specialization" name="specialization" required>
             <option value="general">General Physician</option>
@@ -35,7 +35,13 @@
             <option value="cardiologist">Cardiologist</option>
             <option value="neurologist">Neurologist</option>
           </select>
-        </fieldset>
+        </fieldset> {% endcomment %}
+
+        <div class="formbold-mb-5">
+          <label for="reason" class="formbold-form-label"> Reason for Appointment </label>
+          <textarea type="reason" name="reason" id="reason"
+              placeholder="Please describe your illness" class="formbold-form-input" required> </textarea>
+        </div>
 
         <!-- Preferred Time -->
         <fieldset class="formbold-mb-5">

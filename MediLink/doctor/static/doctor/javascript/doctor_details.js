@@ -14,8 +14,7 @@ document.getElementById("btn_confirm_details").onclick = function(url) {
             'name': document.getElementById("name").value,
             'phone': document.getElementById("phone").value,
             'email': document.getElementById("email").value,
-            'reason': document.getElementById("reason").value,
-            'accebility': document.getElementById("accessibility").value,       
+            'reason': document.getElementById("reason").value,       
         }),
     })
     .then(response => response.text())
