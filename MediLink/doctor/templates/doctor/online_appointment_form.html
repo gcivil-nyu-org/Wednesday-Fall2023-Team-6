@@ -1,0 +1,65 @@
+{% load static %}
+<head>
+  <title>Online Doctor Appointment Booking</title>
+  <link rel="stylesheet" type="text/css" href="../../static/doctor/css/onlineAppointmentApplicationFormStyle.css">
+</head>
+<div class="modal fade" id="book_appointment_modal" tabindex="-1" role="dialog" aria-labelledby="book_appointment_modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+            <div class="formbold-main-wrapper">
+
+                <div class="formbold-form-wrapper">
+                    <h1>Book Doctor Visit Appointment</h1>
+                    <!-- form action needed -->
+<form action="/submit_appointment" method="post">
+        <!-- Your original form content starts here -->
+        <!-- Personal Details -->
+        <fieldset class="formbold-mb-5">
+          <legend class="formbold-form-label">Personal Details:</legend>
+          <label class="formbold-form-label" for="fname">First Name:</label>
+          <input class="formbold-form-input" type="text" id="fname" name="firstname" required><br>
+          <label class="formbold-form-label" for="lname">Last Name:</label>
+          <input class="formbold-form-input" type="text" id="lname" name="lastname" required><br>
+          <label class="formbold-form-label" for="email">Email:</label>
+          <input class="formbold-form-input" type="email" id="email" name="email" required><br>
+          <label class="formbold-form-label" for="phone">Phone Number:</label>
+          <input class="formbold-form-input" type="tel" id="phone" name="phone" required><br>
+        </fieldset>
+
+        <!-- Doctor Specialization ### COMMENTING FOR NOW-->
+        {% comment %} <fieldset class="formbold-mb-5">
+          <legend class="formbold-form-label">Doctor Specialization:</legend>
+          <select class="formbold-form-input" id="specialization" name="specialization" required>
+            <option value="general">General Physician</option>
+            <option value="dermatologist">Dermatologist</option>
+            <option value="cardiologist">Cardiologist</option>
+            <option value="neurologist">Neurologist</option>
+          </select>
+        </fieldset> {% endcomment %}
+
+        <div class="formbold-mb-5">
+          <label for="reason" class="formbold-form-label"> Reason for Appointment </label>
+          <textarea type="reason" name="reason" id="reason"
+              placeholder="Please describe your illness" class="formbold-form-input" required> </textarea>
+        </div>
+
+        <!-- Preferred Time -->
+        <fieldset class="formbold-mb-5">
+          <legend class="formbold-form-label">Preferred Time:</legend>
+          <label class="formbold-form-label" for="date">Date:</label>
+          <input class="formbold-form-input" type="date" id="date" name="date" required><br>
+          <label class="formbold-form-label" for="time">Time:</label>
+          <input class="formbold-form-input" type="time" id="time" name="time" required><br>
+        </fieldset>
+
+        <!-- Submit Button -->
+        <input class="formbold-btn" type="submit" value="Book Appointment">
+      </form>
+                </div>
+            </div>
+          </div>
+    </div>
+</div>
+
+<script src="{% static 'hospital/javascript/doctor_details.js' %}">
+</script>
