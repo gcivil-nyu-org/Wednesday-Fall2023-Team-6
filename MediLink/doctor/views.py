@@ -14,7 +14,7 @@ from .models import Doctor, DoctorAppointment
 
 class DoctorDetailView(generic.DetailView):
     model = Doctor
-    template_name = 'Doctor/doctor_details.html'
+    template_name = 'doctor/doctor_details.html'
     
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
@@ -51,4 +51,4 @@ def book_consultation(request, doctor_id):
         appointment.status = "REQ"
         appointment.save()
         print("Online Appointment Saved")
-        return HttpResponse("Online Consultation Request Created SUccessfully!", status=200)
+        return HttpResponse("Online Consultation Request Created Successfully!", status=200)

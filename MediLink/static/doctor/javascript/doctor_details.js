@@ -1,4 +1,5 @@
 $("#booking_form").submit(function(event) {
+    // this takes care of disabling the form's submission
     event.preventDefault();
 });
 
@@ -7,7 +8,7 @@ document.getElementById("btn_confirm_details").onclick = function(url) {
 
     if(document.getElementById("date").value.trim() == "" ||
         document.getElementById("time").value.trim() == "" ||
-        document.getElementById("name").value.trim() == "" ||
+        document.getElementById("fname").value.trim() == "" ||
         document.getElementById("phone").value.trim() == "" ||
         document.getElementById("email").value.trim() == ""){
         alert("Please fill the mandatory fields!");
@@ -20,11 +21,10 @@ document.getElementById("btn_confirm_details").onclick = function(url) {
         body: JSON.stringify({
             'date': document.getElementById("date").value,
             'time': document.getElementById("time").value,
-            'name': document.getElementById("name").value,
+            'name': document.getElementById("fname").value,
             'phone': document.getElementById("phone").value,
             'email': document.getElementById("email").value,
             'reason': document.getElementById("reason").value,
-            'accebility': document.getElementById("accessibility").value,       
         }),
     })
     .then((response) => {
