@@ -9,17 +9,16 @@
             <div class="formbold-main-wrapper">
 
                 <div class="formbold-form-wrapper">
-                    <h1>Book Doctor Visit Appointment</h1>
+                    <h1>Book Online Consultation</h1>
                     <!-- form action needed -->
-<form action="/submit_appointment" method="post">
+                    <form id = "booking_form">
+
         <!-- Your original form content starts here -->
         <!-- Personal Details -->
         <fieldset class="formbold-mb-5">
           <legend class="formbold-form-label">Personal Details:</legend>
-          <label class="formbold-form-label" for="fname">First Name:</label>
+          <label class="formbold-form-label" for="fname">Name:</label>
           <input class="formbold-form-input" type="text" id="fname" name="firstname" required><br>
-          <label class="formbold-form-label" for="lname">Last Name:</label>
-          <input class="formbold-form-input" type="text" id="lname" name="lastname" required><br>
           <label class="formbold-form-label" for="email">Email:</label>
           <input class="formbold-form-input" type="email" id="email" name="email" required><br>
           <label class="formbold-form-label" for="phone">Phone Number:</label>
@@ -53,7 +52,9 @@
         </fieldset>
 
         <!-- Submit Button -->
-        <input class="formbold-btn" type="submit" value="Book Appointment">
+
+        <input class="formbold-btn" type="submit" value="Book Appointment" id = "btn_confirm_details" data-url="{% url 'doctor:book_consultation' doctor.id %}" >
+
       </form>
                 </div>
             </div>
@@ -61,5 +62,5 @@
     </div>
 </div>
 
-<script src="{% static 'hospital/javascript/doctor_details.js' %}">
+<script src="{% static 'doctor/javascript/doctor_details.js' %}">
 </script>
