@@ -1,10 +1,19 @@
 $("#booking_form").submit(function(event) {
-    // this takes care of disabling the form's submission
     event.preventDefault();
 });
 
 document.getElementById("btn_confirm_details").onclick = function(url) {
     var url = $("#btn_confirm_details").attr("data-url");
+
+    if(document.getElementById("date").value.trim() == "" ||
+        document.getElementById("time").value.trim() == "" ||
+        document.getElementById("name").value.trim() == "" ||
+        document.getElementById("phone").value.trim() == "" ||
+        document.getElementById("email").value.trim() == ""){
+        alert("Please fill the mandatory fields!");
+        return;
+    }
+
     fetch(url, {
         method: "POST",
         credentials: 'same-origin',
@@ -18,15 +27,27 @@ document.getElementById("btn_confirm_details").onclick = function(url) {
             'accebility': document.getElementById("accessibility").value,       
         }),
     })
-    .then(response => response.text())
-    .then(result => {
-        // Handle the response from the server (e.g., display a message)
-        console.log(result.message); // Replace with your handling logic
-        $("#book_appointment_modal").modal('hide');
-        alert("Booking Request Successful!")
+    .then((response) => {
+        if(response.status == 200) {
+            return response.text();
+        }else {
+            throw new Error("Server Error: " + response.text());
+        }
+    })
+    .then((result) => {
+        document.getElementById("alert_message").textContent = result;
+        console.log(result);
+        $("#alert-container").show();
+
+        setTimeout(function() {
+            $("#alert-container").hide();
+        }, 5000);
+
     })
     .catch(error => {
         // Handle any errors that occur during the fetch
-        alert("Error:", error);
+        alert("Error:" + error);
     });
+
+    $("#book_appointment_modal").modal('hide');
 }

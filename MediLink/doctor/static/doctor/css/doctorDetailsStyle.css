@@ -11,6 +11,27 @@
     cursor: pointer;
 }
 
+.details-main-wrapper {
+  width: 100%; 
+  margin-top: 50px;
+  padding-left: 30%;
+  padding-right: 30%;
+}
+
+#doctor_heading {
+  text-align: center;
+  padding-top: 20px;
+  font-weight: 600;
+}
+
+.fixed-alert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+}
+
 .modal {
   display: none;
   position: fixed;

@@ -15,6 +15,9 @@ from .models import Doctor, DoctorAppointment
 class DoctorDetailView(generic.DetailView):
     model = Doctor
     template_name = 'Doctor/doctor_details.html'
+    
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 
 @xframe_options_exempt
@@ -48,4 +51,4 @@ def book_consultation(request, doctor_id):
         appointment.status = "REQ"
         appointment.save()
         print("Online Appointment Saved")
-        return HttpResponseRedirect(reverse("doctor:detail_view", args=(doctor_id,)))
+        return HttpResponse("Online Consultation Request Created SUccessfully!", status=200)

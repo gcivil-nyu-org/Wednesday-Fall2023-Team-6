@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.views import generic
 from django.urls import reverse
 from .models import Hospital, HospitalAppointment
@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 import json
-
+from django.contrib import messages
 
 class HospitalDetailView(generic.DetailView):
     model = Hospital
@@ -51,4 +51,5 @@ def book_appointment(request, hospital_id):
         appointment.status = "REQ"
         appointment.save()
         print("Appointment Saved")
-        return HttpResponseRedirect(reverse("hospital:detail_view", args=(hospital_id,)))
+        
+        return HttpResponse("Appointment Request Created Successfully!", status=200)
