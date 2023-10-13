@@ -1,0 +1,22 @@
+body {
+    background-color: #1a355a;
+}
+.container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 50px;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+.hidden{
+    display: none;
+}
+#btn_register_user {
+    margin-top: 20px;
+}
+#password_status {
+    color: red;
+}
