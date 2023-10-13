@@ -1,6 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+
+
+def LoginView(request):
+    template_name = 'user/login.html'
+    return render(request, template_name)
         
 def register(request):
     if request.method == 'GET':
