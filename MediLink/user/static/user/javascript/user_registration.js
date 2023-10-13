@@ -6,7 +6,7 @@ function showAdditionalFields() {
 
     if (userType === "doctor") {
         document.getElementById("doctorFields").classList.remove("hidden");
-        document.getElementById("hospital-admin").classList.remove("hidden");
+        document.getElementById("hospitalAdminFields").classList.remove("hidden");
     } else if (userType === "hospital-admin") {
         document.getElementById("hospitalAdminFields").classList.remove("hidden");
     } else if (userType === "patient") {

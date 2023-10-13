@@ -16,17 +16,11 @@ body {
   box-sizing: border-box;
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
   border-radius: 10px;
-}s
-
-.login-box h2{
-  margin: 0 0 30px;
-  padding: 0;
-  color: #f4f5f8;
-  text-align: center;
 }
 
 .login-box h1{
-    color: #29568a;
+    color: #fff;
+    padding-bottom: 20px;
 }
 
 .login-box .user-box {
@@ -97,3 +91,11 @@ body {
 .login-box p {
     color: white;
   }
+
+p.test {
+  margin-top: 30px;
+}
+
+span {
+  color: #29568a
+}
