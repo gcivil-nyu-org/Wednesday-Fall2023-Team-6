@@ -1,3 +1,15 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
-# Create your views here.
+
+def LoginView(request):
+    template_name = 'user/login.html'
+    return render(request, template_name)
+        
+def register(request):
+    if request.method == 'GET':
+        return render(request, template_name = 'user/user_registration.html')
+    else:
+        print(request.POST)
+        return HttpResponseRedirect(reverse('user:user_registration'))

@@ -1,0 +1,21 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'user/css/login.css' %}">
+
+<div class="login-box">
+    <h1>Welcome to <span>MediLink</span></h1>
+    <form>
+      <div class="user-box">
+        <input type="text" name="user_email" required>
+        <label>Email*</label>
+      </div>
+      <div class="user-box">
+        <input type="password" name="user_pwd" required>
+        <label>Password*</label>
+      </div>
+      <button>
+        Login
+      </button>
+    </form>
+    <p class="test">Forgot your credentials? <a class="test" href="#! ">Recover here</a></p>
+    <p>Don't have an account? <a href="{% url "user:user_registration" %}" class="test">Register here</a></p>
+  </div>
