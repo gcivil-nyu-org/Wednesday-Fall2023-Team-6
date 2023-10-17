@@ -17,10 +17,11 @@ def loginView(request):
         if user is not None:
             login(request, user)
             print("Login successful")
-            return redirect("home")  # Redirect to the home page after login
+            return redirect("user:home")  # Redirect to the home page after login
 
         else:
-            return HttpResponse("Username or Password is incorrect!!!!")
+            messages.error(request, 'Incorrect Credentials! User does not exist!')
+            return redirect("user:login")
     template_name = "user/login.html"
     return render(request, template_name)
 
