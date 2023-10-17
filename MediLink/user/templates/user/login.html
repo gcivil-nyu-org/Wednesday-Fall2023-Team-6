@@ -15,31 +15,7 @@
         <input type="password" name="user_pwd" required>
         <label>Password*</label>
       </div>
-      <button type="submit" id="btn_login_user">Login</button>
-        Login
-      </button>
-    </form>
-    <p>Forgot your credentials? <a href="{% url "user:resetPassword" %}">Recover here</a></p>
-    <p>Don't have an account? <a href="{% url "user:user_registration" %}">Register here</a></p>
-  </div>{% load static %}
-<link rel="stylesheet" href="{% static 'user/css/login.css' %}">
-<script src="{% static 'user/javascript/login.js' %}"></script>
-
-
-<div class="login-box">
-    <h1>Welcome to <span>MediLink</span></h1>
-    <form id="loginForm">
-      <div class="user-box">
-        <input type="email" name="user_email" required>
-        <label>Email*</label>
-      </div>
-      <div class="user-box">
-        <input type="password" name="user_pwd" required>
-        <label>Password*</label>
-      </div>
-      <button type="submit" id="btn_login_user">
-        Login
-      </button>
+      <button type="submit" id="btn_login_user">login</button>
     </form>
     <p>Forgot your credentials? <a href="{% url "user:resetPassword" %}">Recover here</a></p>
     <p>Don't have an account? <a href="{% url "user:user_registration" %}">Register here</a></p>
