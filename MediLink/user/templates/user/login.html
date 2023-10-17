@@ -22,11 +22,11 @@
     <form id="loginForm" method="post" action="{% url 'user:login' %}">
       {% csrf_token %}
       <div class="user-box">
-        <input type="email" name="user_email" required>
+        <input type="email" name="user_email" placeholder=" " required>
         <label>Email*</label>
       </div>
       <div class="user-box">
-        <input type="password" name="user_pwd" required>
+        <input type="password" name="user_pwd" placeholder=" " required>
         <label>Password*</label>
       </div>
       <button type="submit" id="btn_login_user">login</button>
