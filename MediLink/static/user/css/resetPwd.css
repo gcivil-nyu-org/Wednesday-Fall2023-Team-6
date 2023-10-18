@@ -1,0 +1,153 @@
+.form-group {
+    margin-bottom: 20px;
+    background-color: transparent;
+}
+.hidden{
+    display: none;
+}
+#btn_register_user {
+    margin-top: 20px;
+}
+#password_status {
+    color: red;
+}
+
+span {
+    color: #29568a
+}
+
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background: linear-gradient(#141e30, #243b55);
+  }
+  
+  .resetPwd-box {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 40px;
+    width: 40%;
+    margin-top: 70px;
+    margin-bottom: 70px;
+    background: rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+  }
+  
+  .resetPwd-box h1{
+      color: #fff;
+      padding-bottom: 40px;
+      text-align: center;
+  }
+  
+  .form-group {
+    position: relative;
+  }
+
+  .select-transparent {
+    background: transparent; /* Transparent background */
+    color: #fff; /* White text color */
+    border: 1px solid #ced4da; /* Border style */
+    border-radius: 0.25rem; /* Add border-radius for Bootstrap appearance */
+    padding: 0.375rem 0.75rem; /* Add padding for spacing */
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 17px;
+  }
+  
+  /* Style the dropdown arrow (optional) */
+  .select-transparent::-ms-expand {
+    display: none; /* Hide the default arrow on IE/Edge */
+  }
+  
+  .select-transparent::after {
+    content: '\25BC'; /* Unicode character for a downward-pointing triangle */
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Adjust the arrow position as needed */
+    transform: translateY(-50%);
+    color: #fff; /* Arrow color */
+  }
+  
+  /* Style for focused state */
+  .select-transparent:focus {
+    border-color: #80bdff; /* Modify border color for focused state */
+    outline: 0; /* Remove default outline */
+    box-shadow: none; /* Remove default box-shadow */
+  }
+
+  .select-transparent option {
+    background: #000; /* Background color for unfocused options */
+    color: #fff; /* Text color for unfocused options */
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1px solid #fff;
+    outline: none;
+    background: transparent;
+  }
+
+  .form-group label:not(.select-label) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    pointer-events: none;
+    transition: 0.5s;
+  }
+
+  .select-label {
+    font-size: 12px;
+    color: #8ae44d;
+  }
+  
+  .form-group input:focus ~ label,
+  .form-group input:not(:placeholder-shown) ~ label {
+    top: -20px;
+    left: 0;
+    color: #8ae44d;
+    font-size: 12px;
+  }
+  
+  button {
+    position: relative;
+    padding: 10px 20px;
+    color: #f9faf7;
+    background-color: rgba(0, 0, 0, 0.5);
+    font-size: 16px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: 0.5s;
+    margin-top: 40px;
+    letter-spacing: 4px;
+    width: 100%;
+  }
+  
+  button:hover {
+    background: #8ae44d;
+    color: #ffffff;
+    border-radius: 5px;
+    /* box-shadow: 0 0 5px #9cc2c4,
+                  0 0 25px #9ab0b1,
+                  0 0 50px #5f6768,
+                  0 0 100px #262727; */
+  }  
+
+  p {
+    color: #fff;
+    margin-top: 30px;
+  }
+
+  .login {
+    color: #8ae44d;
+  }
