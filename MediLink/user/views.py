@@ -4,7 +4,12 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from user.models import User
-
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import User
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.contrib.auth.hashers import make_password
 
 def loginView(request):
     if request.method == "POST":
@@ -56,3 +61,43 @@ def register(request):
     else:
         print(request.POST)
         return HttpResponseRedirect(reverse("user:user_registration"))
+
+def register(request):
+    if request.method == "POST":
+        # Collecting data from the form
+        name = request.POST.get('user_name')
+        email = request.POST.get('user_email')
+        phone = request.POST.get('user_phone')
+        sex = request.POST.get('user_sex')
+        user_type = request.POST.get('userType')
+        specialization = request.POST.get('specialization') or None
+        associated_hospital = request.POST.get('associatedHospital') or None
+        insurance_provider = request.POST.get('insurance') or None
+        password = make_password(request.POST.get('password'))  # hashing the password for security
+
+        # Conditionally set fields based on user type
+        if user_type != 'doctor':
+            specialization = None
+        if user_type not in ['doctor', 'hospital-admin']:
+            associated_hospital = None
+        if user_type != 'patient':
+            insurance_provider = None
+
+        # Create a new user object and save it
+        user = User(
+            name=name,
+            email=email,
+            phone=phone,
+            sex=sex,
+            user_type=user_type,
+            specialization=specialization,
+            associated_hospital=associated_hospital,
+            insurance_provider=insurance_provider,
+            password=password
+        )
+        user.save()
+
+        messages.success(request, "Registration successful!")
+        return HttpResponseRedirect(reverse("user:login"))  # redirect to login page after successful registration
+
+    return render(request, template_name="user/user_registration.html")
