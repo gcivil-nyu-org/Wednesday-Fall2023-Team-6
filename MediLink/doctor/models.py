@@ -20,15 +20,14 @@ class Choices:
 class Doctor(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    practice_name = models.CharField(max_length=100)
     primary_speciality = models.CharField(max_length=50)
-    hospital = models.ForeignKey('hospital.Hospital', max_length=100, null=True, on_delete=models.SET_NULL)
-    borough = models.CharField(max_length=50, choices=Choices.boroughs)
-    address = models.CharField(max_length=200)
-    phone = models.CharField(max_length=12)
-    zip = models.IntegerField()
-    
-    def __str__(self):
-        return self.first_name + " " + self.last_name
+    site_name = models.CharField(max_length=100)
+    practice_borough = models.CharField(max_length=50)
+    practice_mailing_address = models.CharField(max_length=200)
+    practice_phone_number = models.CharField(max_length=12)
+    organization_type = models.CharField(max_length=100)
+    practice_zip_code = models.IntegerField()
 
 
 class DoctorAppointment(models.Model):
