@@ -54,7 +54,7 @@ def passwordResetView(request):
                 'token': secrets.token_hex(16),
                 "protocol": 'https' if request.is_secure() else 'http'
             })
-            email = EmailMessage(subject, message, to=["w742794749@gmail.com"])
+            email = EmailMessage(subject, message, to=[user.email])
             if email.send():
                 alert_message = "Email sent. Please follow the link to reset your password."
                 messages.success(request, alert_message)
