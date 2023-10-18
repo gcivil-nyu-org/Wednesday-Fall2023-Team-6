@@ -119,7 +119,7 @@ body {
     font-size: 12px;
   }
   
-  button {
+  button:not(.close) {
     position: relative;
     padding: 10px 20px;
     color: #f9faf7;
@@ -133,7 +133,7 @@ body {
     width: 100%;
   }
   
-  button:hover {
+  button:hover:not(.close) {
     background: #8ae44d;
     color: #ffffff;
     border-radius: 5px;
@@ -151,7 +151,6 @@ body {
   .login {
     color: #8ae44d;
   }
-
   
   button:disabled,
   button[disabled]{

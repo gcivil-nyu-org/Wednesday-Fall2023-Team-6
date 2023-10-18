@@ -16,14 +16,17 @@ class Choices:
     ]
     
 class Hospital(models.Model):
+    name = models.CharField(max_length=100)
     facility_type = models.CharField(max_length=100)
     borough = models.CharField(max_length=50, choices=Choices.boroughs)
     phone = models.CharField(max_length=15)
     location = models.CharField(max_length=200)
     postal_code = models.IntegerField()
-    latitude = models.FloatField()
-    longitude = models.FloatField()
-    nta = models.CharField(max_length=100)
+    latitude = models.FloatField(null=True)
+    longitude = models.FloatField(null=True)
+    
+    def __str__(self):
+        return self.name
 
 class HospitalAppointment(models.Model):
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
