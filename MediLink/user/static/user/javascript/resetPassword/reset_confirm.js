@@ -1,12 +1,3 @@
-function checkUserDetails() {
-    if(!$("#resetPwdForm")[0].checkValidity()){
-        $("#resetPwdForm")[0].reportValidity();
-        return false;
-    }
-
-    return true;
-}
-
 function checkPassword() {
 
     if(document.getElementById("password").value.length < 8) {
@@ -26,11 +17,4 @@ function checkPassword() {
     }
 
     document.getElementById("btn_reset_password").disabled = false;
-}
-
-function showPasswordFields() {
-    if(checkUserDetails()) {
-        document.getElementById("user_details_section").classList.add("hidden");
-        document.getElementById("passwordFields").classList.remove("hidden");
-    }
 }
