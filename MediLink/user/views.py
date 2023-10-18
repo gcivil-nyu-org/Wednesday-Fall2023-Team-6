@@ -10,6 +10,7 @@ from .models import User
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User as Django_User
 
 def loginView(request):
     if request.method == "POST":
@@ -56,13 +57,6 @@ def home(request):
 
 
 def register(request):
-    if request.method == "GET":
-        return render(request, template_name="user/user_registration.html")
-    else:
-        print(request.POST)
-        return HttpResponseRedirect(reverse("user:user_registration"))
-
-def register(request):
     if request.method == "POST":
         # Collecting data from the form
         name = request.POST.get('user_name')
@@ -73,7 +67,7 @@ def register(request):
         specialization = request.POST.get('specialization') or None
         associated_hospital = request.POST.get('associatedHospital') or None
         insurance_provider = request.POST.get('insurance') or None
-        password = make_password(request.POST.get('password'))  # hashing the password for security
+        password = request.POST.get('password')  # hashing the password for security
 
         # Conditionally set fields based on user type
         if user_type != 'doctor':
@@ -82,22 +76,38 @@ def register(request):
             associated_hospital = None
         if user_type != 'patient':
             insurance_provider = None
+        
+        try:
+            Django_User.objects.get(username=email)
+            messages.error(request, "User already exists! Please go to login page.")
+            return HttpResponseRedirect(reverse("user:user_registration"))
+        except:
+            pass
 
         # Create a new user object and save it
-        user = User(
-            name=name,
-            email=email,
-            phone=phone,
-            sex=sex,
-            user_type=user_type,
-            specialization=specialization,
-            associated_hospital=associated_hospital,
-            insurance_provider=insurance_provider,
-            password=password
-        )
-        user.save()
-
-        messages.success(request, "Registration successful!")
-        return HttpResponseRedirect(reverse("user:login"))  # redirect to login page after successful registration
+        try:
+            usr = Django_User.objects.create_user(email, email, password)
+            usr.first_name = name
+            usr.save()
+            
+            user = User(
+                name=name,
+                email=email,
+                phone=phone,
+                sex=sex,
+                user_type=user_type,
+                specialization=specialization,
+                associated_hospital=associated_hospital,
+                insurance_provider=insurance_provider,
+                password=password
+            )
+            user.save()
+            print("User saved successfully")
+        except Exception as e:
+            messages.error(request, "Failed to add new user! Invalid details / User already exists.")
+            print(e)
+            return render(request, template_name="user/user_registration.html")
+            
+        return HttpResponseRedirect(reverse("user:home"))  # redirect to home page after successful registration
 
     return render(request, template_name="user/user_registration.html")
