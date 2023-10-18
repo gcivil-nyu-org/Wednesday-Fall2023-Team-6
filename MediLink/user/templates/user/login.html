@@ -17,12 +17,6 @@
   {% endfor %}
 {% endif %}
 
-{% if alert_message %}
-<script>
-    alert('{{ alert_message }}');
-</script>
-{% endif %}
-
 <div class="login-box">
     <h1>Welcome to <span>MediLink</span></h1>
     <form id="loginForm" method="post" action="{% url 'user:login' %}">
