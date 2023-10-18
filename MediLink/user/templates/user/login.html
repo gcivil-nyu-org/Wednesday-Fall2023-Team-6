@@ -17,6 +17,12 @@
   {% endfor %}
 {% endif %}
 
+{% if alert_message %}
+<script>
+    alert('{{ alert_message }}');
+</script>
+{% endif %}
+
 <div class="login-box">
     <h1>Welcome to <span>MediLink</span></h1>
     <form id="loginForm" method="post" action="{% url 'user:login' %}">
@@ -31,6 +37,6 @@
       </div>
       <button type="submit" id="btn_login_user">login</button>
     </form>
-    <p>Forgot your credentials? <a href="{% url "user:resetPassword" %}">Recover here</a></p>
+    <p>Forgot your credentials? <a href="{% url "user:passwordReset" %}">Recover here</a></p>
     <p>Don't have an account? <a href="{% url "user:user_registration" %}">Register here</a></p>
   </div>
