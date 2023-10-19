@@ -12,9 +12,10 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib import messages
 
+
 class HospitalDetailView(generic.DetailView):
     model = Hospital
-    template_name = 'hospital/hospital_details.html'
+    template_name = "hospital/hospital_details.html"
 
 
 @xframe_options_exempt
@@ -24,7 +25,9 @@ def book_appointment(request, hospital_id):
     try:
         body = json.load(request)
         user_id = 1
-        start_time = datetime.strptime(f'{body["date"]} {body["time"]}', '%Y-%m-%d %H:%M')
+        start_time = datetime.strptime(
+            f'{body["date"]} {body["time"]}', "%Y-%m-%d %H:%M"
+        )
         start_time = timezone.make_aware(start_time)
         preferred_doctor = get_object_or_404(Doctor, pk=1)
         name = body["name"]
@@ -51,5 +54,5 @@ def book_appointment(request, hospital_id):
         appointment.status = "REQ"
         appointment.save()
         print("Appointment Saved")
-        
+
         return HttpResponse("Appointment Request Created Successfully!", status=200)

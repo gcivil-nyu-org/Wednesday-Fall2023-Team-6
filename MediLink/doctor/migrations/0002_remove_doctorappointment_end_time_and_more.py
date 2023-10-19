@@ -4,34 +4,33 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('doctor', '0001_initial'),
+        ("doctor", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='doctorappointment',
-            name='end_time',
+            model_name="doctorappointment",
+            name="end_time",
         ),
         migrations.AddField(
-            model_name='doctorappointment',
-            name='email',
-            field=models.EmailField(default='example@example.com', max_length=254),
+            model_name="doctorappointment",
+            name="email",
+            field=models.EmailField(default="example@example.com", max_length=254),
         ),
         migrations.AddField(
-            model_name='doctorappointment',
-            name='name',
-            field=models.CharField(default='Default Name', max_length=100),
+            model_name="doctorappointment",
+            name="name",
+            field=models.CharField(default="Default Name", max_length=100),
         ),
         migrations.AddField(
-            model_name='doctorappointment',
-            name='phone',
-            field=models.CharField(default='Default Phone', max_length=15),
+            model_name="doctorappointment",
+            name="phone",
+            field=models.CharField(default="Default Phone", max_length=15),
         ),
         migrations.AddField(
-            model_name='doctorappointment',
-            name='reason',
-            field=models.CharField(default='Default Reason', max_length=300),
+            model_name="doctorappointment",
+            name="reason",
+            field=models.CharField(default="Default Reason", max_length=300),
         ),
     ]
