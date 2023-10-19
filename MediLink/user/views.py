@@ -1,10 +1,8 @@
 from django.shortcuts import redirect, render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
-from django.contrib import messages
 from user.models import User
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User as Django_User
 
 # import for email sending
@@ -92,7 +90,6 @@ def passwordResetConfirmView(request, uidb64, token):
             user.password = new_password
             user.save()
             alert_message = "Password reset successfully, please login."
-            # return render(request, "user/login.html", {'alert_message': alert_message})
             messages.success(request, alert_message)
             return HttpResponseRedirect(reverse("user:login"))
 
@@ -133,8 +130,8 @@ def register(request):
             Django_User.objects.get(username=email)
             messages.error(request, "User already exists! Please go to login page.")
             return HttpResponseRedirect(reverse("user:user_registration"))
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
         # Create a new user object and save it
         try:

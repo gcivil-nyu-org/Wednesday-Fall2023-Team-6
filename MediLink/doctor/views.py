@@ -1,14 +1,12 @@
 from datetime import datetime
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.views import generic
-from django.urls import reverse
 from user.models import User
 from django.utils import timezone
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 import json
-from hospital.models import Hospital
 from .models import Doctor, DoctorAppointment
 
 

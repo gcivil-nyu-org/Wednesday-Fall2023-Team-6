@@ -1,0 +1,42 @@
+language: python
+dist: bionic
+os: linux
+python:
+  - "3.11"
+before_install:
+  - pip install 'urllib3<2.0'
+  - sudo apt-get update
+#  - sudo apt-get install -y sqlite3 libsqlite3-dev
+  # Verify SQLite version
+  - sqlite3 --version
+
+# Define your build steps, for example:
+install:
+  - pip install -r requirements.txt
+  - pip install black
+  - pip install flake8
+  - pip install coverage
+  - pip install pyyaml
+  - pip install coveralls
+before_script:
+  - python manage.py migrate
+
+script:
+  - black --check . --skip-string-normalization
+  - python -m flake8 --ignore=E303,E501 --max-line-length=88
+  - python -m coverage run --source=doctor,hospital,user,MediLink manage.py test
+
+after_script:
+  coveralls
+
+deploy:
+  provider: elasticbeanstalk
+  on:
+    branch: travis
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+  region: "us-west-2"
+  app: "swe1-app"
+  env: "test"
+  bucket_name: "elasticbeanstalk-us-west-2-466579977483"
+# You can add additional steps such as deployment configuration if needed.

@@ -1,8 +1,7 @@
 from datetime import datetime
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views import generic
-from django.urls import reverse
 from .models import Hospital, HospitalAppointment
 from user.models import User
 from doctor.models import Doctor
@@ -10,7 +9,6 @@ from django.utils import timezone
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 import json
-from django.contrib import messages
 
 
 class HospitalDetailView(generic.DetailView):
