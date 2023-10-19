@@ -14,8 +14,8 @@ from .models import Doctor, DoctorAppointment
 
 class DoctorDetailView(generic.DetailView):
     model = Doctor
-    template_name = 'doctor/doctor_details.html'
-    
+    template_name = "doctor/doctor_details.html"
+
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
@@ -27,13 +27,14 @@ def book_consultation(request, doctor_id):
     try:
         body = json.load(request)
         user_id = 1
-        start_time = datetime.strptime(f'{body["date"]} {body["time"]}', '%Y-%m-%d %H:%M')
+        start_time = datetime.strptime(
+            f'{body["date"]} {body["time"]}', "%Y-%m-%d %H:%M"
+        )
         start_time = timezone.make_aware(start_time)
         name = body["name"]
         phone = body["phone"]
         email = body["email"]
         reason = body["reason"]
-
 
     except Exception as e:
         print("Error: ", e)
@@ -51,4 +52,6 @@ def book_consultation(request, doctor_id):
         appointment.status = "REQ"
         appointment.save()
         print("Online Appointment Saved")
-        return HttpResponse("Online Consultation Request Created Successfully!", status=200)
+        return HttpResponse(
+            "Online Consultation Request Created Successfully!", status=200
+        )
