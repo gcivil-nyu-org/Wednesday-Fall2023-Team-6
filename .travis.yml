@@ -19,7 +19,7 @@ install:
   - pip install pyyaml
   - pip install coveralls
 before_script:
-  - python manage.py migrate
+  - python MediLink/manage.py migrate
 
 script:
   - black --check . --skip-string-normalization
