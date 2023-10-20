@@ -12,18 +12,18 @@ before_install:
 
 # Define your build steps, for example:
 install:
-  - pip install -r MediLink/requirements.txt
+  - pip install -r requirements.txt
   - pip install black
   - pip install flake8
   - pip install coverage
   - pip install coveralls
 before_script:
-  - python MediLink/manage.py migrate
+  - python manage.py migrate
 
 script:
   - black --check . --skip-string-normalization
   - python -m flake8 --ignore=E303,E501 --max-line-length=88
-  - python -m coverage run --source=MediLink/doctor,MediLink/hospital,MediLink/user,MediLink/MediLink MediLink/manage.py test
+  - python -m coverage run --source=doctor,hospital,user,MediLink manage.py test
 
 after_script:
   coveralls
