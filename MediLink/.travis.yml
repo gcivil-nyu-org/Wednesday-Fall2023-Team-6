@@ -39,4 +39,5 @@ deploy:
   app: "swe1-app"
   env: "test"
   bucket_name: "elasticbeanstalk-us-west-2-466579977483"
+
 # You can add additional steps such as deployment configuration if needed.
