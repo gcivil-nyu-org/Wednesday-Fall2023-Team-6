@@ -16,7 +16,6 @@ install:
   - pip install black
   - pip install flake8
   - pip install coverage
-  - pip install pyyaml
   - pip install coveralls
 before_script:
   - python MediLink/manage.py migrate
