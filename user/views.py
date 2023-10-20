@@ -42,7 +42,6 @@ def passwordResetView(request):
 
     else:
         user_email = request.POST.get("user_email")
-        print(user_email)
 
         if User.objects.filter(email=user_email).exists():
             user = User.objects.get(email=user_email)
@@ -85,9 +84,9 @@ def passwordResetConfirmView(request, uidb64, token):
     else:
         user_email = urlsafe_base64_decode(uidb64).decode("utf-8")
         new_password = request.POST.get("password")
-        if User.objects.filter(email=user_email).exists():
-            user = User.objects.get(email=user_email)
-            user.password = new_password
+        if Django_User.objects.filter(username=user_email).exists():
+            user = Django_User.objects.get(username=user_email)
+            user.set_password(new_password)
             user.save()
             alert_message = "Password reset successfully, please login."
             messages.success(request, alert_message)
