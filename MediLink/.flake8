@@ -1,0 +1,6 @@
+[flake8]
+per-file-ignores =
+    Wednesday-Fall2023-Team-6/*: E501
+exclude = .git,__pycache__,.venv, venv, myenv
+max-complexity = 10
+max-line-length= 88
