@@ -33,7 +33,8 @@ deploy:
   provider: elasticbeanstalk
   on:
     branch: develop
-  access_key_id: $AWS_ACCESS_KEY
+  access_key_id: $MASTER_AWS_ACCESS_KEY
+  secret_access_key: $MASTER_AWS_SECRET_KEY
   region: $AWS_REGION
   app: $AWS_APP_NAME
   env: $AWS_ENV_NAME
