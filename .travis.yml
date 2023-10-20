@@ -24,7 +24,7 @@ before_script:
 script:
   - black --check . --skip-string-normalization
   - python -m flake8 --ignore=E303,E501 --max-line-length=88
-  - python -m coverage run --source=MediLink/doctor,MediLink/hospital,MediLink/user,MediLink/MediLink manage.py test
+  - python -m coverage run --source=MediLink/doctor,MediLink/hospital,MediLink/user,MediLink/MediLink MediLink/manage.py test
 
 after_script:
   coveralls
