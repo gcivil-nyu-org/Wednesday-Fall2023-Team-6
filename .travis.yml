@@ -34,10 +34,9 @@ deploy:
   on:
     branch: develop
   access_key_id: $AWS_ACCESS_KEY
-  secret_access_key: $AWS_SECRET_KEY
-  region: "us-west-2"
-  app: "swe1-app"
-  env: "test"
-  bucket_name: "elasticbeanstalk-us-west-2-466579977483"
+  region: $AWS_REGION
+  app: $AWS_APP_NAME
+  env: $AWS_ENV_NAME
+  bucket_name: $AWS_BUCKET_NAME
 
 # You can add additional steps such as deployment configuration if needed.
