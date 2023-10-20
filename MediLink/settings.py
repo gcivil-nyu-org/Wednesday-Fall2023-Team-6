@@ -144,8 +144,8 @@ LOGIN_REDIRECT_URL = "user:home"
 # email settings
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "pw1298@nyu.edu"
-EMAIL_HOST_PASSWORD = "qwqg jnsx lcfx ntxx"
+EMAIL_HOST_USER = "medilink.customercare@gmail.com"
+EMAIL_HOST_PASSWORD = "qjdx dlmj fxpc vted"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
