@@ -17,6 +17,7 @@ class DoctorDetailView(generic.DetailView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+
 def TempDetails(request):
     template_name = "doctor/details.html"
     return render(request, template_name)
