@@ -1,5 +1,7 @@
 from django.db import models
 
+from user.models import User
+
 
 class Choices:
     boroughs = [
@@ -30,10 +32,12 @@ class Hospital(models.Model):
     def __str__(self):
         return self.name
 
+class HospitalAdmin(User):
+    associated_hospital = models.CharField(max_length=100)
 
 class HospitalAppointment(models.Model):
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
-    user = models.ForeignKey("user.User", on_delete=models.CASCADE)
+    patient = models.ForeignKey("user.Patient", on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=15)
     email = models.EmailField(max_length=254)
