@@ -1,5 +1,5 @@
 from datetime import datetime
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views import generic
 from user.models import User
@@ -16,6 +16,11 @@ class DoctorDetailView(generic.DetailView):
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
+
+
+def TempDetails(request):
+    template_name = "doctor/details.html"
+    return render(request, template_name)
 
 
 @xframe_options_exempt
