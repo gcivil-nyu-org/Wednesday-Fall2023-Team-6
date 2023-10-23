@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
-from user.models import User
+from user.models import Doctor, Patient, HospitalAdmin
 from django.contrib.auth.models import User as Django_User
 
 # import for email sending
@@ -113,10 +113,11 @@ def register(request):
         sex = request.POST.get("user_sex")
         user_type = request.POST.get("userType")
         specialization = request.POST.get("specialization") or None
-        associated_hospital = request.POST.get("associatedHospital") or None
+        associated_hospital = request.POST.get("hospital") or None
         insurance_provider = request.POST.get("insurance") or None
         password = request.POST.get("password")  # hashing the password for security
-
+        print("lol")
+        print(request.POST)
         # Conditionally set fields based on user type
         if user_type != "doctor":
             specialization = None
@@ -137,19 +138,35 @@ def register(request):
             usr = Django_User.objects.create_user(email, email, password)
             usr.first_name = name
             usr.save()
+            if user_type == "doctor":
+                Doctor.objects.create(
+                    name=name,
+                    email=email,
+                    phone=phone,
+                    sex=sex,
+                    specialization=specialization,
+                    associated_hospital=associated_hospital
+                )
 
-            user = User(
-                name=name,
-                email=email,
-                phone=phone,
-                sex=sex,
-                user_type=user_type,
-                specialization=specialization,
-                associated_hospital=associated_hospital,
-                insurance_provider=insurance_provider,
-                password=password,
-            )
-            user.save()
+            elif user_type == "patient":
+                Patient.objects.create(
+                    name=name,
+                    email=email,
+                    phone=phone,
+                    sex=sex,
+                    insurance_provider=insurance_provider
+                )
+
+            elif user_type == "hospital-admin":
+                HospitalAdmin.objects.create(
+                    name=name,
+                    email=email,
+                    phone=phone,
+                    sex=sex,
+                    associated_hospital=associated_hospital
+                )
+
+
             print("User saved successfully")
         except Exception as e:
             messages.error(
