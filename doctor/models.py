@@ -12,7 +12,7 @@ class Choices:
 
 class Doctor(User):
     primary_speciality = models.CharField(max_length=50)
-    hospital = models.ForeignKey(
+    associated_hospital = models.ForeignKey(
         "hospital.Hospital", max_length=100, null=True, on_delete=models.SET_NULL
     )
 

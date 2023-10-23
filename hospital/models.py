@@ -32,8 +32,12 @@ class Hospital(models.Model):
     def __str__(self):
         return self.name
 
+
 class HospitalAdmin(User):
-    associated_hospital = models.CharField(max_length=100)
+    associated_hospital = models.ForeignKey(
+        "hospital.Hospital", max_length=100, null=True, on_delete=models.CASCADE
+    )
+
 
 class HospitalAppointment(models.Model):
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)

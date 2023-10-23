@@ -55,11 +55,11 @@
                 </select>
             </div>
             <div class="form-group">
-                <input type="text" id="address" name="user_address" placeholder=" ">
+                <input type="text" id="address" name="address" placeholder=" " required>
                 <label for="address">Address</label>
             </div>
             <div class="form-group">
-                <select class="custom-select select-transparent" id="borough" name="borough">
+                <select class="custom-select select-transparent" id="borough" name="borough" required>
                     <option value="BKN">Brooklyn</option>
                     <option value="MHT">Manhattan</option>
                     <option value="QNS">Queens</option>
@@ -68,7 +68,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <input type="Number" id="zip" name="zip_code" placeholder=" ">
+                <input type="Number" id="zip" name="zip" placeholder=" " required>
                 <label for="zip">Zip Code</label>
             </div>
             
@@ -81,7 +81,7 @@
             <div class="form-group hidden" id="hospitalAdminFields">
                 <label class="select-label" for="associatedHospital">Associated Hospital</label>
                 <select class="custom-select select-transparent" id="associatedHospital" name="hospital">
-                    <option value="None">None</option>
+                    <option value="">None</option>
                 </select>
             </div>
             <!-- Additional fields for Patient (you can customize this part) -->
