@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
-from user.models import Doctor, Patient, HospitalAdmin
+from user.models import Doctor, Patient, HospitalAdmin, User
 from django.contrib.auth.models import User as Django_User
 
 # import for email sending
@@ -104,69 +104,78 @@ def home(request):
     return render(request, "user/home.html")
 
 
+def get_form_data(request):
+    # Collecting data from the form
+    name = request.POST.get("user_name")
+    email = request.POST.get("user_email")
+    phone = request.POST.get("user_phone")
+    sex = request.POST.get("user_sex")
+    user_type = request.POST.get("userType")
+    specialization = request.POST.get("specialization") or None
+    associated_hospital = request.POST.get("hospital") or None
+    insurance_provider = request.POST.get("insurance") or None
+    password = request.POST.get("password")  # hashing the password for security
+    # Conditionally set fields based on user type
+    if user_type != "doctor":
+        specialization = None
+    if user_type not in ["doctor", "hospital-admin"]:
+        associated_hospital = None
+    if user_type != "patient":
+        insurance_provider = None
+    return {
+        "name": name,
+        "email": email,
+        "phone": phone,
+        "sex": sex,
+        "user_type": user_type,
+        "specialization": specialization,
+        "associated_hospital": associated_hospital,
+        "insurance_provider": insurance_provider,
+        "password": password,
+    }
+
+
+def user_exists(email):
+    return Django_User.objects.filter(username=email).exists()
+
+
+def create_django_user(email, password, name):
+    usr = Django_User.objects.create_user(email, email, password)
+    usr.first_name = name
+    usr.save()
+
+
+def create_user_profile(user_type, **kwargs):
+    if user_type == "doctor":
+        valid_fields = {field.name for field in Doctor._meta.get_fields()}
+    elif user_type == "patient":
+        valid_fields = {field.name for field in Patient._meta.get_fields()}
+    elif user_type == "hospital-admin":
+        valid_fields = {field.name for field in HospitalAdmin._meta.get_fields()}
+    else:
+        raise ValueError(f"Invalid user type: {user_type}")
+    filtered_kwargs = {k: v for k, v in kwargs.items() if k in valid_fields}
+    if user_type == "doctor":
+        Doctor.objects.create(**filtered_kwargs)
+    elif user_type == "patient":
+        Patient.objects.create(**filtered_kwargs)
+    elif user_type == "hospital-admin":
+        HospitalAdmin.objects.create(**filtered_kwargs)
+
+
 def register(request):
     if request.method == "POST":
         # Collecting data from the form
-        name = request.POST.get("user_name")
-        email = request.POST.get("user_email")
-        phone = request.POST.get("user_phone")
-        sex = request.POST.get("user_sex")
-        user_type = request.POST.get("userType")
-        specialization = request.POST.get("specialization") or None
-        associated_hospital = request.POST.get("hospital") or None
-        insurance_provider = request.POST.get("insurance") or None
-        password = request.POST.get("password")  # hashing the password for security
-        print("lol")
-        print(request.POST)
-        # Conditionally set fields based on user type
-        if user_type != "doctor":
-            specialization = None
-        if user_type not in ["doctor", "hospital-admin"]:
-            associated_hospital = None
-        if user_type != "patient":
-            insurance_provider = None
-
-        try:
-            Django_User.objects.get(username=email)
+        form_data = get_form_data(request)
+        if user_exists(form_data["email"]):
             messages.error(request, "User already exists! Please go to login page.")
             return HttpResponseRedirect(reverse("user:user_registration"))
-        except Exception as e:
-            print(e)
-
-        # Create a new user object and save it
         try:
-            usr = Django_User.objects.create_user(email, email, password)
-            usr.first_name = name
-            usr.save()
-            if user_type == "doctor":
-                Doctor.objects.create(
-                    name=name,
-                    email=email,
-                    phone=phone,
-                    sex=sex,
-                    specialization=specialization,
-                    associated_hospital=associated_hospital
-                )
-
-            elif user_type == "patient":
-                Patient.objects.create(
-                    name=name,
-                    email=email,
-                    phone=phone,
-                    sex=sex,
-                    insurance_provider=insurance_provider
-                )
-
-            elif user_type == "hospital-admin":
-                HospitalAdmin.objects.create(
-                    name=name,
-                    email=email,
-                    phone=phone,
-                    sex=sex,
-                    associated_hospital=associated_hospital
-                )
-
-
+            create_django_user(
+                form_data["email"], form_data["password"], form_data["name"]
+            )
+            user_type = form_data.pop("user_type")
+            create_user_profile(user_type, **form_data)
             print("User saved successfully")
         except Exception as e:
             messages.error(
