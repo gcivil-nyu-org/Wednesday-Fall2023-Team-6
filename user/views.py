@@ -2,8 +2,10 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
-from user.models import Doctor, Patient, HospitalAdmin, User
-from django.contrib.auth.models import User as Django_User
+from user.models import Patient
+from doctor.models import Doctor
+from hospital.models import HospitalAdmin
+from django.contrib.auth.models import User
 
 # import for email sending
 from django.template.loader import render_to_string
@@ -84,8 +86,8 @@ def passwordResetConfirmView(request, uidb64, token):
     else:
         user_email = urlsafe_base64_decode(uidb64).decode("utf-8")
         new_password = request.POST.get("password")
-        if Django_User.objects.filter(username=user_email).exists():
-            user = Django_User.objects.get(username=user_email)
+        if User.objects.filter(username=user_email).exists():
+            user = User.objects.get(username=user_email)
             user.set_password(new_password)
             user.save()
             alert_message = "Password reset successfully, please login."
@@ -136,11 +138,11 @@ def get_form_data(request):
 
 
 def user_exists(email):
-    return Django_User.objects.filter(username=email).exists()
+    return User.objects.filter(username=email).exists()
 
 
 def create_django_user(email, password, name):
-    usr = Django_User.objects.create_user(email, email, password)
+    usr = User.objects.create_user(email, email, password)
     usr.first_name = name
     usr.save()
 

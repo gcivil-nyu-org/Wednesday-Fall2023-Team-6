@@ -11,10 +11,6 @@ class Choices:
 
 class User(models.Model):
     name = models.CharField(max_length=100, default="Default Name")
-
-
-class Doctor(models.Model):
-    name = models.CharField(max_length=100, default="Default Name")
     email = models.EmailField(default="example@example.com", unique=True)
     phone = models.CharField(max_length=15, default="000-000-0000")
     sex = models.CharField(max_length=10, choices=[
