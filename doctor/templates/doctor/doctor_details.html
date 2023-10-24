@@ -46,8 +46,11 @@
         <div class="detail-info">
             <div class="description">
                 <p>Doctor {{object.first_name}} {{object.last_name}} is
-                    a doctor working at {{object.hospital}} whose primary
-                    speciality is {{object.primary_speciality}}. </p>
+                    a doctor 
+                    {% if object.associated_hospital.name %}
+                    working at {{object.associated_hospital.name}}
+                    {% endif %}
+                    whose primary speciality is {{object.primary_speciality}}. </p>
             </div>
             <div class="ratings">
                 <p>ratings
@@ -78,10 +81,12 @@
             <h2>Primary Speciality</h2>
             <p>{{object.primary_speciality}}</p>
         </div>
+        {% if object.associated_hospital.name %}
         <div class="navigator-item">
             <h2>Hospital</h2>
-            <p>{{object.hospital}}</p>
+            <p>{{object.associated_hospital.name}}</p>
         </div>
+        {% endif %}        
         <div class="navigator-item">
             <h2>HOURS</h2>
             <p>Mon - Fri: 11 am - 8 pm</p>

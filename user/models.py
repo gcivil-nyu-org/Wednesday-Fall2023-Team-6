@@ -1,36 +1,39 @@
 from django.db import models
 
 
+class Choices:
+    boroughs = [
+        ("BKN", "Brooklyn"),
+        ("MHT", "Manhattan"),
+        ("QNS", "Queens"),
+        ("BRX", "Bronx"),
+        ("SND", "Staten Island"),
+    ]
+
+    sex = [
+        ("male", "Male"),
+        ("female", "Female"),
+        ("other", "Other"),
+    ]
+
+
 class User(models.Model):
     name = models.CharField(max_length=100, default="Default Name")
     email = models.EmailField(default="example@example.com", unique=True)
-    password = models.CharField(max_length=100)
     phone = models.CharField(max_length=15, default="000-000-0000")
-    sex = models.CharField(
-        max_length=10,
-        choices=[("male", "Male"), ("female", "Female"), ("other", "Other")],
-        null=True,
-        blank=True,
-    )
+    sex = models.CharField(max_length=10, choices=Choices.sex, null=True, blank=True)
 
-    # User type and related fields
-    USER_TYPE_CHOICES = [
-        ("patient", "General Patient"),
-        ("doctor", "Doctor / Medical Specialist"),
-        ("hospital-admin", "Hospital Administrator"),
-    ]
-    user_type = models.CharField(
-        max_length=15, choices=USER_TYPE_CHOICES, default="patient"
-    )
+    address = models.CharField(max_length=200)
+    borough = models.CharField(max_length=50, choices=Choices.boroughs)
 
-    # Additional fields for Doctors
-    specialization = models.CharField(max_length=100, blank=True, null=True)
-
-    # Fields for Hospital Administrator and Doctors
-    associated_hospital = models.CharField(max_length=100, blank=True, null=True)
-
-    # Additional fields for Patient
-    insurance_provider = models.CharField(max_length=100, blank=True, null=True)
+    zip = models.IntegerField()
 
     def __str__(self):
-        return self.email
+        return self.name + " (" + self.email + ")"
+
+    class Meta:
+        abstract = True
+
+
+class Patient(User):
+    insurance_provider = models.CharField(max_length=100, blank=True, null=True)
