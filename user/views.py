@@ -13,7 +13,6 @@ from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-import secrets
 from django.core.mail import EmailMessage
 from django.contrib import messages
 
@@ -107,7 +106,6 @@ def passwordResetConfirmView(request, uidb64, token):
                 alert_message = "Password reset successfully, please login."
                 messages.success(request, alert_message)
                 return HttpResponseRedirect(reverse("user:login"))
-            
             else:
                 alert_message = "Token invalid!"
                 messages.error(request, alert_message)
