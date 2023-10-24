@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 import secrets
 from django.core.mail import EmailMessage
 from django.contrib import messages
@@ -45,6 +46,7 @@ def passwordResetView(request):
 
     else:
         user_email = request.POST.get("user_email")
+        token_generator = PasswordResetTokenGenerator()
 
         if User.objects.filter(email=user_email).exists():
             user = User.objects.get(email=user_email)
@@ -55,7 +57,7 @@ def passwordResetView(request):
                     "user": user,
                     "domain": get_current_site(request).domain,
                     "uid": urlsafe_base64_encode(user.email.encode("utf-8")),
-                    "token": secrets.token_hex(16),
+                    "token": token_generator.make_token(user),
                     "protocol": "https" if request.is_secure() else "http",
                 },
             )
@@ -87,13 +89,29 @@ def passwordResetConfirmView(request, uidb64, token):
     else:
         user_email = urlsafe_base64_decode(uidb64).decode("utf-8")
         new_password = request.POST.get("password")
+        token_generator = PasswordResetTokenGenerator()
+
+        print(token)
+
+        """
+            verifying uid64
+        """
         if User.objects.filter(username=user_email).exists():
             user = User.objects.get(username=user_email)
-            user.set_password(new_password)
-            user.save()
-            alert_message = "Password reset successfully, please login."
-            messages.success(request, alert_message)
-            return HttpResponseRedirect(reverse("user:login"))
+            """
+                verifying token
+            """
+            if token_generator.check_token(user, token):
+                user.set_password(new_password)
+                user.save()
+                alert_message = "Password reset successfully, please login."
+                messages.success(request, alert_message)
+                return HttpResponseRedirect(reverse("user:login"))
+            
+            else:
+                alert_message = "Token invalid!"
+                messages.error(request, alert_message)
+                return HttpResponseRedirect(reverse("user:passwordReset"))
 
         else:
             alert_message = (
