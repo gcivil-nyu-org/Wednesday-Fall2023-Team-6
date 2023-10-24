@@ -1,15 +1,18 @@
+import re
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
-from user.models import Doctor, Patient, HospitalAdmin, User
-from django.contrib.auth.models import User as Django_User
+from user.models import Choices, Patient
+from doctor.models import Doctor
+from hospital.models import HospitalAdmin, Hospital
+from django.contrib.auth.models import User
 
 # import for email sending
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-import secrets
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import EmailMessage
 from django.contrib import messages
 
@@ -42,6 +45,7 @@ def passwordResetView(request):
 
     else:
         user_email = request.POST.get("user_email")
+        token_generator = PasswordResetTokenGenerator()
 
         if User.objects.filter(email=user_email).exists():
             user = User.objects.get(email=user_email)
@@ -52,7 +56,7 @@ def passwordResetView(request):
                     "user": user,
                     "domain": get_current_site(request).domain,
                     "uid": urlsafe_base64_encode(user.email.encode("utf-8")),
-                    "token": secrets.token_hex(16),
+                    "token": token_generator.make_token(user),
                     "protocol": "https" if request.is_secure() else "http",
                 },
             )
@@ -84,13 +88,28 @@ def passwordResetConfirmView(request, uidb64, token):
     else:
         user_email = urlsafe_base64_decode(uidb64).decode("utf-8")
         new_password = request.POST.get("password")
-        if Django_User.objects.filter(username=user_email).exists():
-            user = Django_User.objects.get(username=user_email)
-            user.set_password(new_password)
-            user.save()
-            alert_message = "Password reset successfully, please login."
-            messages.success(request, alert_message)
-            return HttpResponseRedirect(reverse("user:login"))
+        token_generator = PasswordResetTokenGenerator()
+
+        print(token)
+
+        """
+            verifying uid64
+        """
+        if User.objects.filter(username=user_email).exists():
+            user = User.objects.get(username=user_email)
+            """
+                verifying token
+            """
+            if token_generator.check_token(user, token):
+                user.set_password(new_password)
+                user.save()
+                alert_message = "Password reset successfully, please login."
+                messages.success(request, alert_message)
+                return HttpResponseRedirect(reverse("user:login"))
+            else:
+                alert_message = "Token invalid!"
+                messages.error(request, alert_message)
+                return HttpResponseRedirect(reverse("user:passwordReset"))
 
         else:
             alert_message = (
@@ -104,45 +123,97 @@ def home(request):
     return render(request, "user/home.html")
 
 
-def get_form_data(request):
+def isValidEmail(email):
+    if not email:
+        return False
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        return False
+    return True
+
+
+def isValidPassword(password):
+    if not password:
+        return False
+    if not len(password) >= 8:
+        return False
+    return True
+
+
+def get_form_data(request):  # noqa: C901
     # Collecting data from the form
-    name = request.POST.get("user_name")
-    email = request.POST.get("user_email")
-    phone = request.POST.get("user_phone")
-    sex = request.POST.get("user_sex")
-    user_type = request.POST.get("userType")
+    name = request.POST.get("user_name") or None
+    email = request.POST.get("user_email") or None
+    phone = request.POST.get("user_phone") or None
+    sex = request.POST.get("user_sex") or None
+    user_type = request.POST.get("userType") or None
     specialization = request.POST.get("specialization") or None
     associated_hospital = request.POST.get("hospital") or None
     insurance_provider = request.POST.get("insurance") or None
-    password = request.POST.get("password")  # hashing the password for security
+    password = request.POST.get("password") or None
+    address = request.POST.get("address") or None
+    borough = request.POST.get("borough") or None
+    zip = request.POST.get("zip") or None
+
+    if not name:
+        return "Error: Invalid Name"
+    if not isValidEmail(email):
+        return "Error: Invalid Email"
+    if not phone:
+        return "Error: Invalid Phone"
+    if sex not in [opt[0] for opt in Choices.sex]:
+        return "Error: Invalid Sex"
+    if user_type not in ["patient", "doctor", "hospital-admin"]:
+        return "Error: Invalid User Type"
+    if not isValidPassword(password):
+        return "Error: Invalid Password"
+    if not address:
+        return "Invalid Address"
+    if not zip:
+        return "Invalid Zip"
+    if borough not in [opt[0] for opt in Choices.boroughs]:
+        return "Error: Invalid Borough"
+
     # Conditionally set fields based on user type
     if user_type != "doctor":
         specialization = None
     if user_type not in ["doctor", "hospital-admin"]:
         associated_hospital = None
+    elif user_type == "doctor" and (not associated_hospital):
+        associated_hospital = None
+    else:
+        try:
+            associated_hospital = Hospital.objects.get(id=int(associated_hospital))
+        except Exception as e:
+            print("Error: ", e)
+            return "Error: Invalid Hospital selected."
     if user_type != "patient":
         insurance_provider = None
+
     return {
         "name": name,
         "email": email,
         "phone": phone,
         "sex": sex,
         "user_type": user_type,
-        "specialization": specialization,
+        "primary_speciality": specialization,
         "associated_hospital": associated_hospital,
         "insurance_provider": insurance_provider,
         "password": password,
+        "address": address,
+        "borough": borough,
+        "zip": zip,
     }
 
 
 def user_exists(email):
-    return Django_User.objects.filter(username=email).exists()
+    return User.objects.filter(username=email).exists()
 
 
 def create_django_user(email, password, name):
-    usr = Django_User.objects.create_user(email, email, password)
+    usr = User.objects.create_user(email, email, password)
     usr.first_name = name
     usr.save()
+    return usr
 
 
 def create_user_profile(user_type, **kwargs):
@@ -167,15 +238,19 @@ def register(request):
     if request.method == "POST":
         # Collecting data from the form
         form_data = get_form_data(request)
+        if type(form_data) is str:
+            messages.error(request, form_data)
+            return HttpResponseRedirect(reverse("user:user_registration"))
         if user_exists(form_data["email"]):
             messages.error(request, "User already exists! Please go to login page.")
             return HttpResponseRedirect(reverse("user:user_registration"))
         try:
-            create_django_user(
+            usr = create_django_user(
                 form_data["email"], form_data["password"], form_data["name"]
             )
             user_type = form_data.pop("user_type")
             create_user_profile(user_type, **form_data)
+            login(request, usr)
             print("User saved successfully")
         except Exception as e:
             messages.error(
