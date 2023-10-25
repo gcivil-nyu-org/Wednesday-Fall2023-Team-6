@@ -16,6 +16,8 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import EmailMessage
 from django.contrib import messages
 
+PASSWORD_RESET_SUBJECT = "MediLink Account Password Reset Request"
+
 
 def loginView(request):
     if request.method == "POST":
@@ -49,7 +51,7 @@ def passwordResetView(request):
 
         if User.objects.filter(email=user_email).exists():
             user = User.objects.get(email=user_email)
-            subject = "MediLink Account Password Reset Request"
+            subject = PASSWORD_RESET_SUBJECT
             message = render_to_string(
                 "user/resetPassword/template_reset_password.html",
                 {
@@ -86,11 +88,13 @@ def passwordResetConfirmView(request, uidb64, token):
         return render(request, template_name, {"uidb64": uidb64, "token": token})
 
     else:
-        user_email = urlsafe_base64_decode(uidb64).decode("utf-8")
-        new_password = request.POST.get("password")
-        token_generator = PasswordResetTokenGenerator()
-
-        print(token)
+        try:
+            user_email = urlsafe_base64_decode(uidb64).decode("utf-8")
+            new_password = request.POST.get("password")
+            token_generator = PasswordResetTokenGenerator()
+        except:
+            messages.error(request, "Invalid Details")
+            return HttpResponseRedirect(reverse("user:passwordReset"))
 
         """
             verifying uid64

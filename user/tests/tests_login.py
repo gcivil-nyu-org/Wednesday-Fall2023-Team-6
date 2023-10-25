@@ -7,7 +7,7 @@ from MediLink.settings import MESSAGE_TAGS
 
 
 class LoginTests(TestCase):
-    @classmethod
+
     def setUp(self):
         self.user_email = "test_user@gmail.com"
         self.user_password = "test_password"
@@ -15,6 +15,10 @@ class LoginTests(TestCase):
 
     def test_01_existing_user(self):
         print("\nRunning: test for checking login of existing user")
+        response = self.client.get("/user/login/")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "user/login.html")
+        
         post_data = {"user_email": self.user_email, "user_pwd": self.user_password}
         response = self.client.post("/user/login/", post_data)
         logged_in_user = auth.get_user(self.client)
