@@ -92,7 +92,8 @@ def passwordResetConfirmView(request, uidb64, token):
             user_email = urlsafe_base64_decode(uidb64).decode("utf-8")
             new_password = request.POST.get("password")
             token_generator = PasswordResetTokenGenerator()
-        except:
+        except Exception as e:
+            print(e)
             messages.error(request, "Invalid Details")
             return HttpResponseRedirect(reverse("user:passwordReset"))
 
