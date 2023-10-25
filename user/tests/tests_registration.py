@@ -84,6 +84,10 @@ class RegistrationTests(TestCase):
     def test_01_nonexisting_user(self):
         print("\nRunning: test for checking registration of nonexisting user")
 
+        response = self.client.get("/user/registration/")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "user/user_registration.html")
+
         post_data_users = [
             dict(self.post_data_patient),
             dict(self.post_data_doctor),
