@@ -29,7 +29,7 @@
     </head>
     <div class="header">
         <!-- <img src="logo.png" alt="logo" class="logo"> -->
-        <span>Hospital {{object.facility_type}}</span>
+        <span>Hospital {{object.name}}</span>
         <nav>
             <a href="#" id="searchLink">Search</a>
             <a href="#">Logout</a>
@@ -41,7 +41,7 @@
         </div>
         <div class="detail-info">
             <div class="description">
-                <p>Hospital {{object.name}} is
+                <p>{{object.name}} is
                     a hospital located at {{object.borough}} whose primary
                     speciality is {{object.facility_type}}. </p>
             </div>
@@ -83,10 +83,7 @@
             <p>Sat: 7 am - 9 pm</p>
         </div>
     </div>
-    <!-- <h1 id="doctor_heading" class="display-4">{{ object.first_name }}</h1>
-    <div class="details-main-wrapper">
-        <button id="btn_book_online_consultation" class="formbold-btn" data-toggle="modal" data-target="#book_appointment_modal">Book Online Appointment</button>
-    </div> -->
+   
     {% include "hospital/hospital_appointment_form.html" %}
     <script src="{% static 'hospital/javascript/hospital_details.js' %}"></script>
     <footer class="filled"></footer>
