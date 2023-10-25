@@ -28,12 +28,12 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Doctor {{object.first_name}} {{doctor.last_name}}</title>
+        <title>Doctor {{object.name}} </title>
     </head>
 
     <div class="header">
         <!-- <img src="logo.png" alt="logo" class="logo"> -->
-        <span>Doctor {{object.first_name}} {{doctor.last_name}}</span>
+        <span>Doctor {{object.name}}</span>
         <nav>
             <a href="#">Search</a>
             <a href="#">Logout</a>
@@ -45,7 +45,7 @@
         </div>
         <div class="detail-info">
             <div class="description">
-                <p>Doctor {{object.first_name}} {{object.last_name}} is
+                <p>Doctor {{object.name}} is
                     a doctor 
                     {% if object.associated_hospital.name %}
                     working at {{object.associated_hospital.name}}
