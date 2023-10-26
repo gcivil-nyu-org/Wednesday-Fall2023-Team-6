@@ -25,6 +25,7 @@ def logoutView(request):
     return redirect("user:login")  # Redirect to the login page after logout
 
 
+
 def loginView(request):
     if request.method == "POST":
         username = request.POST.get("user_email")
