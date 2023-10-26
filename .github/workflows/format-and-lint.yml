@@ -1,0 +1,41 @@
+name: Autoformat with Black and Push Changes
+
+on:
+  push:
+    paths:
+      - '**.py'  # Trigger only when Python files are modified
+    branches:
+      - '*'  # Trigger on any branch
+
+jobs:
+  autoformat-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x  # Choose the Python version you need
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black
+
+      - name: Autoformat code with Black
+        run: |
+          black .
+
+      - name: Configure Git
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Commit and push changes
+        run: |
+          git add .
+          git commit -m "Autoformat code with Black"
+          git push
