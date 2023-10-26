@@ -15,8 +15,14 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import EmailMessage
 from django.contrib import messages
+from django.contrib.auth import logout
 
 PASSWORD_RESET_SUBJECT = "MediLink Account Password Reset Request"
+
+
+def logoutView(request):
+    logout(request)
+    return redirect("user:login")  # Redirect to the login page after logout
 
 
 def loginView(request):
