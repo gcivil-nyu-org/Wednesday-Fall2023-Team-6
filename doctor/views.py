@@ -1,4 +1,6 @@
 from datetime import datetime
+from typing import Any
+from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views import generic
@@ -17,11 +19,14 @@ class DoctorDetailView(generic.DetailView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+class DoctorListView(generic.ListView):
+    template_name = "doctor/doctor_list.html"
 
-def TempDetails(request):
-    template_name = "doctor/details.html"
-    return render(request, template_name)
+    # doctor list object name in html
+    context_object_name = "doctor_list"
 
+    def get_queryset(self):
+        return Doctor.objects.filter().order_by("name")
 
 @xframe_options_exempt
 @csrf_exempt

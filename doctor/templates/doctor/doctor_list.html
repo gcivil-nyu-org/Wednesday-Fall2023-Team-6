@@ -1,0 +1,14 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'doctor/css/doctorListStyle.css' %}">
+
+{% if doctor_list %}
+<ul>
+    {% for doctor in doctor_list%}
+    <li><a href="{%url 'doctor:detail_view' doctor.id %}">{{ doctor.name }}</a></li>
+    {% endfor %}
+</ul>
+
+{% else %}
+<p>No doctors are available</p>
+{% endif %}
