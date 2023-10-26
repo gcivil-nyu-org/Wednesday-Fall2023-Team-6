@@ -1,7 +1,5 @@
 from datetime import datetime
-from typing import Any
-from django.db.models.query import QuerySet
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views import generic
 from user.models import User
@@ -19,6 +17,7 @@ class DoctorDetailView(generic.DetailView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+
 class DoctorListView(generic.ListView):
     template_name = "doctor/doctor_list.html"
 
@@ -27,6 +26,7 @@ class DoctorListView(generic.ListView):
 
     def get_queryset(self):
         return Doctor.objects.filter().order_by("name")
+
 
 @xframe_options_exempt
 @csrf_exempt
