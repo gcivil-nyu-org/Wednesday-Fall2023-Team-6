@@ -1,0 +1,195 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ebf1f3;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    background-color: #0a2049;
+    height: 40px;
+    color: white;
+  }
+  
+  .header span {
+    font-size: 40px;
+    font-weight: bold;
+  }
+  
+  nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+  }
+  
+  nav p {
+    margin: 0 10px;
+  }
+  
+  .search-and-filter {
+    background-color: rgb(255, 255, 255);
+    position: relative;
+    height: 200px;
+    margin-bottom: 10px;
+    margin-left: 3%;
+    margin-right: 3%;
+    border-radius: 10px;
+    box-shadow: 0 12px 8px rgba(51, 51, 51, 0.1);
+  }
+  
+  .search-and-filter span {
+    padding-left: 20px;
+    font-size: 60px;
+    font-weight: 800;
+    color: #0a2049;
+  }
+  
+  .hospital-list {
+    /* background-color: rgb(255, 255, 255); */
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(auto, 1fr));
+    grid-gap: 20px;
+    height: auto;
+    margin-bottom: 10px;
+    margin-left: 3%;
+    margin-right: 3%;
+    border-radius: 10px;
+  }
+  
+  .hospital-list a {
+    text-decoration: none;
+    color: black;
+  }
+  
+  /* pagination */
+  
+  .pagination {
+    /* background-color: rgb(255, 255, 255); */
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    margin-left: 3%;
+    margin-right: 3%;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .pagination span{
+      font-weight: bold;
+  }
+  
+  .page-numbers {
+      display: inline-block;
+      margin: 0 10px;
+      border-radius: 50%;
+  }
+  
+  .prev, .next, .first, .last {
+      text-decoration: none;
+      background-color: #b8ebf1;
+      border-radius: 10px;
+      color: #333;
+      padding: 5px 10px;
+      border: 1px solid #94c0f1;
+      margin: 10px 2px;
+  }
+  
+  .page{
+      text-decoration: none;
+      background-color: #b8ebf1;
+      border-radius: 50%;
+      color: #333;
+      padding: 5px 10px;
+      border: 1px solid #94c0f1;
+      margin: 10px 2px;
+  }
+  
+  .page:hover, .prev:hover, .next:hover, .first:hover, .last:hover {
+      background-color: #ebb3b3;
+      cursor: pointer;
+  }
+  
+  .page.active{
+      color: #fff;
+      background-image: linear-gradient(#e9b4bd, #ff4568);
+      border: 1px solid #f32775;
+      background-repeat: no-repeat;
+  }
+  
+  /* card list */
+  .card {
+    background-color: rgb(255, 255, 255);
+    padding: 10px;
+    display: grid;
+    align-items: center;
+    border-radius: 10px;
+    max-height: 350px;
+    min-width: 400px;
+    box-shadow: 0 12px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .row {
+      display: flex;
+  }
+  
+  .left-column {
+      flex: 1;   
+      display: flex;
+      align-items: center;
+  }
+  
+  .right-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+  }
+  
+  .avatar {
+    min-width: 80%;
+    height: auto;
+  }
+  
+  .border {
+    padding: 10px;
+    font-size: 15px;
+  }
+  
+  .card p{
+      font-weight: 900;
+      font-size: 20px;
+  }
+  
+  .card h3{
+      font-size: 15px;
+  }
+  
+  .book-appointment{
+      position: sticky;
+      bottom: 0;
+      background-color: rgb(0, 0, 0);
+      color: white;
+      border-radius: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      width: 100%;
+  }
+  
+  button:hover{
+      position: sticky;
+      bottom: 0;
+      background: #040d5f;
+      color: #ffffff;
+      border-radius: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      width: 100%;
+  }
+  
