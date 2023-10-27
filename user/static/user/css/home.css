@@ -1,0 +1,43 @@
+body, h1 {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-image: url('doc.gif');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: Arial, sans-serif;
+    position: relative;
+}
+
+h1 {
+    text-align: center;
+    padding: 50px 0;
+    font-size: 36px;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+form {
+    text-align: center;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #8ae44d;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #72c542;
+}
