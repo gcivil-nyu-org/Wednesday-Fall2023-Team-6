@@ -31,15 +31,17 @@ nav p {
   margin: 0 10px;
 }
 
+/* search and filter */
 .search-and-filter {
   background-color: rgb(255, 255, 255);
   position: relative;
-  height: 200px;
+  height: 250px;
   margin-bottom: 10px;
   margin-left: 3%;
   margin-right: 3%;
   border-radius: 10px;
   box-shadow: 0 12px 8px rgba(51, 51, 51, 0.1);
+  display: flex;
 }
 
 .search-and-filter span {
@@ -47,6 +49,89 @@ nav p {
   font-size: 60px;
   font-weight: 800;
   color: #0a2049;
+}
+
+.search-and-filter h3{
+    padding-left: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #919499;
+}
+
+.search-and-filter h2{
+    padding-left: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #0bb6fa;
+}
+
+.filter-left-column {
+    flex: 1;   
+}
+
+.form-name-input{
+    margin-top: 30px;
+    padding-left: 20px;
+}
+
+.doctor-name-input {
+    width: min(70%, 550px);
+    height: 40px;
+    border-radius: 15px;
+    border-color: #0a2049;
+}
+
+.filter-right-column {
+    flex: 1; 
+    display: flex;
+    flex-direction: row;  
+}
+
+.filter-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.filter-form button{
+    width: 100%;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+    color: rgb(0, 0, 0);
+    background-color: rgb(89, 197, 211);
+    border-radius: 10px;
+    border-color: #b8ebf1;
+    margin-right: 1px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label{
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.custom-select {
+    width: 400px;
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    border-color: #0a2049;
+    /* Add more styles as needed */
+}
+
+/* search icon */
+.search {
+    padding-left: 10px;
+    background-color: #fff;
+    border-color: #fff;
+    border: 0px;
+    font-size: 20px;
+    color: #3194d6;
 }
 
 .doctor-list {
@@ -135,29 +220,29 @@ nav p {
   box-shadow: 0 12px 8px rgba(0, 0, 0, 0.1);
 }
 
-.row {
+.card-row {
     display: flex;
 }
 
-.left-column {
+.card-left-column {
     flex: 1;   
     display: flex;
     align-items: center;
 }
 
-.right-column {
+.card-right-column {
     flex: 1;
     display: flex;
     flex-direction: column;
     position: relative;
 }
 
-.avatar {
+.card-avatar {
   min-width: 80%;
   height: auto;
 }
 
-.border {
+.card-border {
   padding: 10px;
   font-size: 15px;
 }
@@ -182,7 +267,7 @@ nav p {
     width: 100%;
 }
 
-button:hover{
+.doctor-list button:hover{
     position: sticky;
     bottom: 0;
     background: #040d5f;

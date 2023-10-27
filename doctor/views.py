@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import Doctor, DoctorAppointment
 from django.core.paginator import Paginator
+from .forms import DoctorFilterForm
 
 
 class DoctorDetailView(generic.DetailView):
@@ -28,6 +29,26 @@ class DoctorListView(generic.ListView):
 
     def get_queryset(self):
         doctors = Doctor.objects.all().order_by("name")
+        filter_form = DoctorFilterForm(self.request.GET)
+
+        """
+        filter backend implementation
+        """
+        if filter_form.is_valid():
+            primary_speciality = filter_form.cleaned_data.get("primary_speciality")
+            address = filter_form.cleaned_data.get("address")
+            borough = filter_form.cleaned_data.get("borough")
+            zip_code = filter_form.cleaned_data.get("zip")
+
+            if primary_speciality:
+                doctors = doctors.filter(primary_speciality=primary_speciality)
+            if address:
+                doctors = doctors.filter(address=address)
+            if borough:
+                doctors = doctors.filter(borough=borough)
+            if zip_code:
+                doctors = doctors.filter(zip=zip_code)
+
         return doctors
 
     def get_context_data(self, **kwargs):
@@ -37,6 +58,8 @@ class DoctorListView(generic.ListView):
         page_number = self.request.GET.get("page")
         doctor_list = paginator.get_page(page_number)
         context["doctor_list"] = doctor_list
+
+        context["filter_form"] = DoctorFilterForm()
         return context
 
 
