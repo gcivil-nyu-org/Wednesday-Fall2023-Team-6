@@ -8,6 +8,7 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import Doctor, DoctorAppointment
+from django.core.paginator import Paginator
 
 
 class DoctorDetailView(generic.DetailView):
@@ -19,13 +20,24 @@ class DoctorDetailView(generic.DetailView):
 
 
 class DoctorListView(generic.ListView):
+    model = Doctor
     template_name = "doctor/doctor_list.html"
 
     # doctor list object name in html
     context_object_name = "doctor_list"
 
     def get_queryset(self):
-        return Doctor.objects.filter().order_by("name")
+        doctors = Doctor.objects.all().order_by("name")
+        return doctors
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Pagination
+        paginator = Paginator(context["doctor_list"], 12)
+        page_number = self.request.GET.get("page")
+        doctor_list = paginator.get_page(page_number)
+        context["doctor_list"] = doctor_list
+        return context
 
 
 @xframe_options_exempt

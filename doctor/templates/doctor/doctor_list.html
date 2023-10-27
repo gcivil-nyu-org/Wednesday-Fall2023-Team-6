@@ -1,14 +1,101 @@
 {% load static %}
 
 <link rel="stylesheet" href="{% static 'doctor/css/doctorListStyle.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-{% if doctor_list %}
-<ul>
-    {% for doctor in doctor_list%}
-    <li><a href="{%url 'doctor:detail_view' doctor.id %}">{{ doctor.name }}</a></li>
-    {% endfor %}
-</ul>
+<title>Doctor List Page</title>
 
-{% else %}
-<p>No doctors are available</p>
-{% endif %}
+<body>
+    <div class="header">
+        <span>MediLink</span>
+        <nav>
+            <a href="#">Search</a>
+            <a href="#">Logout</a>
+        </nav>
+    </div>
+
+    <div class="search-and-filter">
+        <span>Doctors</span>
+        <!-- <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Dropdown button
+            </button> -->
+        <!-- <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul> -->
+    </div>
+
+    <div class="pagination">
+        {% if doctor_list.has_previous %}
+        <a href="?page=1" class="first">First</a>
+        <a href="?page={{ doctor_list.previous_page_number }}" class="prev">&laquo; Previous</a>
+        {% endif %}
+
+        <div class="page-numbers">
+            {% for num in doctor_list.paginator.page_range %}
+
+            {% if doctor_list.number == num %}
+            <a href="?page={{ num }}" class="page active" onclick="activePage()">{{ num }}</a>
+            {% elif num > doctor_list.number|add:'-4' and num < doctor_list.number|add:'4' %} 
+            <a href="?page={{ num }}" class="page" onclick="activePage()">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+
+        </div>
+        <span class="current">Page {{ doctor_list.number }} of {{ doctor_list.paginator.num_pages }} pages.</span>
+
+        {% if doctor_list.has_next %}
+        <a href="?page={{ doctor_list.next_page_number }}" class="next">Next &raquo;</a>
+        <a href="?page={{ doctor_list.paginator.num_pages }}" class="last">Last</a>
+        {% endif %}
+    </div>
+
+    <div class="doctor-list">
+        {% if doctor_list %}
+        {% for doctor in doctor_list%}
+        <!-- <li><a href="{%url 'doctor:detail_view' doctor.id %}">{{ doctor.name }}</a></li> -->
+        <a href="{%url 'doctor:detail_view' doctor.id %}">
+            <div class="card">
+                <div class="row">
+                    <div class="left-column">
+                        <img class="avatar" src="{% static 'doctor/images/avatar.jpg' %}" alt="placeholder">
+                    </div>
+                    <div class="right-column">
+                        <p>Dr {{doctor.name}}</p>
+                        <h3>{{doctor.primary_speciality}}</h3>
+                        <h3>{{doctor.address}}</h3>
+                        <div class="ratings">
+                            <h3>ratings
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                            </h3>
+                        </div>
+                        <div class="contact">
+                            <button style="font-size:18px" class="book-appointment" data-toggle="modal"
+                                data-target="#book_appointment_modal">Contact
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <h3 class="border">
+                        (most recent review from patient)
+                    </h3>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <p>No doctors are available</p>
+    {% endif %}
+</body>
+
+<script src="{% static 'doctor/javascript/doctor_list.js' %}"></script>
