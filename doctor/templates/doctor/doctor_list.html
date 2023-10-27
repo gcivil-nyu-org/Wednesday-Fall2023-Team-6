@@ -2,10 +2,13 @@
 
 <link rel="stylesheet" href="{% static 'doctor/css/doctorListStyle.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- search icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <title>Doctor List Page</title>
 
 <body>
+    <!-- header part -->
     <div class="header">
         <span>MediLink</span>
         <nav>
@@ -14,20 +17,50 @@
         </nav>
     </div>
 
+    <!-- filter part -->
     <div class="search-and-filter">
-        <span>Doctors</span>
-        <!-- <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Dropdown button
-            </button> -->
-        <!-- <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul> -->
+        <div class="filter-left-column">
+            <span>Doctors</span>
+            <h3>This page shows a list of doctors registered in MediLink.</h3>
+            <h2>Search doctor's name below or filter for more accurate searching.</h2>
+            <form method="get">
+                {% csrf_token %}
+                <div class="form-name-input">
+                    {{ filter_form.name }}
+                    <button class="search">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="filter-title">
+            <p>Filters:</p>
+        </div>
+        <div class="filter-right-column">
+            <form method="get" class="filter-form" id="filter-form" onchange="handleFilterChange()">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="{{ filter_form.primary_speciality.id_for_label }}">Primary Speciality:</label>
+                    {{ filter_form.primary_speciality }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ filter_form.address.id_for_label }}">Address:</label>
+                    {{ filter_form.address }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ filter_form.borough.id_for_label }}">Borough:</label>
+                    {{ filter_form.borough }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ filter_form.zip.id_for_label }}">Zip:</label>
+                    {{ filter_form.zip }}
+                </div>
+                <button type="submit" hidden></button>
+            </form>
+        </div>
     </div>
 
+    <!-- pagination -->
     <div class="pagination">
         {% if doctor_list.has_previous %}
         <a href="?page=1" class="first">First</a>
@@ -38,11 +71,11 @@
             {% for num in doctor_list.paginator.page_range %}
 
             {% if doctor_list.number == num %}
-            <a href="?page={{ num }}" class="page active" onclick="activePage()">{{ num }}</a>
-            {% elif num > doctor_list.number|add:'-4' and num < doctor_list.number|add:'4' %} 
-            <a href="?page={{ num }}" class="page" onclick="activePage()">{{ num }}</a>
-            {% endif %}
-            {% endfor %}
+            <a href="?page={{ num }}" class="page active">{{ num }}</a>
+            {% elif num > doctor_list.number|add:'-4' and num < doctor_list.number|add:'4' %} <a href="?page={{ num }}"
+                class="page">{{ num }}</a>
+                {% endif %}
+                {% endfor %}
 
         </div>
         <span class="current">Page {{ doctor_list.number }} of {{ doctor_list.paginator.num_pages }} pages.</span>
@@ -53,17 +86,17 @@
         {% endif %}
     </div>
 
+    <!-- doctor list part -->
     <div class="doctor-list">
         {% if doctor_list %}
         {% for doctor in doctor_list%}
-        <!-- <li><a href="{%url 'doctor:detail_view' doctor.id %}">{{ doctor.name }}</a></li> -->
         <a href="{%url 'doctor:detail_view' doctor.id %}">
             <div class="card">
-                <div class="row">
-                    <div class="left-column">
-                        <img class="avatar" src="{% static 'doctor/images/avatar.jpg' %}" alt="placeholder">
+                <div class="card-row">
+                    <div class="card-left-column">
+                        <img class="card-avatar" src="{% static 'doctor/images/avatar.jpg' %}" alt="placeholder">
                     </div>
-                    <div class="right-column">
+                    <div class="card-right-column">
                         <p>Dr {{doctor.name}}</p>
                         <h3>{{doctor.primary_speciality}}</h3>
                         <h3>{{doctor.address}}</h3>
@@ -83,8 +116,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <h3 class="border">
+                <div class="card-row">
+                    <h3 class="card-border">
                         (most recent review from patient)
                     </h3>
                 </div>
@@ -94,7 +127,10 @@
     </div>
 
     {% else %}
-    <p>No doctors are available</p>
+    <p class="no-result">
+        Sorry, no doctors are available based on your search, please
+        clear the filters and try again.
+    </p>
     {% endif %}
 </body>
 
