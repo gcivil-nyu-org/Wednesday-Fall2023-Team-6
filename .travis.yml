@@ -20,7 +20,6 @@ install:
   - pip install coveralls
 before_script:
   - python manage.py migrate
-  - python manage.py collectstatic
 
 script:
   - black --check . --skip-string-normalization
