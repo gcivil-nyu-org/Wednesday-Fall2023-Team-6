@@ -8,7 +8,7 @@ class DoctorFilterForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 "class": "doctor-name-input",
-                "placeholder": "Search doctor's name",
+                "placeholder": "Search doctor name",
             }
         ),
         required=False,
