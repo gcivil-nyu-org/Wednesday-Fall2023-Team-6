@@ -16,6 +16,7 @@ class HospitalDetailView(generic.DetailView):
     model = Hospital
     template_name = "hospital/hospital_details.html"
 
+
 class HospitalListView(generic.ListView):
     model = Hospital
     template_name = "hospital/hospital_list.html"
