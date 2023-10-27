@@ -51,87 +51,114 @@ nav p {
   color: #0a2049;
 }
 
-.search-and-filter h3{
-    padding-left: 20px;
-    font-weight: bold;
-    font-size: 14px;
-    color: #919499;
+.search-and-filter h3 {
+  padding-left: 20px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #919499;
 }
 
-.search-and-filter h2{
-    padding-left: 20px;
-    font-weight: bold;
-    font-size: 14px;
-    color: #0bb6fa;
+.search-and-filter h2 {
+  padding-left: 20px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #0bb6fa;
 }
 
 .filter-left-column {
-    flex: 1;   
+  flex: 1;
 }
 
-.form-name-input{
-    margin-top: 30px;
-    padding-left: 20px;
+.form-name-input {
+  margin-top: 30px;
+  padding-left: 20px;
 }
 
 .doctor-name-input {
-    width: min(70%, 550px);
-    height: 40px;
-    border-radius: 15px;
-    border-color: #0a2049;
+  width: min(70%, 550px);
+  height: 40px;
+  border-radius: 15px;
+  border-color: #0a2049;
+}
+
+.filter-title {
+  margin-left: 40px;
+  font-weight: bold;
+  font-size: 20px;
+  color: #0753c5;
 }
 
 .filter-right-column {
-    flex: 1; 
-    display: flex;
-    flex-direction: row;  
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .filter-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
-.filter-form button{
-    width: 100%;
-    font-size: 15px;
-    font-family: Arial, sans-serif;
-    color: rgb(0, 0, 0);
-    background-color: rgb(89, 197, 211);
-    border-radius: 10px;
-    border-color: #b8ebf1;
-    margin-right: 1px;
+.filter-form button {
+  width: 80%;
+  font-size: 15px;
+  font-family: Arial, sans-serif;
+  color: rgb(0, 0, 0);
+  background-color: rgb(89, 197, 211);
+  border-radius: 10px;
+  border-color: #b8ebf1;
+  cursor: pointer;
+}
+
+.filter-form button:hover {
+  width: 80%;
+  font-size: 15px;
+  font-family: Arial, sans-serif;
+  color: rgb(0, 0, 0);
+  background-color: rgb(89, 142, 211);
+  border-radius: 10px;
+  border-color: #b8ebf1;
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
-.form-group label{
-    margin-top: 10px;
-    font-size: 15px;
-    font-weight: bold;
+.form-group label {
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: bold;
 }
 
 .custom-select {
-    width: 400px;
-    padding: 5px;
-    margin: 5px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    border-color: #0a2049;
-    /* Add more styles as needed */
+  width: 350px;
+  padding: 5px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  border-color: #0a2049;
+  /* Add more styles as needed */
 }
 
 /* search icon */
 .search {
-    padding-left: 10px;
-    background-color: #fff;
-    border-color: #fff;
-    border: 0px;
-    font-size: 20px;
-    color: #3194d6;
+  padding-left: 10px;
+  background-color: #fff;
+  border: 0px;
+  font-size: 20px;
+  color: #3194d6;
+  cursor: pointer;
+}
+
+.search:hover {
+  padding-left: 10px;
+  background-color: #ffffff;
+  border: 0px;
+  font-size: 20px;
+  color: #315dd6;
+  cursor: pointer;
 }
 
 .doctor-list {
@@ -166,46 +193,53 @@ nav p {
   margin-bottom: 20px;
 }
 
-.pagination span{
-    font-weight: bold;
+.pagination span {
+  font-weight: bold;
 }
 
 .page-numbers {
-    display: inline-block;
-    margin: 0 10px;
-    border-radius: 50%;
+  display: inline-block;
+  margin: 0 10px;
+  border-radius: 50%;
 }
 
-.prev, .next, .first, .last {
-    text-decoration: none;
-    background-color: #b8ebf1;
-    border-radius: 10px;
-    color: #333;
-    padding: 5px 10px;
-    border: 1px solid #94c0f1;
-    margin: 10px 2px;
+.prev,
+.next,
+.first,
+.last {
+  text-decoration: none;
+  background-color: #b8ebf1;
+  border-radius: 10px;
+  color: #333;
+  padding: 5px 10px;
+  border: 1px solid #94c0f1;
+  margin: 10px 2px;
 }
 
-.page{
-    text-decoration: none;
-    background-color: #b8ebf1;
-    border-radius: 50%;
-    color: #333;
-    padding: 5px 10px;
-    border: 1px solid #94c0f1;
-    margin: 10px 2px;
+.page {
+  text-decoration: none;
+  background-color: #b8ebf1;
+  border-radius: 50%;
+  color: #333;
+  padding: 5px 10px;
+  border: 1px solid #94c0f1;
+  margin: 10px 2px;
 }
 
-.page:hover, .prev:hover, .next:hover, .first:hover, .last:hover {
-    background-color: #ebb3b3;
-    cursor: pointer;
+.page:hover,
+.prev:hover,
+.next:hover,
+.first:hover,
+.last:hover {
+  background-color: #ebb3b3;
+  cursor: pointer;
 }
 
-.page.active{
-    color: #fff;
-    background-image: linear-gradient(#e9b4bd, #ff4568);
-    border: 1px solid #f32775;
-    background-repeat: no-repeat;
+.page.active {
+  color: #fff;
+  background-image: linear-gradient(#e9b4bd, #ff4568);
+  border: 1px solid #f32775;
+  background-repeat: no-repeat;
 }
 
 /* card list */
@@ -216,25 +250,27 @@ nav p {
   align-items: center;
   border-radius: 10px;
   max-height: 350px;
-  min-width: 400px;
+  min-width: 410px;
   box-shadow: 0 12px 8px rgba(0, 0, 0, 0.1);
 }
 
 .card-row {
-    display: flex;
+  display: flex;
 }
 
 .card-left-column {
-    flex: 1;   
-    display: flex;
-    align-items: center;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  margin-right: 5px;
 }
 
 .card-right-column {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-left: 5px;
 }
 
 .card-avatar {
@@ -247,33 +283,42 @@ nav p {
   font-size: 15px;
 }
 
-.card p{
-    font-weight: 900;
-    font-size: 20px;
+.card p {
+  font-weight: 900;
+  font-size: 20px;
+  margin-right: 3px;
 }
 
-.card h3{
-    font-size: 15px;
+.card h3 {
+  font-size: 15px;
 }
 
-.book-appointment{
-    position: sticky;
-    bottom: 0;
-    background-color: rgb(0, 0, 0);
-    color: white;
-    border-radius: 10px;
-    padding: 10px 20px;
-    cursor: pointer;
-    width: 100%;
+.book-appointment {
+  position: sticky;
+  bottom: 0;
+  background-color: rgb(0, 0, 0);
+  color: white;
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  width: 100%;
 }
 
-.doctor-list button:hover{
-    position: sticky;
-    bottom: 0;
-    background: #040d5f;
-    color: #ffffff;
-    border-radius: 10px;
-    padding: 10px 20px;
-    cursor: pointer;
-    width: 100%;
+.doctor-list button:hover {
+  position: sticky;
+  bottom: 0;
+  background: #040d5f;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* no result */
+.no-result {
+  padding-left: 20px;
+  font-weight: bold;
+  width: 700px;
+  font-size: 30px;
 }

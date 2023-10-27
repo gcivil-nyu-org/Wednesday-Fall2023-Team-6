@@ -35,31 +35,57 @@ class DoctorListView(generic.ListView):
         filter backend implementation
         """
         if filter_form.is_valid():
+            name = filter_form.cleaned_data.get("name")
             primary_speciality = filter_form.cleaned_data.get("primary_speciality")
             address = filter_form.cleaned_data.get("address")
             borough = filter_form.cleaned_data.get("borough")
             zip_code = filter_form.cleaned_data.get("zip")
 
-            if primary_speciality:
+            if name:
+                """
+                to make the name contains the input name
+                """
+                doctors = doctors.filter(name__contains=name)
+            if primary_speciality and primary_speciality != "All":
                 doctors = doctors.filter(primary_speciality=primary_speciality)
-            if address:
+            if address and address != "All":
                 doctors = doctors.filter(address=address)
-            if borough:
+            if borough and borough != "All":
                 doctors = doctors.filter(borough=borough)
-            if zip_code:
+            if zip_code and zip_code != "All":
                 doctors = doctors.filter(zip=zip_code)
 
         return doctors
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Pagination
+
+        """
+        Pagination use the paginator to make pagination,
+        which contains two variables,
+        the first one is the context doctor list from get_queryset,
+        the second one is the quantity of the page items.
+        """
         paginator = Paginator(context["doctor_list"], 12)
         page_number = self.request.GET.get("page")
         doctor_list = paginator.get_page(page_number)
         context["doctor_list"] = doctor_list
 
-        context["filter_form"] = DoctorFilterForm()
+        # Get filter parameters from the URL
+        primary_speciality = self.request.GET.get("primary_speciality", "all")
+        address = self.request.GET.get("address", "all")
+        borough = self.request.GET.get("borough", "all")
+        zip = self.request.GET.get("zip_code", "all")
+        name = self.request.GET.get("name", "")
+        context["filter_form"] = DoctorFilterForm(
+            initial={
+                "primary_speciality": primary_speciality,
+                "address": address,
+                "borough": borough,
+                "zip_code": zip,
+                "name": name,
+            }
+        )
         return context
 
 
