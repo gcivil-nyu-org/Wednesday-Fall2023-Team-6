@@ -9,11 +9,32 @@ from django.utils import timezone
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.core.paginator import Paginator
 
 
 class HospitalDetailView(generic.DetailView):
     model = Hospital
     template_name = "hospital/hospital_details.html"
+
+
+class HospitalListView(generic.ListView):
+    model = Hospital
+    template_name = "hospital/hospital_list.html"
+
+    context_object_name = "hospital_list"
+
+    def get_queryset(self):
+        hospitals = Hospital.objects.all().order_by("name")
+        return hospitals
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Pagination
+        paginator = Paginator(context["hospital_list"], 12)
+        page_number = self.request.GET.get("page")
+        hospital_list = paginator.get_page(page_number)
+        context["hospital_list"] = hospital_list
+        return context
 
 
 @xframe_options_exempt

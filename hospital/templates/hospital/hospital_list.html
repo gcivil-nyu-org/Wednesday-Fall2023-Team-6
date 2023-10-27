@@ -1,0 +1,90 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'hospital/css/hospitalListStyle.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<title>Hospital List Page</title>
+
+<body>
+    <div class="header">
+        <span>MediLink</span>
+        <nav>
+            <a href="#">Search</a>
+            <a href="#">Logout</a>
+        </nav>
+    </div>
+
+    <div class="search-and-filter">
+        <span>Hospital</span>
+    </div>
+
+    <div class="pagination">
+        {% if hospital_list.has_previous %}
+        <a href="?page=1" class="first">First</a>
+        <a href="?page={{ hospital_list.previous_page_number }}" class="prev">&laquo; Previous</a>
+        {% endif %}
+
+        <div class="page-numbers">
+            {% for num in hospital_list.paginator.page_range %}
+
+            {% if hospital_list.number == num %}
+            <a href="?page={{ num }}" class="page active" onclick="activePage()">{{ num }}</a>
+            {% elif num > hospital_list.number|add:'-4' and num < hospital_list.number|add:'4' %} 
+            <a href="?page={{ num }}" class="page" onclick="activePage()">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+
+        </div>
+        <span class="current">Page {{ hospital_list.number }} of {{ hospital_list.paginator.num_pages }} pages.</span>
+
+        {% if hospital_list.has_next %}
+        <a href="?page={{ hospital_list.next_page_number }}" class="next">Next &raquo;</a>
+        <a href="?page={{ hospital_list.paginator.num_pages }}" class="last">Last</a>
+        {% endif %}
+    </div>
+
+    <div class="hospital-list">
+        {% if hospital_list %}
+        {% for hospital in hospital_list%}
+        <a href="{%url 'hospital:detail_view' hospital.id %}">
+            <div class="card">
+                <div class="row">
+                    <div class="left-column">
+                        <img class="avatar" src="{% static 'hospital/images/hospital_profile_picture.jpeg' %}" alt="placeholder">
+                    </div>
+                    <div class="right-column">
+                        <p>{{hospital.name}}</p>
+                        <h3>{{hospital.facility_type}}</h3>
+                        <h3>{{hospital.location}}</h3>
+                        <div class="ratings">
+                            <h3>ratings
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                            </h3>
+                        </div>
+                        <div class="contact">
+                            <button style="font-size:18px" class="book-appointment" data-toggle="modal"
+                                data-target="#book_appointment_modal">Contact
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <h3 class="border">
+                        (most recent review from patient)
+                    </h3>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <p>No hospitals are available</p>
+    {% endif %}
+</body>
+
+<script src="{% static 'hospital/javascript/hospital_list.js' %}"></script>
