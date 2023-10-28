@@ -25,9 +25,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install black
 
-      - name: Autoformat code with Black
-        run: |
-          black .
+      - name: Check code formatting with Black
+        run: black --check . --skip-string-normalization
+        continue-on-error: true # Continue even if Black check fails
+
+      - name: Format code with Black (if check fails)
+        run: black .
+        if: failure() # Run this step only if the previous step fails
 
       - name: Configure Git
         run: |
