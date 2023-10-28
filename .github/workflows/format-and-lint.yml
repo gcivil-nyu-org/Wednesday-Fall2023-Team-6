@@ -37,9 +37,11 @@ jobs:
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
+        if: failure()
 
       - name: Commit and push changes
         run: |
           git add .
           git commit -m "Autoformat code with Black"
           git push
+        if: failure()
