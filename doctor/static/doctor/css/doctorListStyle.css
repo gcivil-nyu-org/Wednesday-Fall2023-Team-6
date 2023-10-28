@@ -9,7 +9,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 30px;
   position: relative;
   background-color: #0a2049;
   height: 40px;
@@ -17,45 +17,64 @@ body {
 }
 
 .header span {
-  font-size: 40px;
+  font-size: 30px;
   font-weight: bold;
 }
 
 nav a {
   margin: 0 10px;
   text-decoration: none;
-  color: rgb(255, 255, 255);
+  color: rgb(255, 237, 237);
 }
 
 nav p {
   margin: 0 10px;
 }
 
+.rating-color{
+  color:#fbc634 !important;
+}
+
+.ratings {
+  margin-top: 10px;
+}
+
 /* search and filter */
 .search-and-filter {
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(199, 221, 255, 0.534);
   position: relative;
-  height: 250px;
+  width: 100%;
   margin-bottom: 10px;
-  margin-left: 3%;
-  margin-right: 3%;
-  border-radius: 10px;
+  margin-top: 20px;
+  padding-left: 3%;
+  padding-right: 3%;
   box-shadow: 0 12px 8px rgba(51, 51, 51, 0.1);
   display: flex;
 }
 
 .search-and-filter span {
-  padding-left: 20px;
   font-size: 60px;
   font-weight: 800;
   color: #0a2049;
+  border-bottom: 3px solid #0a2049;
+}
+
+.dropdown-menu {
+  margin-left: 20px;
+}
+
+.dropdown-menu a{
+  font-weight: 600;
+  color: #0a2049;
+  font-size: 20px;
 }
 
 .search-and-filter h3 {
   padding-left: 20px;
   font-weight: bold;
   font-size: 14px;
-  color: #919499;
+  color: #000000;
+  margin-top: 20px;
 }
 
 .search-and-filter h2 {
@@ -66,19 +85,35 @@ nav p {
 }
 
 .filter-left-column {
-  flex: 1;
+  width: 50%
 }
 
 .form-name-input {
-  margin-top: 30px;
+  margin-top: 10px;
   padding-left: 20px;
+  position: absolute;
+  bottom: 40;
+  width: 30%;
+}
+
+legend {
+  font-weight: 900;
+  font-size: larger;
+  margin-left: 5px;
 }
 
 .doctor-name-input {
-  width: min(70%, 550px);
+  width: 80%;
   height: 40px;
-  border-radius: 15px;
-  border-color: #0a2049;
+  border-radius: 5px;
+  border-width: 3px;
+  margin-right: 5px;
+  border-color: #0753c5;
+  padding: 2%;
+}
+
+.doctor-name-input::placeholder {
+  font-weight: 400;
 }
 
 .filter-title {
@@ -89,36 +124,11 @@ nav p {
 }
 
 .filter-right-column {
-  flex: 1;
+  /* flex: 1; */
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-}
-
-.filter-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.filter-form button {
-  width: 80%;
-  font-size: 15px;
-  font-family: Arial, sans-serif;
-  color: rgb(0, 0, 0);
-  background-color: rgb(89, 197, 211);
-  border-radius: 10px;
-  border-color: #b8ebf1;
-  cursor: pointer;
-}
-
-.filter-form button:hover {
-  width: 80%;
-  font-size: 15px;
-  font-family: Arial, sans-serif;
-  color: rgb(0, 0, 0);
-  background-color: rgb(89, 142, 211);
-  border-radius: 10px;
-  border-color: #b8ebf1;
+  margin-top: 20px;
 }
 
 .form-group {
@@ -128,6 +138,7 @@ nav p {
 
 .form-group label {
   margin-top: 10px;
+  margin-left: 5px;
   font-size: 15px;
   font-weight: bold;
 }
@@ -136,10 +147,8 @@ nav p {
   width: 350px;
   padding: 5px;
   margin: 5px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  border-color: #0a2049;
-  /* Add more styles as needed */
+  border: 1px solid #599ecc;
+  border-radius: 5px;
 }
 
 /* search icon */
@@ -165,6 +174,7 @@ nav p {
   /* background-color: rgb(255, 255, 255); */
   position: relative;
   display: grid;
+  margin-top: 40px;
   grid-template-columns: repeat(3, minmax(auto, 1fr));
   grid-gap: 20px;
   height: auto;
@@ -172,6 +182,15 @@ nav p {
   margin-left: 3%;
   margin-right: 3%;
   border-radius: 10px;
+}
+
+#speciality {
+  font-weight: bold;
+}
+
+#address {
+  font-weight: lighter;
+  color: rgb(63, 63, 63);
 }
 
 .doctor-list a {
@@ -189,8 +208,8 @@ nav p {
   margin-left: 3%;
   margin-right: 3%;
   border-radius: 10px;
-  margin-top: 10px;
-  margin-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 50px;
 }
 
 .pagination span {
@@ -208,7 +227,6 @@ nav p {
 .first,
 .last {
   text-decoration: none;
-  background-color: #b8ebf1;
   border-radius: 10px;
   color: #333;
   padding: 5px 10px;
@@ -218,8 +236,7 @@ nav p {
 
 .page {
   text-decoration: none;
-  background-color: #b8ebf1;
-  border-radius: 50%;
+  border-radius: 20%;
   color: #333;
   padding: 5px 10px;
   border: 1px solid #94c0f1;
@@ -231,14 +248,14 @@ nav p {
 .next:hover,
 .first:hover,
 .last:hover {
-  background-color: #ebb3b3;
+  background-color: #bed3ff;
   cursor: pointer;
 }
 
 .page.active {
   color: #fff;
-  background-image: linear-gradient(#e9b4bd, #ff4568);
-  border: 1px solid #f32775;
+  background-image: linear-gradient(#9bbaff, #378cfc);
+  border: 1px solid #2600ad;
   background-repeat: no-repeat;
 }
 
@@ -248,21 +265,15 @@ nav p {
   padding: 10px;
   display: grid;
   align-items: center;
-  border-radius: 10px;
-  max-height: 350px;
-  min-width: 410px;
+  min-width: 500px;
+  border-radius: 5px;
   box-shadow: 0 12px 8px rgba(0, 0, 0, 0.1);
-}
-
-.card-row {
-  display: flex;
 }
 
 .card-left-column {
   flex: 1;
   display: flex;
   align-items: center;
-  margin-right: 5px;
 }
 
 .card-right-column {
@@ -270,7 +281,6 @@ nav p {
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-left: 5px;
 }
 
 .card-avatar {
@@ -279,8 +289,11 @@ nav p {
 }
 
 .card-border {
-  padding: 10px;
   font-size: 15px;
+  margin-top: 30px;
+  margin-left: 2px;
+  color: rgb(80, 80, 80);
+  font-weight: 700;
 }
 
 .card p {
@@ -294,14 +307,23 @@ nav p {
 }
 
 .book-appointment {
-  position: sticky;
-  bottom: 0;
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(55, 135, 255);
   color: white;
-  border-radius: 10px;
+  border-radius: 5px;
+  border-color: black;
   padding: 10px 20px;
   cursor: pointer;
   width: 100%;
+}
+
+#book_appointment_button:hover {
+  border-radius: 5px;
+}
+
+.contact {
+  position: absolute;
+  bottom: 0;
+  width: 80%;
 }
 
 .doctor-list button:hover {
