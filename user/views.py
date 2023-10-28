@@ -26,6 +26,7 @@ def logoutView(request):
 
 
 
+
 def loginView(request):
     if request.method == "POST":
         username = request.POST.get("user_email")
