@@ -27,7 +27,8 @@ script:
   - python -m coverage run --source=doctor,hospital,user,MediLink manage.py test
 #  - yes | python manage.py collectstatic --noinput
 
-after_script: coveralls
+after_success:
+  coveralls
 
 deploy:
   provider: elasticbeanstalk
