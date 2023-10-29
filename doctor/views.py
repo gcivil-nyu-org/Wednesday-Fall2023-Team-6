@@ -39,7 +39,7 @@ class DoctorListView(generic.ListView):
             primary_speciality = filter_form.cleaned_data.get("primary_speciality")
             address = filter_form.cleaned_data.get("address")
             borough = filter_form.cleaned_data.get("borough")
-            zip_code = filter_form.cleaned_data.get("zip")
+            zip = filter_form.cleaned_data.get("zip")
 
             if name:
                 """
@@ -52,8 +52,8 @@ class DoctorListView(generic.ListView):
                 doctors = doctors.filter(address=address)
             if borough and borough != "All":
                 doctors = doctors.filter(borough=borough)
-            if zip_code and zip_code != "All":
-                doctors = doctors.filter(zip=zip_code)
+            if zip and zip != "All":
+                doctors = doctors.filter(zip=zip)
 
         return doctors
 
@@ -75,14 +75,14 @@ class DoctorListView(generic.ListView):
         primary_speciality = self.request.GET.get("primary_speciality", "all")
         address = self.request.GET.get("address", "all")
         borough = self.request.GET.get("borough", "all")
-        zip = self.request.GET.get("zip_code", "all")
+        zip = self.request.GET.get("zip", "all")
         name = self.request.GET.get("name", "")
         context["filter_form"] = DoctorFilterForm(
             initial={
                 "primary_speciality": primary_speciality,
                 "address": address,
                 "borough": borough,
-                "zip_code": zip,
+                "zip": zip,
                 "name": name,
             }
         )

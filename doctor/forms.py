@@ -1,4 +1,6 @@
 from django import forms
+
+from user.models import Choices
 from .models import Doctor
 
 
@@ -72,12 +74,11 @@ class DoctorFilterForm(forms.Form):
         self.fields["address"].choices = all_address
         self.fields["address"].initial = initial_values["address"]
 
-        boroughs = list(Doctor.objects.values_list("borough", flat=True).distinct())
-        all_borough = all_option + [(borough, borough) for borough in boroughs]
+        all_borough = all_option + [(bor[0], bor[1]) for bor in Choices.boroughs]
         self.fields["borough"].choices = all_borough
         self.fields["borough"].initial = initial_values["borough"]
 
         zip_codes = list(Doctor.objects.values_list("zip", flat=True).distinct())
-        all_zip = all_option + [(zip_code, zip_code) for zip_code in zip_codes]
+        all_zip = all_option + [(zip, zip) for zip in zip_codes]
         self.fields["zip"].choices = all_zip
         self.fields["zip"].initial = initial_values["zip"]

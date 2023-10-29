@@ -300,6 +300,11 @@ legend {
   font-weight: 900;
   font-size: 20px;
   margin-right: 3px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card h3 {

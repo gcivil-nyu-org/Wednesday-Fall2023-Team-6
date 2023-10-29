@@ -1,4 +1,6 @@
 from django import forms
+
+from user.models import Choices
 from .models import Hospital
 
 
@@ -9,6 +11,7 @@ class HospitalFilterForm(forms.Form):
             attrs={
                 "class": "hospital-name-input",
                 "placeholder": "Search hospital name",
+                "name": "search",
             }
         ),
         required=False,
@@ -69,8 +72,7 @@ class HospitalFilterForm(forms.Form):
         self.fields["location"].choices = all_locations
         self.fields["location"].initial = initial_values["location"]
 
-        boroughs = list(Hospital.objects.values_list("borough", flat=True).distinct())
-        all_borough = all_option + [(borough, borough) for borough in boroughs]
+        all_borough = all_option + [(bor[0], bor[1]) for bor in Choices.boroughs]
         self.fields["borough"].choices = all_borough
         self.fields["borough"].initial = initial_values["borough"]
 

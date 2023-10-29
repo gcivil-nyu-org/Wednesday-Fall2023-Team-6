@@ -25,17 +25,26 @@ jobs:
           python -m pip install --upgrade pip
           pip install black
 
-      - name: Autoformat code with Black
+      - name: Check code formatting with Black
+        id: black-check
         run: |
-          black .
+          if black --check . --skip-string-normalization; then
+            echo "Black check passed."
+            echo "::set-output name=black-check-result::pass"
+          else
+            echo "Black check failed."
+            echo "::set-output name=black-check-result::fail"
+          fi
 
-      - name: Configure Git
+      - name: Format code with Black (if check fails)
         run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-
-      - name: Commit and push changes
-        run: |
-          git add .
-          git commit -m "Autoformat code with Black"
-          git push
+          if [[ "${{ steps.black-check.outputs.black-check-result }}" == "fail" ]]; then
+            black .
+            git config user.name "${{ github.actor }}"
+            git config user.email "${{ github.actor }}@users.noreply.github.com"
+            git add .
+            git commit -m "Autoformat code with Black"
+            git push
+          else
+            echo "Black check passed. No need to format."
+          fi

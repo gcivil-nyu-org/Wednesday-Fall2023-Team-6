@@ -35,23 +35,23 @@
             </a>
             {% comment %} <h3>This page shows a list of doctors registered in MediLink.</h3> {% endcomment %}
             {% comment %} <h2>Search doctor's name below or filter for more accurate searching.</h2> {% endcomment %}
-            <form method="get">
-                {% csrf_token %}
+            <form method="get" id="search-form">
                 <div class="form-name-input">
                     {{ filter_form.name }}
-                    <button id="search-button" type="button" class="btn btn-primary">
+                    <button id="search-button" type="button" class="btn btn-primary" onclick="handleFilterChange()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                         </svg>
                     </button>
+                    <input type="submit" hidden/>
                 </div>
             </form>
         </div>
         <div class="filter-right-column container">
             <form method="get" class="filter-form" id="filter-form" onchange="handleFilterChange()">
-                <fieldset>
+                <fieldset id="filter-fieldset">
                     <legend>FILTERS</legend>
-                    {% csrf_token %}
+                    <hr class="mt-0 mb-3"/>
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
@@ -128,16 +128,16 @@
     <!-- pagination -->
     <div class="pagination">
         {% if doctor_list.has_previous %}
-        <a href="?page=1" class="first">First</a>
-        <a href="?page={{ doctor_list.previous_page_number }}" class="prev">&laquo; Previous</a>
+        <a onclick="javascript:getPageUrl(1)" class="first">First</a>
+        <a onclick="javascript:getPageUrl({{ doctor_list.previous_page_number }})" class="prev">&laquo; Previous</a>
         {% endif %}
 
         <div class="page-numbers">
             {% for num in doctor_list.paginator.page_range %}
 
             {% if doctor_list.number == num %}
-            <a href="?page={{ num }}" class="page active">{{ num }}</a>
-            {% elif num > doctor_list.number|add:'-4' and num < doctor_list.number|add:'4' %} <a href="?page={{ num }}"
+            <a onclick="javascript:getPageUrl({{ num }})" class="page active">{{ num }}</a>
+            {% elif num > doctor_list.number|add:'-4' and num < doctor_list.number|add:'4' %} <a onclick="javascript:getPageUrl({{ num }})"
                 class="page">{{ num }}</a>
                 {% endif %}
                 {% endfor %}
@@ -146,8 +146,8 @@
         <span class="current">Page {{ doctor_list.number }} of {{ doctor_list.paginator.num_pages }} pages</span>
 
         {% if doctor_list.has_next %}
-        <a href="?page={{ doctor_list.next_page_number }}" class="next">Next &raquo;</a>
-        <a href="?page={{ doctor_list.paginator.num_pages }}" class="last">Last</a>
+        <a onclick="javascript:getPageUrl({{ doctor_list.next_page_number }})" class="next">Next &raquo;</a>
+        <a onclick="javascript:getPageUrl({{ doctor_list.paginator.num_pages }})" class="last">Last</a>
         {% endif %}
     </div>
 
