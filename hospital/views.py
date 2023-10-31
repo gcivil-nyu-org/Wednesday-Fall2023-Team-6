@@ -1,6 +1,6 @@
 from datetime import datetime
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views import generic
 from .models import Hospital, HospitalAppointment
 from user.models import User
@@ -16,6 +16,32 @@ from .forms import HospitalFilterForm
 class HospitalDetailView(generic.DetailView):
     model = Hospital
     template_name = "hospital/hospital_details.html"
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+
+def TempDetails(request):
+    template_name = "hospital/hospital_details.html"
+    return render(request, template_name)
+
+
+def get_hospitals(request):
+    # Query all hospitals from the database
+    hospitals = Hospital.objects.all()
+
+    # Convert queryset to a list of dictionaries
+    hospital_list = [
+        {
+            "name": hospital.name,
+            "facility_type": hospital.facility_type,
+            # Add other fields as needed
+        }
+        for hospital in hospitals
+    ]
+
+    # Return the list as JSON
+    return JsonResponse({"hospitals": hospital_list})
 
 
 class HospitalListView(generic.ListView):
