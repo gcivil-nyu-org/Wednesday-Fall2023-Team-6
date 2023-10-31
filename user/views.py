@@ -22,7 +22,7 @@ PASSWORD_RESET_SUBJECT = "MediLink Account Password Reset Request"
 
 def logoutView(request):
     logout(request)
-    return redirect("user:login")  # Redirect to the login page after logout
+    return redirect("user:home")  # Redirect to the login page after logout
 
 
 def loginView(request):
