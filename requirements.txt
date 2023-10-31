@@ -1,1 +1,9 @@
 Django==4.2.4
+asgiref
+sqlparse
+pytest
+coverage
+flake8
+black
+coveralls
+pyyaml
