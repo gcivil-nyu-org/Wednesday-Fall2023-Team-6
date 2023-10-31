@@ -12,5 +12,5 @@ urlpatterns = [
         name="book_appointment",
     ),
     path("details/", TempDetails, name="details"),
-    path('get_hospitals/', get_hospitals, name='get_hospitals'),
+    path("get_hospitals/", get_hospitals, name="get_hospitals"),
 ]

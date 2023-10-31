@@ -18,6 +18,7 @@ class HospitalDetailView(generic.DetailView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+
 def TempDetails(request):
     template_name = "hospital/hospital_details.html"
     return render(request, template_name)
@@ -30,15 +31,15 @@ def get_hospitals(request):
     # Convert queryset to a list of dictionaries
     hospital_list = [
         {
-            'name': hospital.name,
-            'facility_type': hospital.facility_type,
+            "name": hospital.name,
+            "facility_type": hospital.facility_type,
             # Add other fields as needed
         }
         for hospital in hospitals
     ]
 
     # Return the list as JSON
-    return JsonResponse({'hospitals': hospital_list})
+    return JsonResponse({"hospitals": hospital_list})
 
 
 @xframe_options_exempt
