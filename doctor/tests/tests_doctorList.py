@@ -41,7 +41,7 @@ class TestDoctorListView(TestCase):
         # Create doctors with different specialities
         Doctor.objects.create(
             name="Doctor A",
-            email=f"doctorA@example.com",
+            email="doctorA@example.com",
             phone="987-654-3210",
             sex="Female",
             address="Test Address A",
@@ -52,10 +52,10 @@ class TestDoctorListView(TestCase):
 
         Doctor.objects.create(
             name="Doctor B",
-            email=f"doctorB@example.com",
+            email="doctorB@example.com",
             phone="987-654-3210",
             sex="Female",
-            address=f"Test Address B",
+            address="Test Address B",
             borough="Queens",
             zip=54321,
             primary_speciality="Dermatology",
@@ -63,18 +63,17 @@ class TestDoctorListView(TestCase):
 
         Doctor.objects.create(
             name="Doctor C",
-            email=f"doctorC@example.com",
+            email="doctorC@example.com",
             phone="987-654-3210",
             sex="Female",
-            address=f"Test Address C",
+            address="Test Address C",
             borough="Queens",
             zip=54321,
             primary_speciality="Cardiology",
         )
 
         response = self.client.get(
-            "/doctor/"
-            + "?page=1&primary_speciality=Cardiology&borough=All&address=All&zip=All&name="
+            "/doctor/" + "?page=1&primary_speciality=Cardiology&borough=All&address=All&zip=All&name="
         )
 
         self.assertEqual(response.status_code, 200)
@@ -92,7 +91,7 @@ class TestDoctorListView(TestCase):
         # Create doctors with different specialities
         Doctor.objects.create(
             name="Doctor A",
-            email=f"doctorA@example.com",
+            email="doctorA@example.com",
             phone="987-654-3210",
             sex="Female",
             address="Test Address A",
@@ -103,18 +102,17 @@ class TestDoctorListView(TestCase):
 
         Doctor.objects.create(
             name="Doctor B",
-            email=f"doctorB@example.com",
+            email="doctorB@example.com",
             phone="987-654-3210",
             sex="Female",
-            address=f"Test Address B",
+            address="Test Address B",
             borough="Queens",
             zip=54321,
             primary_speciality="Dermatology",
         )
 
         response = self.client.get(
-            "/doctor/"
-            + "?page=1&primary_speciality=All&borough=All&address=All&zip=All&name=Doctor A"
+            "/doctor/" + "?page=1&primary_speciality=All&borough=All&address=All&zip=All&name=Doctor A"
         )
 
         self.assertEqual(response.status_code, 200)
