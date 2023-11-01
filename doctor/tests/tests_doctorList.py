@@ -72,9 +72,9 @@ class TestDoctorListView(TestCase):
             primary_speciality="Cardiology",
         )
 
-        response = self.client.get(
-            "/doctor/" + "?page=1&primary_speciality=Cardiology&borough=All&address=All&zip=All&name="
-        )
+        url = "/doctor/"
+        url += "?page=1&primary_speciality=Cardiology&borough=All&address=All&zip=All&name="
+        response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
 
@@ -111,9 +111,9 @@ class TestDoctorListView(TestCase):
             primary_speciality="Dermatology",
         )
 
-        response = self.client.get(
-            "/doctor/" + "?page=1&primary_speciality=All&borough=All&address=All&zip=All&name=Doctor A"
-        )
+        url = "/doctor/"
+        url += "?page=1&primary_speciality=All&borough=All&address=All&zip=All&name=Doctor A"
+        response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
 
