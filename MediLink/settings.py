@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-z2if98e5x^l*zx4!r(72d^(_+ax0pwsflq_s)0pqiey(t_d3lv
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "medilink-integration.eba-eh6g3vfq.us-east-1.elasticbeanstalk.com",
+    "medilink-integration.eba-ywbzcdwm.us-west-2.elasticbeanstalk.com",
     "127.0.0.1",
 ]
 
