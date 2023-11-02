@@ -134,6 +134,32 @@ def home(request):
     return render(request, "user/home.html")
 
 
+def accountView(request):
+    template_name = "user/account.html"
+    """
+    use login_required decorator to
+    check weather a user is logged in
+    for the account view
+    """
+    if request.user.is_authenticated:
+        user = request.user
+        if user.username != "admin":
+            print(user.email)
+            login_user = Patient.objects.filter(email=user.email).first()
+            print(login_user.borough)
+            return render(request, template_name, {"login_user": login_user})
+        # admin user logged in, redirect to admin page
+        else:
+            return HttpResponseRedirect(reverse("admin:index"))
+    # visitors should log in to view the account
+    # redirect to login page
+    else:
+        alert_message = "Please login/register to view your account!"
+        messages.error(request, alert_message)
+        # auto redirect to login page
+        return HttpResponseRedirect(reverse("user:login"))
+
+
 def isValidEmail(email):
     if not email:
         return False
