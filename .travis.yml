@@ -6,7 +6,7 @@ python:
 before_install:
   - pip install 'urllib3<2.0'
   - sudo apt-get update
-#  - sudo apt-get install -y sqlite3 libsqlite3-dev
+  #  - sudo apt-get install -y sqlite3 libsqlite3-dev
   # Verify SQLite version
   - sqlite3 --version
 
@@ -27,7 +27,7 @@ script:
   - python -m coverage run --source=doctor,hospital,user,MediLink manage.py test
 #  - yes | python manage.py collectstatic --noinput
 
-after_script:
+after_success:
   coveralls
 
 deploy:
@@ -40,5 +40,4 @@ deploy:
   bucket_name: $AWS_BUCKET_NAME
   on:
     branch: develop
-
 # You can add additional steps such as deployment configuration if needed.

@@ -9,6 +9,8 @@ from django.utils import timezone
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.core.paginator import Paginator
+from .forms import HospitalFilterForm
 
 
 class HospitalDetailView(generic.DetailView):
@@ -40,6 +42,75 @@ def get_hospitals(request):
 
     # Return the list as JSON
     return JsonResponse({"hospitals": hospital_list})
+
+
+class HospitalListView(generic.ListView):
+    model = Hospital
+    template_name = "hospital/hospital_list.html"
+
+    # doctor list object name in html
+    context_object_name = "hospital_list"
+
+    def get_queryset(self):
+        hospitals = Hospital.objects.all().order_by("name")
+        filter_form = HospitalFilterForm(self.request.GET)
+
+        """
+        filter backend implementation
+        """
+        if filter_form.is_valid():
+            name = filter_form.cleaned_data.get("name")
+            facility_type = filter_form.cleaned_data.get("facility_type")
+            location = filter_form.cleaned_data.get("location")
+            borough = filter_form.cleaned_data.get("borough")
+            postal_code = filter_form.cleaned_data.get("postal_code")
+
+            if name:
+                """
+                to make the name contains the input name
+                """
+                hospitals = hospitals.filter(name__contains=name)
+            if facility_type and facility_type != "All":
+                hospitals = hospitals.filter(facility_type=facility_type)
+            if location and location != "All":
+                hospitals = hospitals.filter(location=location)
+            if borough and borough != "All":
+                hospitals = hospitals.filter(borough=borough)
+            if postal_code and postal_code != "All":
+                hospitals = hospitals.filter(postal_code=postal_code)
+
+        return hospitals
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        """
+        Pagination use the paginator to make pagination,
+        which contains two variables,
+        the first one is the context hospital list from get_queryset,
+        the second one is the quantity of the page items.
+        """
+        paginator = Paginator(context["hospital_list"], 12)
+        page_number = self.request.GET.get("page")
+        hospital_list = paginator.get_page(page_number)
+        context["hospital_list"] = hospital_list
+
+        # Get filter parameters from the URL
+        facility_type = self.request.GET.get("facility_type", "all")
+        location = self.request.GET.get("location", "all")
+        borough = self.request.GET.get("borough", "all")
+        postal_code = self.request.GET.get("postal_code", "all")
+        name = self.request.GET.get("name", "")
+        context["filter_form"] = HospitalFilterForm(
+            initial={
+                "facility_type": facility_type,
+                "location": location,
+                "borough": borough,
+                "postal_code": postal_code,
+                "name": name,
+            }
+        )
+        return context
 
 
 @xframe_options_exempt
