@@ -147,6 +147,7 @@ nav p {
   margin-right: 5px;
   background-color: rgb(255, 255, 255, 0.8);
   padding: 7.5px;
+  width: 210px;
   box-shadow: 5px 5px 10px rgba(17, 16, 16, 0.7);
 }
 
