@@ -7,3 +7,4 @@ flake8
 black
 coveralls
 pyyaml
+Pillow
