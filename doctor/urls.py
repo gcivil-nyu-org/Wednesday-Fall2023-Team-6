@@ -6,5 +6,7 @@ app_name = "doctor"
 urlpatterns = [
     path("", DoctorListView.as_view(), name="list_view"),
     path("<int:pk>/", DoctorDetailView.as_view(), name="detail_view"),
-    path("<int:doctor_id>/bookConsultation/", book_consultation, name="book_consultation"),
+    path(
+        "<int:doctor_id>/bookConsultation/", book_consultation, name="book_consultation"
+    ),
 ]

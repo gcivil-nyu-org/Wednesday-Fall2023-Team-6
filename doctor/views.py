@@ -13,7 +13,6 @@ from .forms import DoctorFilterForm
 from django.core.exceptions import ValidationError
 
 
-
 class DoctorDetailView(generic.DetailView):
     model = Doctor
     template_name = "doctor/doctor_details.html"
@@ -99,7 +98,9 @@ def book_consultation(request, doctor_id):
         try:
             body = json.loads(request.body.decode("utf-8"))
             user_id = 1  # Replace with the appropriate user ID logic
-            start_time = datetime.strptime(f'{body["date"]} {body["time"]}', "%Y-%m-%d %H:%M")
+            start_time = datetime.strptime(
+                f'{body["date"]} {body["time"]}', "%Y-%m-%d %H:%M"
+            )
             start_time = timezone.make_aware(start_time)
             name = body["name"]
             phone = body["phone"]
@@ -119,12 +120,14 @@ def book_consultation(request, doctor_id):
                 email=email,
                 reason=reason,
                 start_time=start_time,
-                status="REQ"
+                status="REQ",
             )
             appointment.full_clean()  # Validate model fields
             appointment.save()
             print("Online Appointment Saved")
-            return HttpResponse("Online Consultation Request Created Successfully!", status=200)
+            return HttpResponse(
+                "Online Consultation Request Created Successfully!", status=200
+            )
 
         except ValidationError as ve:
             print("Validation Error:", ve)

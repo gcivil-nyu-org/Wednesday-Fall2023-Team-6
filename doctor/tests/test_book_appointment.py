@@ -33,9 +33,9 @@ class BookConsultationTestCase(TestCase):
         )
         saved_patient = Patient.objects.get(pk=self.patient.pk)
         print({self.patient.id})
-        response = self.client.get(f'/doctor/{self.doctor.id}/')
+        response = self.client.get(f"/doctor/{self.doctor.id}/")
         print(response)
-        self.book_consultation_url = f'/doctor/{self.doctor.id}/bookConsultation/'
+        self.book_consultation_url = f"/doctor/{self.doctor.id}/bookConsultation/"
         self.data = {
             "date": "2023-11-03",
             "time": "05:43",
@@ -47,7 +47,11 @@ class BookConsultationTestCase(TestCase):
 
     def test_book_consultation(self):
         # Test booking a consultation successfully
-        response = self.client.post(self.book_consultation_url, json.dumps(self.data), content_type="application/json")
+        response = self.client.post(
+            self.book_consultation_url,
+            json.dumps(self.data),
+            content_type="application/json",
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(DoctorAppointment.objects.count(), 1)
         appointment = DoctorAppointment.objects.first()
@@ -71,9 +75,13 @@ class BookConsultationTestCase(TestCase):
         wrong_url = reverse("doctor:book_consultation", kwargs={"doctor_id": 999})
         response = self.client.post(wrong_url, self.data, content_type="text/html")
         self.assertEqual(response.status_code, 404)
+
     def test_book_consultation_no_patient(self):
         self.patient.delete()
         # Test booking a consultation successfully
-        response = self.client.post(self.book_consultation_url, json.dumps(self.data), content_type="application/json")
+        response = self.client.post(
+            self.book_consultation_url,
+            json.dumps(self.data),
+            content_type="application/json",
+        )
         self.assertEqual(response.status_code, 404)
-
