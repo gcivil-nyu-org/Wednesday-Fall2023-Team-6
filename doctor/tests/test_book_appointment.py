@@ -73,7 +73,7 @@ class BookConsultationTestCase(TestCase):
         self.assertEqual(DoctorAppointment.objects.count(), 0)
 
     def test_book_consultation_no_doctor(self):
-        # Test booking a consultation with a non-existent doctor
+        # Test booking a consultation with a non-existent  doctor
         wrong_url = reverse("doctor:book_consultation", kwargs={"doctor_id": 999})
         response = self.client.post(
             wrong_url,
