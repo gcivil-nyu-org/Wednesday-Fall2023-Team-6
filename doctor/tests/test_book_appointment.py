@@ -65,7 +65,9 @@ class BookConsultationTestCase(TestCase):
         # Test booking a consultation with invalid data
         self.data.pop("email")  # Remove email to simulate invalid data
         response = self.client.post(
-            self.book_consultation_url, self.data, content_type="text/html"
+            self.book_consultation_url,
+            json.dumps(self.data),
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(DoctorAppointment.objects.count(), 0)
@@ -73,7 +75,11 @@ class BookConsultationTestCase(TestCase):
     def test_book_consultation_no_doctor(self):
         # Test booking a consultation with a non-existent doctor
         wrong_url = reverse("doctor:book_consultation", kwargs={"doctor_id": 999})
-        response = self.client.post(wrong_url, self.data, content_type="text/html")
+        response = self.client.post(
+            wrong_url,
+            json.dumps(self.data),
+            content_type="application/json",
+        )
         self.assertEqual(response.status_code, 404)
 
     def test_book_consultation_no_patient(self):
