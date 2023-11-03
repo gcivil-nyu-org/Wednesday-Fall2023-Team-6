@@ -71,13 +71,17 @@
 
                     <div class="row">
                         <div class="info-row">
-                            <label class="info-label">Sex</label>
-                            <input type="text" name="sex" class="info-field" disabled value="{{ login_user.sex }}">
+                            <label class="info-label">Zip</label>
+                            <input type="text" name="zip" class="info-field" disabled value="{{ login_user.zip }}">
                         </div>
 
                         <div class="info-row">
-                            <label class="info-label">Zip</label>
-                            <input type="text" name="zip" class="info-field" disabled value="{{ login_user.zip }}">
+                            <label class="info-label">Gender</label>
+                            <select class="info-field" id="sexSelect" name="sex" disabled>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
                         </div>
 
                         <div class="info-row">
@@ -143,10 +147,21 @@
     var userBorough = "{{ login_user.borough }}";
     var selectElement = document.getElementById("boroughSelect");
 
+    var userSex = "{{ login_user.sex }}";
+    var sexElement = document.getElementById("sexSelect");
+
     // Loop through options and set the default option based on user.borough
     for (var i = 0; i < selectElement.options.length; i++) {
         if (selectElement.options[i].value === userBorough) {
             selectElement.options[i].selected = true;
+            break;
+        }
+    }
+
+    // Loop through options and set the default option based on user.sex
+    for (var i = 0; i < sexElement.options.length; i++) {
+        if (sexElement.options[i].value === userSex) {
+            sexElement.options[i].selected = true;
             break;
         }
     }
