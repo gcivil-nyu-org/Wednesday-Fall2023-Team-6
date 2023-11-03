@@ -17,6 +17,11 @@ from django.core.mail import EmailMessage
 from django.contrib import messages
 from django.contrib.auth import logout
 
+# import for avatar changing
+import os
+from django.conf import settings
+
+
 PASSWORD_RESET_SUBJECT = "MediLink Account Password Reset Request"
 
 
@@ -137,7 +142,6 @@ def home(request):
 def accountView(request):
     template_name = "user/account.html"
     """
-    use login_required decorator to
     check weather a user is logged in
     for the account view
     """
@@ -145,21 +149,47 @@ def accountView(request):
         user = request.user
         if user.username != "admin":
             login_user = Patient.objects.filter(email=user.email).first()
+            """
+                1. Get method
+                2. Post method
+                    - edit profile
+                    - upload avatar
+            """
             if request.method == "GET":
                 return render(request, template_name, {"login_user": login_user})
             else:
-                login_user.name = request.POST.get("name")
-                login_user.phone = request.POST.get("phone")
-                login_user.sex = request.POST.get("sex")
-                login_user.insurance_provider = request.POST.get("insurance")
-                login_user.address = request.POST.get("address")
-                login_user.borough = request.POST.get("borough")
-                login_user.zip = request.POST.get("zip")
-                login_user.save()
-                return render(request, template_name, {"login_user": login_user})
+                # -------------- Upload Avatar --------------
+                if len(request.FILES) > 0:
+                    uploaded_file = request.FILES["avatar"]
+                    login_user.avatar = uploaded_file
+                    login_user.save()
+                    file_path = os.path.join(
+                        settings.MEDIA_ROOT, "avatars", uploaded_file.name
+                    )
+
+                    # Save the uploaded file to the specified path
+                    with open(file_path, "wb+") as destination:
+                        for chunk in uploaded_file.chunks():
+                            destination.write(chunk)
+
+                    return render(request, template_name, {"login_user": login_user})
+
+                # -------------- Edit Account Info --------------
+                else:
+                    login_user.name = request.POST.get("name")
+                    login_user.phone = request.POST.get("phone")
+                    login_user.sex = request.POST.get("sex")
+                    login_user.insurance_provider = request.POST.get("insurance")
+                    login_user.address = request.POST.get("address")
+                    login_user.borough = request.POST.get("borough")
+                    login_user.zip = request.POST.get("zip")
+                    login_user.save()
+                    return render(request, template_name, {"login_user": login_user})
+
         # admin user logged in, redirect to admin page
         else:
             return HttpResponseRedirect(reverse("admin:index"))
+
     # visitors should log in to view the account
     # redirect to login page
     else:

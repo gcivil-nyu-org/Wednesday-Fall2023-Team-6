@@ -37,12 +37,16 @@
         <!-- Area to upload user image (avatar) -->
         <div class="avatar-card">
             <div class="avatar-upload-area">
-                <!-- Upload button or input element goes here -->
-                <label for="avatar-upload-input" class="avatar-upload-area">
-                    <!-- Icon or text indicating upload action -->
-                    <div class="upload-text">Upload Image</div>
-                </label>
-                <input type="file" id="avatar-upload-input" class="hidden-input" accept="image/*">
+                <form method="POST" action="{% url 'user:account' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <img src="{{login_user.avatar.url}}" alt="Background Image">
+                    <!-- Upload button or input element -->
+                    <label for="avatar-upload-input" class="avatar-upload-area-1">
+                        <!-- Icon or text indicating upload action -->
+                        <div class="upload-text">Upload Image</div>
+                    </label>
+                    <input type="file" name="avatar" id="avatar-upload-input" class="hidden-input" accept="image/*">
+                </form>
             </div>
         </div>
 
@@ -142,6 +146,7 @@
     </div>
 </body>
 
+<!-- some js code for user interaction -->
 <script>
     // Borough selection part
     var userBorough = "{{ login_user.borough }}";
@@ -165,4 +170,9 @@
             break;
         }
     }
+
+    // avatar upload
+    document.getElementById('avatar-upload-input').addEventListener('change', function () {
+        this.form.submit(); // Automatically submit the form when a file is selected
+    });
 </script>

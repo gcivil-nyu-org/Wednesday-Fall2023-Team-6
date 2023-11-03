@@ -75,23 +75,31 @@ nav p {
   margin: 0 auto;
   cursor: pointer;
   background-color: #ebf1f3;
-  background-image: url("../images/default-avatar.png");
   background-size: cover;
   background-position: center;
 }
 
+.avatar-upload-area img {
+  width: 100%; /* Make the image cover the entire div */
+  height: 100%; /* Make the image cover the entire div */
+  border-radius: 50%;
+}
+
 .upload-text {
   display: none;
-  position: absolute;
-  text-align: center;
-  background-color: rgba(
-    212,
-    213,
-    223,
-    0.8
-  ); /* Background color with opacity */
   padding: 10px;
   border-radius: 20px; /* Optional: Add rounded corners */
+  position: absolute;
+  top: 50%; /* Position the text vertically at 50% from the top */
+  left: 50%; /* Position the text horizontally at 50% from the left */
+  transform: translate(-50%, -50%); /* Center the text within its parent */
+  color: white; /* Set the text color */
+  font-size: 18px; /* Set the font size */
+  text-align: center; /* Center-align the text */
+  background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
+  padding: 10px 20px; /* Add padding to the text */
+  border-radius: 5px; /* Optional: Add rounded corners to the text */
+  cursor: pointer;
 }
 
 .avatar-card:hover .avatar-upload-area .upload-text {

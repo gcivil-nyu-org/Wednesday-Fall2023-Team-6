@@ -28,6 +28,13 @@ class User(models.Model):
 
     zip = models.IntegerField()
 
+    avatar = models.ImageField(
+        upload_to="avatars/",
+        default="avatars/default-avatar.png",
+        null=True,
+        blank=True,
+    )
+
     def __str__(self):
         return self.name + " (" + self.email + ")"
 
