@@ -1,0 +1,212 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #ebf1f3;
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  position: relative;
+  background-color: #0a2049;
+  height: 40px;
+  color: white;
+}
+
+.header span {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+nav a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: rgb(255, 237, 237);
+}
+
+nav p {
+  margin: 0 10px;
+}
+
+.name-display {
+  padding-top: 10px;
+  padding-left: 100px;
+  position: relative;
+}
+
+.name-display span {
+  color: #0a2049;
+  font-size: 60px;
+  font-weight: 900;
+}
+
+/* --------- account left part ---------- */
+.account-left {
+  position: relative;
+  width: 50%;
+  float: left;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ebf1f3;
+}
+
+/* avatar part */
+/* .card {
+    margin-top: 10px;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+} */
+
+.avatar-card {
+  margin-bottom: 10px;
+  border-radius: 5px;
+  padding: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-upload-area {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  cursor: pointer;
+  background-color: #ebf1f3;
+  /* box-shadow: 2px 2px 10px rgba(17, 16, 16, 0.1); */
+  background-image: url("../images/default-avatar.png");
+  background-size: cover;
+  background-position: center;
+  /* Additional styles for the clickable area go here */
+  position: relative;
+}
+
+.upload-text {
+  display: none;
+  position: absolute;
+  text-align: center;
+  background-color: rgba(
+    212,
+    213,
+    223,
+    0.8
+  ); /* Background color with opacity */
+  padding: 10px;
+  border-radius: 20px; /* Optional: Add rounded corners */
+}
+
+.avatar-card:hover .avatar-upload-area .upload-text {
+  display: block;
+  font-weight: bold;
+}
+
+.hidden-input {
+  display: none;
+}
+
+/* Style the upload button or input element */
+.avatar-upload-area input[type="file"] {
+  display: none;
+  /* Additional styles for the file input element go here */
+}
+
+/* user info */
+.user-info {
+  background-color: #0a2049;
+  box-shadow: 0 12px 8px rgba(51, 51, 51, 0.1);
+  border-radius: 15px;
+  padding-left: 30px;
+  padding-right: 30px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.user-info input:disabled {
+    background-color: transparent;
+    color: #d1d0d0; 
+    cursor: not-allowed;
+    border-color: #0d2850;
+}
+
+.user-info label{
+    margin-top: 10px;
+    margin-left: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #d1d0d0; 
+}
+
+.info-row {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.info-row-2 {
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+  width: 49%;
+}
+
+.info-row-3 {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  width: 100%;
+}
+
+.info-row input {
+  border-radius: 5px;
+  border-width: 1px;
+  margin-right: 5px;
+  border-color: #8cb4f1;
+  padding: 5px;
+  color:white;
+}
+
+.info-row-2 input {
+  border-radius: 5px;
+  border-width: 1px;
+  margin-right: 5px;
+  border-color: #8cb4f1;
+  padding: 5px;
+  color:white;
+}
+
+.info-row-3 input {
+  border-radius: 5px;
+  border-width: 1px;
+  margin-right: 5px;
+  border-color: #8cb4f1;
+  padding: 5px;
+  color:white;
+}
+
+.account-right {
+    position: relative;
+    width: 50%;
+    float: left;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ebf1f3;
+}
