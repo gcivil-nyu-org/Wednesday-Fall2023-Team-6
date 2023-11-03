@@ -4,9 +4,11 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+<script src="{% static 'user/javascript/account.js' %}"></script>
 
 <link rel="stylesheet" href="{% static 'user/css/Account.css' %}">
+
+<title>{{login_user.name}} Account</title>
 
 <body>
     <!-- header part -->
@@ -77,9 +79,31 @@
         </div>
 
         <!-- edit button -->
+        <div class="buttons">
+            <button class="edit-btn">Edit</button>
+            <button class="save-btn" disabled>Save</button>
+        </div>
     </div>
 
     <!-- appointment part -->
     <div class="Account-right">
+        <div class="tabs">
+            <div class="tab" name="applications" onclick="showContent('applications')">Applications</div>
+            <div class="tab" name="chats" onclick="showContent('chats')">Chats</div>
+            <div class="tab" name="requests" onclick="showContent('requests')">Requests</div>
+        </div>
+        <div class="content" id="applicationsContent">
+            <!-- Content for Applications tab -->
+            <p>applications</p>
+        </div>
+        <div class="content" id="chatsContent" style="display: none;">
+            <!-- Content for Chats tab -->
+            <p>chats</p>
+        </div>
+        <div class="content" id="requestsContent" style="display: none;">
+            <!-- Content for Requests tab -->
+            <p>requests</p>
+        </div>
     </div>
 </body>
+
