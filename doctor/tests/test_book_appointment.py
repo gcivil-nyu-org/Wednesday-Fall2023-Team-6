@@ -31,7 +31,6 @@ class BookConsultationTestCase(TestCase):
             zip=10001,
             insurance_provider="ABC Insurance",
         )
-        saved_patient = Patient.objects.get(pk=self.patient.pk)
         print({self.patient.id})
         response = self.client.get(f"/doctor/{self.doctor.id}/")
         print(response)
