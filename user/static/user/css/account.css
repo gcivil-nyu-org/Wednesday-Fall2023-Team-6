@@ -49,7 +49,6 @@ nav p {
   width: 50%;
   float: left;
   margin-bottom: 10px;
-  margin-top: 20px;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -67,8 +66,8 @@ nav p {
 }
 
 .avatar-upload-area {
-  width: 250px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -121,7 +120,6 @@ nav p {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
   margin-left: 20px;
   margin-right: 20px;
   box-shadow: 3px 4px 10px #0a2049;
@@ -143,10 +141,35 @@ nav p {
   border-color: #0d2850;
 }
 
+.user-info select{
+  border-radius: 10px;
+  border-width: 1px;
+  margin-right: 5px;
+  background-color: rgb(255, 255, 255, 0.8);
+  padding: 7.5px;
+  box-shadow: 5px 5px 10px rgba(17, 16, 16, 0.7);
+}
+
+.user-info select option{
+  color: #333; /* Text color */
+  background-color: #f2f2f2; /* Background color */
+  font-family: Arial, sans-serif; /* Font family */
+  border-radius: 10%;
+  font-size: 14px; /* Font size */
+  padding: 5px; /* Padding inside the options */
+}
+
+.user-info select:disabled{
+  background-color: transparent;
+  color: #ffffff;
+  cursor: not-allowed;
+  border-color: #0d2850;
+}
+
 .user-info label {
   margin-top: 10px;
   margin-left: 5px;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   color: #d1d0d0;
 }
@@ -160,15 +183,8 @@ nav p {
 .info-row-2 {
   display: flex;
   flex-direction: column;
-  padding-left: 10px;
-  width: 49%;
-}
-
-.info-row-3 {
-  display: flex;
-  flex-direction: column;
   margin: 10px;
-  width: 100%;
+  width: 47%;
 }
 
 /* buttons */
@@ -178,8 +194,9 @@ nav p {
   position: relative;
   display: flex;
   flex-direction: row;
+  justify-content: center;
   align-items: center;
-  margin-top: 40px;
+  margin-top: 30px;
 }
 
 .buttons button:disabled {

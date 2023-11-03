@@ -144,10 +144,19 @@ def accountView(request):
     if request.user.is_authenticated:
         user = request.user
         if user.username != "admin":
-            print(user.email)
             login_user = Patient.objects.filter(email=user.email).first()
-            print(login_user.borough)
-            return render(request, template_name, {"login_user": login_user})
+            if request.method == "GET":
+                return render(request, template_name, {"login_user": login_user})
+            else:
+                login_user.name = request.POST.get("name")
+                login_user.phone = request.POST.get("phone")
+                login_user.sex = request.POST.get("sex")
+                login_user.insurance_provider = request.POST.get("insurance")
+                login_user.address = request.POST.get("address")
+                login_user.borough = request.POST.get("borough")
+                login_user.zip = request.POST.get("zip")
+                login_user.save()
+                return render(request, template_name, {"login_user": login_user})
         # admin user logged in, redirect to admin page
         else:
             return HttpResponseRedirect(reverse("admin:index"))
