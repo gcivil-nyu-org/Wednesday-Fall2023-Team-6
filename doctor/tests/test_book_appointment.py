@@ -7,6 +7,7 @@ from user.models import Patient
 from django.contrib.auth.models import User
 from django.contrib import auth
 
+
 class BookConsultationTestCase(TestCase):
     def setUp(self):
         # Set up data for the whole TestCase
