@@ -36,7 +36,6 @@ class BookConsultationTestCase(TestCase):
         User.objects.create_user(username=self.patient.email, password="test_password")
         self.client.login(username=self.patient.email, password="test_password")
         response = self.client.get(f"/doctor/{self.doctor.id}/")
-        print(response)
         self.book_consultation_url = f"/doctor/{self.doctor.id}/bookConsultation/"
         self.data = {
             "date": "2025-11-03",
