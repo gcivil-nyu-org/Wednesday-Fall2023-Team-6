@@ -4,7 +4,8 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from doctor.models import Doctor, DoctorAppointment
 from user.models import Patient
-
+from django.contrib.auth.models import User
+from django.contrib import auth
 
 class BookConsultationTestCase(TestCase):
     def setUp(self):
@@ -31,12 +32,13 @@ class BookConsultationTestCase(TestCase):
             zip=10001,
             insurance_provider="ABC Insurance",
         )
-        print({self.patient.id})
+        User.objects.create_user(username=self.patient.email, password="test_password")
+        self.client.login(username=self.patient.email, password="test_password")
         response = self.client.get(f"/doctor/{self.doctor.id}/")
         print(response)
         self.book_consultation_url = f"/doctor/{self.doctor.id}/bookConsultation/"
         self.data = {
-            "date": "2023-11-03",
+            "date": "2025-11-03",
             "time": "05:43",
             "name": "Test User",
             "phone": "1234567890",
@@ -89,4 +91,4 @@ class BookConsultationTestCase(TestCase):
             json.dumps(self.data),
             content_type="application/json",
         )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 400)

@@ -115,8 +115,8 @@ def book_consultation(request, doctor_id):
         doctor = get_object_or_404(Doctor, pk=doctor_id)
         try:
             body = json.loads(request.body.decode("utf-8"))
-            if Patient.objects.all().filter(email=request.user.email).exists():
-                user = get_object_or_404(Patient, email=request.user.email)
+            if Patient.objects.all().filter(email=request.user.username).exists():
+                user = get_object_or_404(Patient, email=request.user.username)
             else:
                 return HttpResponseBadRequest(
                     "You need to have a Patient account to create appointments!"
