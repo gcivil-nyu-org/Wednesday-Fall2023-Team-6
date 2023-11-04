@@ -38,15 +38,15 @@ deploy:
       region: $PROD_AWS_REGION
       app: $PROD_AWS_APP_NAME
       env: $PROD_AWS_ENV_NAME
-      bucket_name: "$S3_BUCKET_NAME"
+      bucket_name: "$PROD_BUCKET_NAME"
       on:
           branch: master
     - provider: elasticbeanstalk
-      access_key_id: $MASTER_AWS_ACCESS_KEY
-      secret_access_key: $MASTER_AWS_SECRET_KEY
-      region: $AWS_REGION
-      app: $AWS_APP_NAME
-      env: $AWS_ENV_NAME
-      bucket_name: "$S3_BUCKET_NAME"
+      access_key_id: $INTEGRATION_AWS_ACCESS_KEY
+      secret_access_key: $INTEGRATION_AWS_SECRET_KEY
+      region: $INTEGRATION_REGION
+      app: $INTEGRATION_APP_NAME
+      env: $INTEGRATION_ENV_NAME
+      bucket_name: "$INTEGRATION_BUCKET_NAME"
       on:
           branch: develop
