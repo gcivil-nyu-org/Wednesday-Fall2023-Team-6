@@ -7,7 +7,6 @@ from user.models import Patient
 from django.contrib.auth.models import User
 
 
-
 class BookConsultationTestCase(TestCase):
     def setUp(self):
         # Set up data for the whole TestCase
@@ -35,7 +34,6 @@ class BookConsultationTestCase(TestCase):
         )
         User.objects.create_user(username=self.patient.email, password="test_password")
         self.client.login(username=self.patient.email, password="test_password")
-        response = self.client.get(f"/doctor/{self.doctor.id}/")
         self.book_consultation_url = f"/doctor/{self.doctor.id}/bookConsultation/"
         self.data = {
             "date": "2025-11-03",
