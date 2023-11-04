@@ -32,12 +32,21 @@ after_success:
   coveralls
 
 deploy:
-  provider: elasticbeanstalk
-  access_key_id: $MASTER_AWS_ACCESS_KEY
-  secret_access_key: $MASTER_AWS_SECRET_KEY
-  region: $AWS_REGION
-  app: $AWS_APP_NAME
-  env: $AWS_ENV_NAME
-  bucket_name: $AWS_BUCKET_NAME
-  on:
-    branch: develop
+    - provider: elasticbeanstalk
+      access_key_id: $PROD_AWS_ACCESS_KEY
+      secret_access_key: $PROD_AWS_SECRET_KEY
+      region: $PROD_AWS_REGION
+      app: $PROD_AWS_APP_NAME
+      env: $PROD_AWS_ENV_NAME
+      bucket_name: "$S3_BUCKET_NAME"
+      on:
+          branch: master
+    - provider: elasticbeanstalk
+      access_key_id: $MASTER_AWS_ACCESS_KEY
+      secret_access_key: $MASTER_AWS_SECRET_KEY
+      region: $AWS_REGION
+      app: $AWS_APP_NAME
+      env: $AWS_ENV_NAME
+      bucket_name: "$S3_BUCKET_NAME"
+      on:
+          branch: develop
