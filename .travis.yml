@@ -25,7 +25,8 @@ script:
   - black --check . --skip-string-normalization
   - python -m flake8 --ignore=E303,E501 --max-line-length=88
   - python -m coverage run --source=doctor,hospital,user,MediLink manage.py test
-#  - yes | python manage.py collectstatic --noinput
+  - rm -rf static
+  - python manage.py collectstatic --noinput
 
 after_success:
   coveralls
@@ -34,9 +35,9 @@ deploy:
     - provider: elasticbeanstalk
       access_key_id: $PROD_AWS_ACCESS_KEY
       secret_access_key: $PROD_AWS_SECRET_KEY
-      region: $AWS_REGION
-      app: $AWS_APP_NAME
-      env: $AWS_ENV_NAME
+      region: $PROD_AWS_REGION
+      app: $PROD_AWS_APP_NAME
+      env: $PROD_AWS_ENV_NAME
       bucket_name: "$S3_BUCKET_NAME"
       on:
           branch: master
@@ -49,4 +50,3 @@ deploy:
       bucket_name: "$S3_BUCKET_NAME"
       on:
           branch: develop
-# You can add additional steps such as deployment configuration if needed.
