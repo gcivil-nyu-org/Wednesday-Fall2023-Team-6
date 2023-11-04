@@ -5,7 +5,7 @@ from django.urls import reverse
 from doctor.models import Doctor, DoctorAppointment
 from user.models import Patient
 from django.contrib.auth.models import User
-from django.contrib import auth
+
 
 class BookConsultationTestCase(TestCase):
     def setUp(self):
