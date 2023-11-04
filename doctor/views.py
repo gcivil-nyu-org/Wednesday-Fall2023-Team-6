@@ -62,7 +62,7 @@ class DoctorListView(generic.ListView):
         context = super().get_context_data(**kwargs)
 
         """
-        Pagination use the paginator to make pagination,
+        Pagination use the paginator  to make pagination,
         which contains two variables,
         the first one is the context doctor list from get_queryset,
         the second one is the quantity of the page items.
