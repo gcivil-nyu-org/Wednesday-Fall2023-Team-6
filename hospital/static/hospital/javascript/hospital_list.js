@@ -53,4 +53,11 @@ function getPageUrl(page) {
   window.location.href = baseURL+url;
   return false;
 }
+
+$('#contact_modal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget);
+  var phone = button.data('phone');
+  document.getElementById("modal_phone").setAttribute("href", `tel:${phone}`);
+  document.getElementById("modal_phone").textContent = phone;
+});
   

@@ -36,7 +36,7 @@ nav p {
 }
 
 .ratings {
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 /* search and filter */
@@ -182,7 +182,7 @@ legend {
 }
 
 #address {
-  font-weight: lighter;
+  font-weight: 700;
   color: rgb(63, 63, 63);
 }
 
@@ -298,6 +298,7 @@ legend {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 10px;
 }
 
 .card h3 {
