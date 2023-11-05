@@ -34,20 +34,21 @@
             </a>
         </span>
         <nav>
-            <a href="#" id="searchLink" onclick=window.history.back()>Search</a>
+            <a href="#" id="searchLink" onclick=window.history.back()>Back</a>
+            <a href="#">Account</a>
             <a href="#">Logout</a>
         </nav>
     </div>
-    <div class="main-content">
-        <div class="background-jpg">
+    <div class="main-content row my-2">
+        <div class="background-jpg col">
 
         </div>
-        <div class="detail-info">
+        <div class="detail-info container col px-3">
             <div class="description">
-                <span style="font-weight: bold;">Hospital {{object.name}}</span>
+                <span class="h1">{{object.name}}</span>
                 <br>
                 <br>
-                <p>{{object.name}} is
+                <p class="h6 my-5">{{object.name}} is
                     a hospital located at {{object.borough}} whose primary
                     speciality is {{object.facility_type}}. </p>
             </div>
@@ -61,30 +62,26 @@
                 </p>
                 <p>reviews</p>
             </div>
-            <button style="font-size:18px" class="book-appointment" data-toggle="modal"
+            <button style="font-size:18px" class="book-appointment mt-5" data-toggle="modal"
                 data-target="#book_appointment_modal">Book Appointment
             </button>
         </div>
     </div>
-    <div class="navigator">
+    <div class="navigator container">
         <div class="navigator-item">
-            <h2>PHONE NUMBER</h2>
+            <h2>Phone Number</h2>
             <p>{{object.phone}}</p>
         </div>
-        <div class="navigator-item">
-            <h2>LOCATION</h2>
+        <div class="navigator-item pr-5">
+            <h2>Location</h2>
             <p>{{object.location}}, {{object.borough}}, NY{{object.postal_code}}</p>
         </div>
-        <div class="navigator-item">
+        <div class="navigator-item pr-5">
             <h2>Primary Speciality</h2>
             <p>{{object.facility_type}}</p>
         </div>
         <div class="navigator-item">
-            <h2>Hospital</h2>
-            <p>{{object.name}}</p>
-        </div>
-        <div class="navigator-item">
-            <h2>HOURS</h2>
+            <h2>Hours</h2>
             <p>Mon - Fri: 6 am - 10 pm</p>
             <p>Sat: 7 am - 9 pm</p>
         </div>
