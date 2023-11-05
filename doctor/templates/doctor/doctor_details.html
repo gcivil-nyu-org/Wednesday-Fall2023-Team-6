@@ -32,20 +32,26 @@
     </head>
 
     <div class="header">
-        <!-- <img src="logo.png" alt="logo" class="logo"> -->
-        <span>Doctor {{object.name}}</span>
+        <span><a href="/user/home/">
+                MediLink
+            </a>
+        </span>
         <nav>
-            <a href="#">Search</a>
+            <a href="#" id="searchLink" onclick=window.history.back()>Back</a>
+            <a href="#">Account</a>
             <a href="#">Logout</a>
         </nav>
     </div>
-    <div class="main-content">
-        <div class="background-jpg">
+    <div class="main-content row my-2">
+        <div class="background-jpg col">
             <!-- <img src="{% static 'doctor/images/ww-min.jpg' %}" alt="Doctor" class="doctor-image"> -->
         </div>
-        <div class="detail-info">
+        <div class="detail-info container col px-3">
             <div class="description">
-                <p>Doctor {{object.name}} is
+                <span class="h1">Dr. {{object.name}}</span>
+                <br>
+                <br>
+                <p class="h6 my-5">Dr. {{object.name}} is
                     a doctor 
                     {% if object.associated_hospital.name %}
                     working at {{object.associated_hospital.name}}
@@ -63,32 +69,32 @@
 
                 <p>reviews</p>
             </div>
-            <button style="font-size:18px" class="book-appointment" data-toggle="modal"
+            <button style="font-size:18px" class="book-appointment mt-5" data-toggle="modal"
                 data-target="#book_appointment_modal">Book Online Appointment
             </button>
         </div>
     </div>
     <div class="navigator">
         <div class="navigator-item">
-            <h2>PHONE NUMBER</h2>
+            <h2>Phone Number</h2>
             <p>{{object.phone}}</p>
         </div>
-        <div class="navigator-item">
-            <h2>LOCATION</h2>
+        <div class="navigator-item pr-3">
+            <h2>Location</h2>
             <p>{{object.address}}, {{object.borough}}, NY{{object.zip}}</p>
         </div>
-        <div class="navigator-item">
+        <div class="navigator-item pr-3">
             <h2>Primary Speciality</h2>
             <p>{{object.primary_speciality}}</p>
         </div>
         {% if object.associated_hospital.name %}
-        <div class="navigator-item">
+        <div class="navigator-item pr-3">
             <h2>Hospital</h2>
             <p>{{object.associated_hospital.name}}</p>
         </div>
         {% endif %}        
         <div class="navigator-item">
-            <h2>HOURS</h2>
+            <h2>Hours</h2>
             <p>Mon - Fri: 11 am - 8 pm</p>
             <p>Sat: 6 am - 8 pm</p>
         </div>
