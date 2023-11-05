@@ -8,7 +8,6 @@ from hospital.models import Hospital
 # import json
 
 
-
 class CustomLogicTest(TestCase):
     def test_custom_logic(self):
         pass
