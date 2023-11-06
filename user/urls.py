@@ -13,4 +13,5 @@ urlpatterns = [
         views.passwordResetConfirmView,
         name="passwordResetConfirm",
     ),
+    path("account/", views.accountView, name="account"),
 ]
