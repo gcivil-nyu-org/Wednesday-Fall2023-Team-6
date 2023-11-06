@@ -1,43 +1,80 @@
-body, h1 {
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    background-image: url('doc.gif');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    font-family: Arial, sans-serif;
-    position: relative;
+body, h1, form, .user-actions, .search-container {
+  margin: 0;
+  padding: 0;
+  background-color: #fff; /* Set background color to white */
 }
 
 h1 {
-    text-align: center;
-    padding: 50px 0;
-    font-size: 36px;
-    color: #fff;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  padding: 0px 0; /* Adjust padding */
+  font-size: 30px; /* Adjust font size */
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  background-color: #0a2049;
+  margin: 0;
 }
 
-form {
-    text-align: center;
-    position: absolute;
-    top: 20px;
-    right: 20px;
+h1 span {
+  color: #0a2049;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #8ae44d;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
+.user-actions {
+  position: absolute;
+  top: 10px; /* Adjust top position */
+  right: 10px; /* Adjust right position */
 }
 
-button:hover {
-    background-color: #72c542;
+button, .user-actions a {
+  padding: 8px 16px; /* Adjust padding */
+  background-color: #0a2049;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px; /* Adjust font size */
+  transition: background-color 0.3s;
+}
+
+.user-actions a {
+  display: inline-block;
+  margin-left: 0px; /* Adjust margin */
+}
+
+.image-container {
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 5px; /* Adjust margin */
+}
+
+.image-container img {
+  max-width: 100%; /* Adjust max-width */
+  height: auto;
+  border-radius: 1px; /* Optional: Add border radius to the image */
+}
+
+.search-container {
+  text-align: center;
+  margin: 5px;
+}
+
+.search-bar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-bar {
+  padding: 8px 8px; /* Adjust padding */
+  border: 1px solid #0a2049;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 250px;
+  margin-right: 6px; /* Adjust margin */
+  color: #0a2049;
+}
+
+.placeholder-image {
+  text-align: center;
+  margin-top: 10px; /* Adjust margin */
 }
