@@ -30,7 +30,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "medilink-integration.eba-ywbzcdwm.us-west-2.elasticbeanstalk.com",
     "127.0.0.1",
-    'medilink-prod.us-west-2.elasticbeanstalk.com',
+    "medilink-prod.us-west-2.elasticbeanstalk.com",
 ]
 
 MESSAGE_TAGS = {

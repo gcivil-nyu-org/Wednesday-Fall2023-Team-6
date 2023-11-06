@@ -16,20 +16,19 @@
 
 
 <div class="page">
-
-    <div id="alert-container" class="alert alert-success alert-dismissible fade show fixed-alert" role="alert"
-        style="display: none;">
-        <strong><span id="alert_message">Hello There</span></strong>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Doctor {{object.name}} </title>
     </head>
+
+    <div class="alert alert-danger alert-dismissible shadow fade show" id="alert-container" 
+        role="alert" style="display: none">
+        <button type="button" class="close" onclick="$('#alert-container').hide();" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <strong><span id="alert_message">Error</span></strong>
+    </div>
 
     <div class="header">
         <!-- <img src="logo.png" alt="logo" class="logo"> -->
@@ -60,8 +59,6 @@
                     <span class="fa fa-star"></span>
                     <span class="fa fa-star"></span>
                 </p>
-
-                <p>reviews</p>
             </div>
             <button style="font-size:18px" class="book-appointment" data-toggle="modal"
                 data-target="#book_appointment_modal">Book Online Appointment
