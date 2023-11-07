@@ -30,7 +30,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "medilink-integration.eba-ywbzcdwm.us-west-2.elasticbeanstalk.com",
     "127.0.0.1",
-    'medilink-prod.us-west-2.elasticbeanstalk.com',
+    "medilink-prod.us-west-2.elasticbeanstalk.com",
 ]
 
 MESSAGE_TAGS = {
@@ -44,6 +44,7 @@ MESSAGE_TAGS = {
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -53,15 +54,14 @@ INSTALLED_APPS = [
     "hospital",
     "user",
     "doctor",
-    'channels',
-    'chat',
+    "chat",
 ]
 
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
         },
     },
 }
@@ -98,7 +98,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "MediLink.wsgi.application"
-ASGI_APPLICATION = 'MediLink.routing.application'
+ASGI_APPLICATION = "MediLink.asgi.application"
 
 
 # Database
