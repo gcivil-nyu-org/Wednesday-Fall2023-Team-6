@@ -168,7 +168,7 @@ legend {
   position: relative;
   display: grid;
   margin-top: 40px;
-  grid-template-columns: repeat(3, minmax(auto, 1fr));
+  grid-template-columns: repeat(2, minmax(auto, 1fr));
   grid-gap: 20px;
   height: auto;
   margin-bottom: 10px;
