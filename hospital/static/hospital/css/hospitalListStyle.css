@@ -36,7 +36,7 @@ nav p {
 }
 
 .ratings {
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 /* search and filter */
@@ -92,7 +92,7 @@ nav p {
   margin-top: 10px;
   padding-left: 20px;
   position: absolute;
-  bottom: 40;
+  bottom: 20;
   width: 30%;
 }
 
@@ -168,7 +168,7 @@ legend {
   position: relative;
   display: grid;
   margin-top: 40px;
-  grid-template-columns: repeat(3, minmax(auto, 1fr));
+  grid-template-columns: repeat(2, minmax(auto, 1fr));
   grid-gap: 20px;
   height: auto;
   margin-bottom: 10px;
@@ -182,7 +182,7 @@ legend {
 }
 
 #address {
-  font-weight: lighter;
+  font-weight: 700;
   color: rgb(63, 63, 63);
 }
 
@@ -298,6 +298,7 @@ legend {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 10px;
 }
 
 .card h3 {

@@ -1,5 +1,5 @@
 language: python
-dist: bionic
+dist: focal
 os: linux
 python:
   - "3.11"
@@ -38,7 +38,7 @@ deploy:
       region: $PROD_AWS_REGION
       app: $PROD_AWS_APP_NAME
       env: $PROD_AWS_ENV_NAME
-      bucket_name: "$S3_BUCKET_NAME"
+      bucket_name: $PROD_S3_BUCKET_NAME
       on:
           branch: master
     - provider: elasticbeanstalk
@@ -47,6 +47,6 @@ deploy:
       region: $AWS_REGION
       app: $AWS_APP_NAME
       env: $AWS_ENV_NAME
-      bucket_name: "$S3_BUCKET_NAME"
+      bucket_name: "$AWS_BUCKET_NAME"
       on:
           branch: develop

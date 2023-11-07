@@ -1,24 +1,39 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+from typing import Any
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views import generic
-from user.models import Patient
+from user.models import Choices, Patient
 from django.utils import timezone
-from django.views.decorators.clickjacking import xframe_options_exempt
-from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import Doctor, DoctorAppointment
 from django.core.paginator import Paginator
 from .forms import DoctorFilterForm
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 
 
 class DoctorDetailView(generic.DetailView):
     model = Doctor
     template_name = "doctor/doctor_details.html"
+    borough_converter = {}
+    for borough in Choices.boroughs:
+        borough_converter[borough[0]] = borough[1]
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+
+        try:
+            context["object"].borough = self.borough_converter[
+                context["object"].borough
+            ]
+        except Exception as e:
+            print("Doctor Borough Exception: ", e)
+
+        return context
 
 
 class DoctorListView(generic.ListView):
@@ -90,18 +105,47 @@ class DoctorListView(generic.ListView):
         return context
 
 
-@xframe_options_exempt
-@csrf_exempt
+def check_appointment_overlap(patient, appointment_dtime):
+    end_time = appointment_dtime + timedelta(minutes=30)
+
+    start_check = Q(start_time__lte=end_time)
+    end_check = Q(start_time__gte=(appointment_dtime - timedelta(minutes=30)))
+    overlapping_appointments = DoctorAppointment.objects.filter(
+        start_check & end_check,
+        patient=patient,
+    )
+
+    if overlapping_appointments.exists():
+        return (True, "You have an overlapping appointment/request at that time")
+    else:
+        return (False, "")
+
+
 def book_consultation(request, doctor_id):
     if request.method == "POST":
+        if not request.user.is_authenticated:
+            return HttpResponseBadRequest(
+                "Cannot create an appointment without an account. Please Login!"
+            )
+
         doctor = get_object_or_404(Doctor, pk=doctor_id)
         try:
             body = json.loads(request.body.decode("utf-8"))
-            user_id = 1  # Replace with the appropriate user ID logic
+            if Patient.objects.all().filter(email=request.user.username).exists():
+                user = get_object_or_404(Patient, email=request.user.username)
+            else:
+                return HttpResponseBadRequest(
+                    "You need to have a Patient account to create appointments!"
+                )
             start_time = datetime.strptime(
                 f'{body["date"]} {body["time"]}', "%Y-%m-%d %H:%M"
             )
             start_time = timezone.make_aware(start_time)
+
+            overlap, overlap_message = check_appointment_overlap(user, start_time)
+            if overlap:
+                return HttpResponseBadRequest(overlap_message)
+
             name = body["name"]
             phone = body["phone"]
             email = body["email"]
@@ -113,7 +157,7 @@ def book_consultation(request, doctor_id):
 
         try:
             appointment = DoctorAppointment(
-                patient=get_object_or_404(Patient, pk=user_id),
+                patient=user,
                 doctor=doctor,
                 name=name,
                 phone=phone,
@@ -131,6 +175,8 @@ def book_consultation(request, doctor_id):
 
         except ValidationError as ve:
             print("Validation Error:", ve)
-            return HttpResponseBadRequest("Validation Error")
+            return HttpResponseBadRequest(
+                "Validation Error! Please ensure your details are correct"
+            )
 
     return HttpResponseBadRequest("Invalid Request Method")
