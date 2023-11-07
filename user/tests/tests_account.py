@@ -3,6 +3,9 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from user.models import Patient
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.files.storage import default_storage
+from django.test import override_settings
+from MediLink import settings
 
 
 class AccountViewTest(TestCase):
@@ -47,21 +50,30 @@ class AccountViewTest(TestCase):
         }
 
         response = self.client.post(reverse("user:account"), data=updated_data)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(
-            response, "Updated User"
-        )  # Check if the updated name is in the response content
+
+        # check if the user info is updated
+        updated_user = Patient.objects.get(email="testuser@example.com")
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(updated_user.name, updated_data["name"])
         print("Completed: test for user account edit")
 
+    @override_settings(MEDIA_ROOT=settings.MEDIA_ROOT)
     def test_upload_avatar(self):
         self.client.login(username="testuser@example.com", password="testpassword")
         avatar = SimpleUploadedFile(
             "test-avatar.png", b"file_content", content_type="image/png"
         )
         response = self.client.post(reverse("user:account"), {"avatar": avatar})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         self.patient.refresh_from_db()
         self.assertIsNotNone(self.patient.avatar)
+
+    # delete test avatars
+    def tearDown(self):
+        # Delete the test avatars after the test is complete
+        if self.patient.avatar:
+            default_storage.delete(self.patient.avatar.name)
 
     def test_admin_user_redirected_to_admin_page(self):
         print("\nRunning: test for admin user redirect")

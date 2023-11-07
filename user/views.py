@@ -172,7 +172,7 @@ def accountView(request):
                         for chunk in uploaded_file.chunks():
                             destination.write(chunk)
 
-                    return render(request, template_name, {"login_user": login_user})
+                    return redirect("user:account")
 
                 # -------------- Edit Account Info --------------
                 else:
@@ -184,7 +184,7 @@ def accountView(request):
                     login_user.borough = request.POST.get("borough")
                     login_user.zip = request.POST.get("zip")
                     login_user.save()
-                    return render(request, template_name, {"login_user": login_user})
+                    return redirect("user:account")
 
         # admin user logged in, redirect to admin page
         else:
