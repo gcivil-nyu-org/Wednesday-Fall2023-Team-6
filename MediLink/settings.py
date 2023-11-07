@@ -53,7 +53,18 @@ INSTALLED_APPS = [
     "hospital",
     "user",
     "doctor",
+    'channels',
+    'chat',
 ]
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -87,6 +98,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "MediLink.wsgi.application"
+ASGI_APPLICATION = 'MediLink.routing.application'
 
 
 # Database
