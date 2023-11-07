@@ -47,10 +47,12 @@ class AccountViewTest(TestCase):
         }
 
         response = self.client.post(reverse("user:account"), data=updated_data)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(
-            response, "Updated User"
-        )  # Check if the updated name is in the response content
+
+        # check if the user info is updated
+        updated_user = Patient.objects.get(email="testuser@example.com")
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(updated_user.name, updated_data["name"])
         print("Completed: test for user account edit")
 
     def test_upload_avatar(self):
@@ -59,7 +61,7 @@ class AccountViewTest(TestCase):
             "test-avatar.png", b"file_content", content_type="image/png"
         )
         response = self.client.post(reverse("user:account"), {"avatar": avatar})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         self.patient.refresh_from_db()
         self.assertIsNotNone(self.patient.avatar)
 
