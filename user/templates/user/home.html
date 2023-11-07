@@ -99,9 +99,9 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         {% if user.is_authenticated %}
-                            <form class="form-inline" method="post" action="{% url 'user:logout' %}">
+                            <form id="logout-form"  class="form-inline" method="post" action="{% url 'user:logout' %}">
                                 {% csrf_token %}
-                                <button class="btn btn-outline-light" style="background-color: #0a2049;" type="submit">Logout</button>
+                                <button id= "logout-button" class="btn btn-outline-light" style="background-color: #0a2049;" type="button">Logout</button>
                             </form>
                         {% else %}
                             <a class="btn btn-outline-light" style="background-color: #0a2049;" href="{% url 'user:login' %}">Login</a>
@@ -116,20 +116,20 @@
         <div class="search-container">
             <div class="search-bar-container">
                 <!-- Search Bar 1 -->
-                <div class="input-group mt-3">
-                    <input type="text" class="form-control search-bar" placeholder="Search...">
+                <form class="input-group mt-3" id="search-form-1">
+                    <input type="text" class="form-control search-bar" name="query" id="general-search" placeholder="Search Doctors">
                     <div class="input-group-append">
-                        <button class="btn btn-success" type="button">Search</button>
+                        <button class="btn btn-success" type="submit">Search Doctors</button>
                     </div>
-                </div>
+                </form>
                 <div style="margin-right: 10px;"></div>
                 <!-- Search Bar 2 -->
-                <div class="input-group mt-3">
-                    <input type="text" class="form-control search-bar" placeholder="Search Location...">
+                <form class="input-group mt-3" id="search-form-2">
+                    <input type="text" class="form-control search-bar" name="query1" id="general-search1" placeholder="Search Hospitals">
                     <div class="input-group-append">
-                        <button class="btn btn-success" type="button">Search Location</button>
+                        <button class="btn btn-success" type="submit">Search Hospitals</button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 
@@ -147,6 +147,8 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'user/javascript/home_page.js' %}"></script>
+
 </body>
 
 </html>
