@@ -13,137 +13,136 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="{% static 'user/javascript/account.js' %}"></script>
 
-<link rel="stylesheet" href="{% static 'user/css/account.css' %}">
-
 <title>{{login_user.name}} Account</title>
 
 <body>
     <!-- header part -->
-    <div class="header">
-        <span>MediLink</span>
-        <nav>
-            <a href="{% url 'user:home' %}">Home</a>
-            <a href="{% url 'user:logout' %}">Logout</a>
-        </nav>
-    </div>
-
-    <!-- name display part -->
-    <div class="name-display">
-        <span>{{login_user.name}}</span>
-    </div>
-
-    <!-- basic information part -->
-    <div class="Account-left">
-        <!-- Area to upload user image (avatar) -->
-        <div class="avatar-card">
-            <div class="avatar-upload-area">
-                <form method="POST" action="{% url 'user:account' %}" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <img src="{{login_user.avatar.url}}" alt="Background Image">
-                    <!-- Upload button or input element -->
-                    <label for="avatar-upload-input" class="avatar-upload-area-1">
-                        <!-- Icon or text indicating upload action -->
-                        <div class="upload-text">Upload Image</div>
-                    </label>
-                    <input type="file" name="avatar" id="avatar-upload-input" class="hidden-input" accept="image/*">
-                </form>
+    {% include "user/navbar.html" %}
+    <link rel="stylesheet" href="{% static 'user/css/account.css' %}">
+    <div class="row container-fluid">
+        <div class="Account-left container col">
+            <!-- Area to upload user image (avatar) -->
+            <div class="avatar-card">
+                <div class="avatar-upload-area">
+                    <form method="POST" action="{% url 'user:account' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% if login_user.avatar %}
+                        <img src="{{login_user.avatar.url}}" alt="Background Image">
+                        {% else %}
+                        <img src="{% static "user/images/default-avatar.png" %}" alt="Background Image">
+                        {% endif %}
+                        <!-- Upload button or input element -->
+                        <label for="avatar-upload-input" class="avatar-upload-area-1">
+                            <!-- Icon or text indicating upload action -->
+                            <div class="upload-text">Upload Image</div>
+                        </label>
+                        <input type="file" name="avatar" id="avatar-upload-input" class="hidden-input" accept="image/*">
+                    </form>
+                </div>
             </div>
-        </div>
-
-        <!-- user info -->
-        <form id="user-info-form" method="POST" action="{% url 'user:account' %}">
-            {% csrf_token %}
-            <div class="user-info">
-                <div class="column">
-                    <div class="row">
-                        <div class="info-row">
-                            <label class="info-label">Email</label>
-                            <input type="text" name="email" class="info-field-disable" disabled
-                                value="{{ login_user.email }}">
+    
+            <!-- name display part -->
+            <div class="name-display container">
+                <span>{{login_user.name}}</span>
+            </div>
+    
+            <!-- user info -->
+            <form id="user-info-form" method="POST" action="{% url 'user:account' %}">
+                {% csrf_token %}
+                <div class="user-info">
+                    <div class="column">
+                        <div class="row">
+                            <div class="info-row">
+                                <label class="info-label">Email</label>
+                                <input type="text" name="email" class="info-field-disable" disabled
+                                    value="{{ login_user.email }}">
+                            </div>
+    
+                            <div class="info-row">
+                                <label class="info-label">Name</label>
+                                <input type="text" name="name" class="info-field" disabled value="{{ login_user.name }}">
+                            </div>
+    
+                            <div class="info-row">
+                                <label class="info-label">Phone</label>
+                                <input type="text" name="phone" class="info-field" disabled value="{{ login_user.phone }}">
+                            </div>
                         </div>
-
-                        <div class="info-row">
-                            <label class="info-label">Name</label>
-                            <input type="text" name="name" class="info-field" disabled value="{{ login_user.name }}">
+    
+                        <div class="row">
+                            <div class="info-row">
+                                <label class="info-label">Zip</label>
+                                <input type="text" name="zip" class="info-field" disabled value="{{ login_user.zip }}">
+                            </div>
+    
+                            <div class="info-row">
+                                <label class="info-label">Gender</label>
+                                <select class="info-field" id="sexSelect" name="sex" disabled>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+    
+                            <div class="info-row">
+                                <label class="info-label">Borough</label>
+                                <select class="info-field" id="boroughSelect" name="borough" disabled>
+                                    <option value="BKN">Brooklyn</option>
+                                    <option value="MHT">Manhattan</option>
+                                    <option value="QNS">Queens</option>
+                                    <option value="BRX">Bronx</option>
+                                    <option value="SND">Staten Island</option>
+                                </select>
+                            </div>
                         </div>
-
-                        <div class="info-row">
-                            <label class="info-label">Phone</label>
-                            <input type="text" name="phone" class="info-field" disabled value="{{ login_user.phone }}">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="info-row">
-                            <label class="info-label">Zip</label>
-                            <input type="text" name="zip" class="info-field" disabled value="{{ login_user.zip }}">
-                        </div>
-
-                        <div class="info-row">
-                            <label class="info-label">Gender</label>
-                            <select class="info-field" id="sexSelect" name="sex" disabled>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-
-                        <div class="info-row">
-                            <label class="info-label">Borough</label>
-                            <select class="info-field" id="boroughSelect" name="borough" disabled>
-                                <option value="BKN">Brooklyn</option>
-                                <option value="MHT">Manhattan</option>
-                                <option value="QNS">Queens</option>
-                                <option value="BRX">Bronx</option>
-                                <option value="SND">Staten Island</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="info-row-2">
-                            <label class="info-label">Address</label>
-                            <input type="text" name="address" class="info-field" disabled
-                                value="{{ login_user.address }}">
-                        </div>
-                        <div class="info-row-2">
-                            <label class="info-label">Insurance Provider</label>
-                            <input type="text" name="insurance" class="info-field" disabled
-                                value="{{ login_user.insurance_provider }}">
+    
+                        <div class="row">
+                            <div class="info-row-2">
+                                <label class="info-label">Address</label>
+                                <input type="text" name="address" class="info-field" disabled
+                                    value="{{ login_user.address }}">
+                            </div>
+                            <div class="info-row-2">
+                                <label class="info-label">Insurance Provider</label>
+                                <input type="text" name="insurance" class="info-field" disabled
+                                    value="{{ login_user.insurance_provider }}">
+                            </div>
                         </div>
                     </div>
                 </div>
+    
+    
+                <!-- edit button -->
+                <div class="buttons">
+                    <button class="edit-btn">Edit</button>
+                    <button type="submit" class="save-btn" disabled>Save</button>
+                </div>
+            </form>
+        </div>
+    
+        <!-- appointment part -->
+        <div class="Account-right container col">
+            <div class="tabs">
+                <div class="tab" name="appointments" onclick="showContent('appointments')">Appointments</div>
+                <div class="tab" name="chats" onclick="showContent('chats')">Chats</div>
+                <div class="tab" name="requests" onclick="showContent('requests')">Requests</div>
             </div>
-
-
-            <!-- edit button -->
-            <div class="buttons">
-                <button class="edit-btn">Edit</button>
-                <button type="submit" class="save-btn" disabled>Save</button>
+            <div class="content" id="appointmentsContent">
+                <!-- Content for Appointments tab -->
+                <p>appointments, to be implemented.</p>
             </div>
-        </form>
-    </div>
-
-    <!-- appointment part -->
-    <div class="Account-right">
-        <div class="tabs">
-            <div class="tab" name="applications" onclick="showContent('applications')">Applications</div>
-            <div class="tab" name="chats" onclick="showContent('chats')">Chats</div>
-            <div class="tab" name="requests" onclick="showContent('requests')">Requests</div>
-        </div>
-        <div class="content" id="applicationsContent">
-            <!-- Content for Applications tab -->
-            <p>applications, to be implemented.</p>
-        </div>
-        <div class="content" id="chatsContent" style="display: none;">
-            <!-- Content for Chats tab -->
-            <p>chats, to be implemented.</p>
-        </div>
-        <div class="content" id="requestsContent" style="display: none;">
-            <!-- Content for Requests tab -->
-            <p>requests, to be implemented.</p>
+            <div class="content" id="chatsContent" style="display: none;">
+                <!-- Content for Chats tab -->
+                <p>chats, to be implemented.</p>
+            </div>
+            <div class="content" id="requestsContent" style="display: none;">
+                <!-- Content for Requests tab -->
+                <p>requests, to be implemented.</p>
+            </div>
         </div>
     </div>
+    <!-- basic information part -->
+    
 </body>
 
 <!-- some js code for user interaction -->

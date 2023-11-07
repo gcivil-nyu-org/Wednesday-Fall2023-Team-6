@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views import generic
 from .models import Hospital, HospitalAppointment
-from user.models import Patient
+from user.models import Choices, Patient
 from doctor.models import Doctor
 from django.utils import timezone
 import json
@@ -16,12 +16,22 @@ from django.db.models import Q
 class HospitalDetailView(generic.DetailView):
     model = Hospital
     template_name = "hospital/hospital_details.html"
+    borough_converter = {}
+    for borough in Choices.boroughs:
+        borough_converter[borough[0]] = borough[1]
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(HospitalDetailView, self).get_context_data(**kwargs)
+
+        try:
+            context["object"].borough = self.borough_converter[
+                context["object"].borough
+            ]
+        except Exception as e:
+            print("Doctor Borough Exception: ", e)
         context["doctors"] = Doctor.objects.all().filter(
             associated_hospital=context["object"]
         )
