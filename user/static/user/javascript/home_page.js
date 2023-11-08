@@ -1,31 +1,17 @@
 $(document).ready(function () {
-
     console.log("Script loaded successfully.");
-    // Add event listener for search-form-1 (Doctor search)
-    $("#search-form-1").submit(function (event) {
+
+    // Add event listener for the merged search form
+    $("#search-form").submit(function (event) {
         event.preventDefault();
-        handleDoctorChange();
+        handleSearch();
     });
 
-    // Add event listener for search-form-2 (Hospital search)
-    $("#search-form-2").submit(function (event) {
-        event.preventDefault();
-        handleHospitalSearch();
-    });
-
-    // Add event listener for Enter key press on search-form-1 input
+    // Add event listener for Enter key press on the merged search input
     $("#general-search").on("keydown", function (event) {
         if (event.key === "Enter") {
             event.preventDefault();
-            handleDoctorChange();
-        }
-    });
-
-    // Add event listener for Enter key press on search-form-2 input
-    $("#general-search1").on("keydown", function (event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            handleHospitalSearch();
+            handleSearch();
         }
     });
 
@@ -34,37 +20,26 @@ $(document).ready(function () {
         handleLogout();
     });
 
-    function handleDoctorChange() {
-        var searchForm = document.getElementById("search-form-1");
+    function handleSearch() {
+        var searchForm = document.getElementById("search-form");
 
         if (searchForm.checkValidity()) {
             var inputValue = document.getElementById("general-search").value;
+            var searchType = $("#search-type").val();
 
-            const baseURL = window.location.origin + '/doctor/';
-            var url = "?page=1";
-            url += `&primary_speciality=All&borough=All&address=All&zip=All&name=${encodeURIComponent(inputValue)}`;
+            var baseURL = window.location.origin;
 
-            window.location.href = baseURL + url;
-
-            console.log('Doctor Search Query:', inputValue);
-        }
-
-        return false;
-    }
-
-    function handleHospitalSearch() {
-        var locationSearchForm = document.getElementById("search-form-2");
-
-        if (locationSearchForm.checkValidity()) {
-            var locationInputValue = document.getElementById("general-search1").value;
-
-            const baseURL = window.location.origin + '/hospital/';
-            var url = "?page=1";
-            url += `&facility_type=All&borough=All&location=All&postal_code=All&name=${encodeURIComponent(locationInputValue)}`;
+            if (searchType === "doctor") {
+                baseURL += '/doctor/';
+                var url = `?page=1&primary_speciality=All&borough=All&address=All&zip=All&name=${encodeURIComponent(inputValue)}`;
+            } else if (searchType === "hospital") {
+                baseURL += '/hospital/';
+                var url = `?page=1&facility_type=All&borough=All&location=All&postal_code=All&name=${encodeURIComponent(inputValue)}`;
+            }
 
             window.location.href = baseURL + url;
 
-            console.log('Hospital Search Query:', locationInputValue);
+            console.log('Search Query:', inputValue, 'Search Type:', searchType);
         }
 
         return false;

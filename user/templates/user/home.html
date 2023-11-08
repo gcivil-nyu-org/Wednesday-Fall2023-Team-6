@@ -63,27 +63,31 @@
             border-radius: 1px; /* Optional: Add border radius to the image */
         }
 
+    
         .search-container {
-            text-align: center;
-            margin-top: 5px;
-        }
+    text-align: center;
+    margin-top: 10px; /* Adjust top margin */
+    margin-bottom: 10px; /* Adjust bottom margin */
+}
 
-        .search-bar-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+.search-bar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px; /* Adjust top margin */
+    margin-bottom: 10px; /* Adjust bottom margin */
+}
 
-        .search-bar {
-            padding: 8px 8px; /* Adjust padding */
-            border: 1px solid #0a2049;
-            border-radius: 5px;
-            font-size: 14px;
-            width: 250px;
-            margin-right: 6px; /* Adjust margin */
-            color: #0a2049;
-        }
-
+.search-bar {
+    padding: 8px 8px; /* Adjust padding */
+    border: 1px solid #0a2049;
+    border-radius: 5px;
+    font-size: 12px;
+    width: 250px;
+    margin-right: 10px; /* Adjust right margin */
+    margin-left: 20px; /* Adjust left margin */
+    color: #0a2049;
+}
         .placeholder-image {
             text-align: center;
             margin-top: 10px; /* Adjust margin */
@@ -115,24 +119,19 @@
         <!-- Search Bars -->
         <div class="search-container">
             <div class="search-bar-container">
-                <!-- Search Bar 1 -->
-                <form class="input-group mt-3" id="search-form-1">
-                    <input type="text" class="form-control search-bar" name="query" id="general-search" placeholder="Search Doctors">
+                <!-- Merged Search Bar with Dropdown -->
+                <form class="input-group mt-3" id="search-form">
+                    <select class="form-control" id="search-type">
+                        <option value="doctor">Search Doctors</option>
+                        <option value="hospital">Search Hospitals</option>
+                    </select>
+                    <input type="text" class="form-control search-bar" name="query" id="general-search" placeholder="Search">
                     <div class="input-group-append">
-                        <button class="btn btn-success" type="submit">Search Doctors</button>
-                    </div>
-                </form>
-                <div style="margin-right: 10px;"></div>
-                <!-- Search Bar 2 -->
-                <form class="input-group mt-3" id="search-form-2">
-                    <input type="text" class="form-control search-bar" name="query1" id="general-search1" placeholder="Search Hospitals">
-                    <div class="input-group-append">
-                        <button class="btn btn-success" type="submit">Search Hospitals</button>
+                        <button class="btn btn-success" type="submit">Search</button>
                     </div>
                 </form>
             </div>
         </div>
-
         <!-- Image 1 -->
         <div class="image-container">
             <img src="{% static 'user/images/home.jpg' %}" alt="Your Image Alt Text">
