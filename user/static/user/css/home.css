@@ -62,39 +62,45 @@ button:hover, .user-actions a:hover {
 /* Updated search bar styling */
 .search-container {
   text-align: center;
-  margin-top: 50px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .search-bar-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px; 
-  margin-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-.search-bar {
-  padding: 8px; /* Adjust padding */
-  border: 1px solid #599ecc;
-  border-radius: 5px;
-  font-size: 12px; /* Adjust font size */
-  width: 180px; /* Adjust width */
-  color: #0a2049;
-}
-
-
-.search-bar-container button {
-  padding: 8px;
-  background-color: #599ecc;
-  color: #fff;
-  text-decoration: none;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+#search-type.form-control{
+  padding: 8px 16px; /* Adjust padding */
   font-size: 12px;
-
+  border-radius: 5px;
+ 
 }
 
-.search-bar-container button:hover {
-  background-color: #599ecc;
+.search-bar,
+.btn-success {
+  padding: 8px 16px; /* Adjust padding */
+  font-size: 12px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.search-bar,
+#search-type.form-control {
+  width: 200px; /* Set the same width for the search bar and drop-down menu */
+}
+
+.btn-success {
+  background-color: #3887c9;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-success:hover {
+  background-color: #3887c9;
 }
