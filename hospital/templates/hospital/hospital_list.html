@@ -1,0 +1,167 @@
+{% load static %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<title>Hospital List Page</title>
+
+<body>
+    <!-- header part -->
+    {% include "user/navbar.html" %}
+    <link rel="stylesheet" href="{% static 'hospital/css/hospitalListStyle.css' %}">
+
+    <!-- filter part -->
+    <div class="search-and-filter py-4">
+        <div class="filter-left-column container">
+            <a class="nav-item dropdown text-center">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span>Hospitals</span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="{% url "doctor:list_view" %}">Doctors</a>
+                </div>
+            </a>
+            {% comment %} <h3>This page shows a list of doctors registered in MediLink.</h3> {% endcomment %}
+            {% comment %} <h2>Search doctor's name below or filter for more accurate searching.</h2> {% endcomment %}
+            <form method="get" id="search-form">
+                <div class="form-name-input">
+                    {{ filter_form.name }}
+                    <button id="search-button" type="button" class="btn btn-primary" onclick="handleFilterChange()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                    </button>
+                    <input type="submit" hidden/>
+                </div>
+            </form>
+        </div>
+        <div class="filter-right-column container">
+            <form method="get" class="filter-form" id="filter-form" onchange="handleFilterChange()">
+                <fieldset id="filter-fieldset">
+                    <legend>FILTERS</legend>
+                    <hr class="mt-0 mb-3"/>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="{{ filter_form.facility_type.id_for_label }}">Facility Type:</label>
+                                {{ filter_form.facility_type }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ filter_form.borough.id_for_label }}">Borough:</label>
+                                {{ filter_form.borough }}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="{{ filter_form.location.id_for_label }}">Location:</label>
+                                {{ filter_form.location }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ filter_form.postal_code.id_for_label }}">Zip:</label>
+                                {{ filter_form.postal_code }}
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <button type="submit" hidden></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- hospital list part -->
+    <div class="hospital-list">
+        {% if hospital_list %}
+        {% for hospital in hospital_list%}
+        <div class="hospital_link">
+            <div class="card container">
+                <div class="card-row row">
+                    <div class="card-left-column col">
+                        <a href="{%url 'hospital:detail_view' hospital.id %}">
+                            <img class="card-avatar" src="{% static 'hospital/images/hospital_profile_picture.jpeg' %}" alt="placeholder">
+                        </a>
+                    </div>
+                    <div class="card-right-column col">
+                        <a href="{%url 'hospital:detail_view' hospital.id %}">
+                            <p>{{hospital.name}}</p>
+                            <h3><span id="speciality">{{hospital.facility_type}}</span></h3>
+                            <h3>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                </svg>
+                                <span id="address">{{hospital.location}}</span>
+                            </h3>
+                            <div class="ratings">
+                                <h3>Rating:
+                                    <i class="fa fa-star rating-color"></i>
+                                    <i class="fa fa-star rating-color"></i>
+                                    <i class="fa fa-star rating-color"></i>
+                                    <i class="fa fa-star rating-color"></i>
+                                    <i class="fa fa-star"></i>
+                                </h3>
+                            </div>
+                        </a>
+                        <div class="contact">
+                            <button style="font-size:18px" class="book-appointment" data-toggle="modal"
+                             data-target="#contact_modal" data-phone="{{hospital.phone}}">
+                                Contact
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-row">
+                    <h3 class="card-border">
+                        (most recent review from patient) Excellent hospital. Very good experience!
+                    </h3>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="modal fade" id="contact_modal" tabindex="-1" role="dialog" aria-labelledby="contact_modal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+                <p>Phone: <a id="modal_phone" href='#'></a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- pagination -->
+    <div class="pagination container">
+        {% if hospital_list.has_previous %}
+        <a onclick="javascript:getPageUrl(1)" class="first">First</a>
+        <a onclick="javascript:getPageUrl({{ hospital_list.previous_page_number }})" class="prev">&laquo; Previous</a>
+        {% endif %}
+
+        <div class="page-numbers">
+            {% for num in hospital_list.paginator.page_range %}
+
+            {% if hospital_list.number == num %}
+            <a onclick="javascript:getPageUrl({{ num }})" class="page active">{{ num }}</a>
+            {% elif num > hospital_list.number|add:'-4' and num < hospital_list.number|add:'4' %} <a onclick="javascript:getPageUrl({{ num }})"
+                class="page">{{ num }}</a>
+                {% endif %}
+                {% endfor %}
+
+        </div>
+        <span class="current mx-3">Page {{ hospital_list.number }} of {{ hospital_list.paginator.num_pages }} pages</span>
+
+        {% if hospital_list.has_next %}
+        <a onclick="javascript:getPageUrl({{ hospital_list.next_page_number }})" class="next">Next &raquo;</a>
+        <a onclick="javascript:getPageUrl({{ hospital_list.paginator.num_pages }})" class="last">Last</a>
+        {% endif %}
+    </div>
+
+    {% else %}
+    <p class="no-result">
+        Sorry, no hospitals are available based on your search, please
+        clear the filters and try again.
+    </p>
+    {% endif %}
+</body>
+
+<script src="{% static 'hospital/javascript/hospital_list.js' %}"></script>

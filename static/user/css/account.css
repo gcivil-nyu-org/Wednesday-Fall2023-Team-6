@@ -1,0 +1,251 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #ebf1f3;
+  margin: 0;
+  padding: 0;
+}
+
+.Account-left {
+  margin-left: 20px;
+  padding-bottom: 80px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: #ebf1f3;
+}
+
+.name-display {
+  margin-top: 30px;
+}
+
+.name-display span {
+  color: #0a2049;
+  font-size: 60px;
+  font-weight: 900;
+}
+
+/* avatar part */
+.avatar-card {
+  margin-bottom: 10px;
+  border-radius: 5px;
+  padding: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-upload-area {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  cursor: pointer;
+  background-color: #ebf1f3;
+  background-size: cover;
+  background-position: center;
+  border: 5px black solid;
+}
+
+.avatar-upload-area img {
+  width: 100%; /* Make the image cover the entire div */
+  height: 100%; /* Make the image cover the entire div */
+  border-radius: 50%;
+}
+
+.upload-text {
+  display: none;
+  padding: 10px;
+  border-radius: 20px; /* Optional: Add rounded corners */
+  position: absolute;
+  top: 50%; /* Position the text vertically at 50% from the top */
+  left: 50%; /* Position the text horizontally at 50% from the left */
+  transform: translate(-50%, -50%); /* Center the text within its parent */
+  color: white; /* Set the text color */
+  font-size: 18px; /* Set the font size */
+  text-align: center; /* Center-align the text */
+  background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
+  padding: 10px 20px; /* Add padding to the text */
+  border-radius: 5px; /* Optional: Add rounded corners to the text */
+  cursor: pointer;
+}
+
+.avatar-card:hover .avatar-upload-area .upload-text {
+  display: block;
+  font-weight: bold;
+}
+
+.hidden-input {
+  display: none;
+}
+
+/* Style the upload button or input element */
+.avatar-upload-area input[type="file"] {
+  display: none;
+  /* Additional styles for the file input element go here */
+}
+
+/* user info */
+.user-info {
+  background-color: rgb(10, 32, 73, 0.92);
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 3px 4px 10px #0a2049;
+}
+
+.user-info input {
+  border-radius: 5px;
+  border-width: 1px;
+  margin-right: 5px;
+  background-color: rgb(255, 255, 255, 0.8);
+  padding: 5px;
+  box-shadow: 5px 5px 10px rgba(17, 16, 16, 0.7);
+}
+
+.user-info input:disabled {
+  background-color: transparent;
+  color: #d1d0d0;
+  cursor: not-allowed;
+  border-color: #0d2850;
+}
+
+.user-info select{
+  border-radius: 5px;
+  border-width: 1px;
+  margin-right: 5px;
+  background-color: rgb(255, 255, 255, 0.8);
+  padding: 7.5px;
+  min-width: 150px;
+  box-shadow: 5px 5px 10px rgba(17, 16, 16, 0.7);
+}
+
+.user-info select option{
+  color: #333; /* Text color */
+  background-color: #f2f2f2; /* Background color */
+  font-family: Arial, sans-serif; /* Font family */
+  border-radius: 10%;
+  font-size: 14px; /* Font size */
+  padding: 5px; /* Padding inside the options */
+}
+
+.user-info select:disabled{
+  background-color: transparent;
+  color: #ffffff;
+  cursor: not-allowed;
+  border-color: #0d2850;
+}
+
+.user-info label {
+  margin-top: 10px;
+  margin-left: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #d1d0d0;
+}
+
+.info-row {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.info-row-2 {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  min-width: 40%;
+}
+
+/* buttons */
+.buttons {
+  padding-left: 30px;
+  padding-right: 30px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.buttons button:disabled {
+  width: 200px;
+  padding: 5px;
+  background-color: #f1f3f3;
+  font-size: 20px;
+  border-radius: 10px;
+  cursor: not-allowed;
+}
+
+.edit-btn {
+  width: 200px;
+  padding: 5px;
+  margin-right: 100px;
+  background-color: rgb(114, 195, 241);
+  font-size: 20px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  color: #0a2049;
+  box-shadow: 3px 4px 10px rgb(114, 195, 241);
+}
+
+.save-btn {
+  width: 200px;
+  padding: 5px;
+  background-color: rgb(114, 195, 241);
+  font-size: 20px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  color: #0a2049;
+  box-shadow: 3px 4px 10px rgb(114, 195, 241);
+}
+
+/* --------- account right part ---------- */
+.account-right {
+  margin-bottom: auto;
+  margin-top: auto;
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: #ebf1f3;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  margin-left: 40px;
+  margin-right: 40px;
+  background-color: #f1f5f7; 
+  border-radius: 10px;
+  font-weight: 700;
+  box-shadow: 3px 4px 10px rgb(128, 200, 241);
+  color: #0a2049;
+}
+
+.tab {
+  cursor: pointer;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.tab:hover {
+  background-color:  rgb(128, 200, 241);
+}
+
+.content {
+  /* Styles for the content area go here */
+  background-color: #f1f5f7;
+  border-radius: 10px;
+  box-shadow: 3px 4px 10px rgb(128, 200, 241);
+  margin-top: 30px;
+  height: 600px;
+  padding: 20px;
+}

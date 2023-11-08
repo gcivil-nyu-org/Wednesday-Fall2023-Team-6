@@ -1,0 +1,64 @@
+/* Modal and wrapper */
+.modal-content {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.formbold-main-wrapper,
+.formbold-form-wrapper {
+  width: 100%;
+}
+
+/* Titles */
+h1 {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 24px;
+  color: #333;
+}
+
+/* Fieldset & Labels */
+fieldset {
+  border: none;
+  margin-bottom: 15px;
+}
+
+.formbold-form-label,
+legend {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+/* Input Fields */
+.formbold-form-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.formbold-form-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Button */
+.formbold-btn {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.formbold-btn:hover {
+  background-color: #0056b3;
+}
