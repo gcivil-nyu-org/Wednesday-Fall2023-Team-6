@@ -20,14 +20,14 @@ $(document).ready(function () {
         var searchForm = document.getElementById("search-form");
         if (searchForm.checkValidity()) {
             var inputValue = document.getElementById("general-search").value;
-            var searchType = $("#search-type").val();
+            var searchType = document.getElementById("search_selector").textContent;
             var baseURL = window.location.origin;
-            if (searchType === "doctor") {
+            if (searchType.toLowerCase().includes("doctor")) {
                 baseURL += '/doctor/';
-                var url = `?page=1&primary_speciality=All&borough=All&address=All&zip=All&name=${encodeURIComponent(inputValue)}`;
-            } else if (searchType === "hospital") {
+                var url = `?name=${encodeURIComponent(inputValue)}`;
+            } else {
                 baseURL += '/hospital/';
-                var url = `?page=1&facility_type=All&borough=All&location=All&postal_code=All&name=${encodeURIComponent(inputValue)}`;
+                var url = `?name=${encodeURIComponent(inputValue)}`;
             }
             window.location.href = baseURL + url;
             console.log('Search Query:', inputValue, 'Search Type:', searchType);
@@ -63,3 +63,11 @@ $(document).ready(function () {
         alert(message); // You can use other methods to display the message as well
     }
 });
+
+function setSelection(selection) {
+    if(selection == 'doctor'){
+        document.getElementById("search_selector").textContent = "Doctors ";
+    }else {
+        document.getElementById("search_selector").textContent = "Hospitals ";
+    }
+}

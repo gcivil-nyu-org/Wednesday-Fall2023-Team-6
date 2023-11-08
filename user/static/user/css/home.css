@@ -3,9 +3,6 @@ body, h1, form, .user-actions, .search-container {
   padding: 0;
   background-color: #fff;
 }
-body {
-  padding-top: 56px; /* Adjust the padding-top to make space for the fixed navbar */
-}
 h1 {
   text-align: center;
   padding: 60px 0; /* Adjust the padding to make the header more visible */
@@ -49,18 +46,11 @@ button:hover, .user-actions a:hover {
   height: auto;
   border-radius: 0; /* Remove border-radius */
 }
-/* Updated search bar styling */
-.search-container {
-  text-align: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
 .search-bar-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  height: 150px;
 }
 #search-type.form-control{
   padding: 8px 16px; /* Adjust padding */
@@ -68,23 +58,26 @@ button:hover, .user-actions a:hover {
   border-radius: 5px;
  
 }
+.search-bar {
+  font-weight: 600 !important;
+}
 .search-bar,
 .btn-success {
   padding: 8px 16px; /* Adjust padding */
   font-size: 12px;
   border-radius: 5px;
   color: #fff;
+  min-height: 50px;
 }
 .search-bar,
 #search-type.form-control {
-  width: 200px; /* Set the same width for the search bar and drop-down menu */
+  width: 200px;
 }
-.btn-success {
-  background-color: #3887c9;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s;
+.btn-primary {
+  min-height: 50px;
+  text-align: center;
+  width: 200px;
 }
-.btn-success:hover {
-  background-color: #3887c9;
+.dropdown-item {
+  text-align: center !important;
 }
