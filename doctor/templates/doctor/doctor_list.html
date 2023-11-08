@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{% static 'doctor/css/doctorListStyle.css' %}">
 
     <!-- filter part -->
-    <div class="search-and-filter">
+    <div class="search-and-filter py-4">
         <div class="filter-left-column container">
             <a class="nav-item dropdown text-center">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -134,7 +134,7 @@
       </div>
 
     <!-- pagination -->
-    <div class="pagination">
+    <div class="pagination container">
         {% if doctor_list.has_previous %}
         <a onclick="javascript:getPageUrl(1)" class="first">First</a>
         <a onclick="javascript:getPageUrl({{ doctor_list.previous_page_number }})" class="prev">&laquo; Previous</a>
@@ -151,7 +151,7 @@
                 {% endfor %}
 
         </div>
-        <span class="current">Page {{ doctor_list.number }} of {{ doctor_list.paginator.num_pages }} pages</span>
+        <span class="current mx-3">Page {{ doctor_list.number }} of {{ doctor_list.paginator.num_pages }} pages</span>
 
         {% if doctor_list.has_next %}
         <a onclick="javascript:getPageUrl({{ doctor_list.next_page_number }})" class="next">Next &raquo;</a>
