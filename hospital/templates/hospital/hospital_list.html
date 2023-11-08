@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{% static 'hospital/css/hospitalListStyle.css' %}">
 
     <!-- filter part -->
-    <div class="search-and-filter">
+    <div class="search-and-filter py-4">
         <div class="filter-left-column container">
             <a class="nav-item dropdown text-center">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -131,7 +131,7 @@
       </div>
 
     <!-- pagination -->
-    <div class="pagination">
+    <div class="pagination container">
         {% if hospital_list.has_previous %}
         <a onclick="javascript:getPageUrl(1)" class="first">First</a>
         <a onclick="javascript:getPageUrl({{ hospital_list.previous_page_number }})" class="prev">&laquo; Previous</a>
@@ -148,7 +148,7 @@
                 {% endfor %}
 
         </div>
-        <span class="current">Page {{ hospital_list.number }} of {{ hospital_list.paginator.num_pages }} pages</span>
+        <span class="current mx-3">Page {{ hospital_list.number }} of {{ hospital_list.paginator.num_pages }} pages</span>
 
         {% if hospital_list.has_next %}
         <a onclick="javascript:getPageUrl({{ hospital_list.next_page_number }})" class="next">Next &raquo;</a>
