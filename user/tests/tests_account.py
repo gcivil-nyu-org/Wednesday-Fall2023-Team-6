@@ -123,15 +123,53 @@ class AccountViewTest(TestCase):
         print("Completed: test for user account edit")
 
     @override_settings(MEDIA_ROOT=settings.MEDIA_ROOT)
-    def test_upload_avatar(self):
+    def test_upload_avatar_within_allowed_size(self):
         self.client.login(username="testuser@example.com", password="testpassword")
+
+        # Create a file with size less than the allowed limit (50KB)
+        desired_size_kb = 49
+        desired_size_bytes = desired_size_kb * 1024  # Convert KB to bytes
+
+        # Calculate the number of repetitions needed to achieve the desired size
+        repetitions = desired_size_bytes // len(b"file_content")
+
+        # Create the byte sequence
+        avatar_content = b"file_content" * repetitions
+
         avatar = SimpleUploadedFile(
-            "test-avatar.png", b"file_content", content_type="image/png"
+            "test-avatar.png", avatar_content, content_type="image/png"
         )
+
         response = self.client.post(reverse("user:account"), {"avatar": avatar})
         self.assertEqual(response.status_code, 302)
         self.patient.refresh_from_db()
         self.assertIsNotNone(self.patient.avatar)
+
+    @override_settings(MEDIA_ROOT=settings.MEDIA_ROOT)
+    def test_upload_avatar_exceeds_allowed_size(self):
+        self.client.login(username="testuser@example.com", password="testpassword")
+
+        # Create a file with size more than the allowed limit (51KB)
+        desired_size_kb = 51
+        desired_size_bytes = desired_size_kb * 1024  # Convert KB to bytes
+
+        # Calculate the number of repetitions needed to achieve the desired size
+        repetitions = desired_size_bytes // len(b"file_content")
+
+        # Create the byte sequence
+        avatar_content = b"file_content" * repetitions
+        avatar = SimpleUploadedFile(
+            "test-avatar.png", avatar_content, content_type="image/png"
+        )
+
+        response = self.client.post(reverse("user:account"), {"avatar": avatar})
+
+        # Check if the response status code is 400 (Bad Request)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.content.decode("utf-8"),
+            "File size is too large. Maximum allowed size is 50 KB.",
+        )
 
     # delete test avatars
     def tearDown(self):

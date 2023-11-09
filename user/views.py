@@ -201,7 +201,6 @@ def accountView(request):
                 if len(request.FILES) > 0:
                     uploaded_file = request.FILES["avatar"]
                     MAX_FILE_SIZE_KB = 50
-
                     # Check if the uploaded file size exceeds the maximum allowed size
                     if (
                         uploaded_file.size > MAX_FILE_SIZE_KB * 1024
