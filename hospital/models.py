@@ -57,4 +57,4 @@ class HospitalAppointment(models.Model):
         related_name="preferred_doctor",
     )
     status = models.CharField(max_length=50, choices=Choices.appointment_status)
-    cancel_msg = models.CharField(max_length=100, null=True)
+    cancel_msg = models.CharField(max_length=100, null=True, blank=True)
