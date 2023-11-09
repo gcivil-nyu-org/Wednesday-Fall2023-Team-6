@@ -52,18 +52,20 @@ class AccountViewTest(TestCase):
             location="Test Location",
             postal_code=54321,
         )
+
         self.hospital_admin = HospitalAdmin.objects.create(
             email="testHospitalAdmin@example.com",
-            name="Test User",
+            name="Test Hospital Admin",
             phone="1234567890",
             address="123 Street",
             borough="Borough",
             zip="54321",
             associated_hospital=self.hospital,
         )
+
         self.doctor = Doctor.objects.create(
             email="testDoctor@example.com",
-            name="Test User",
+            name="Test Doctor",
             phone="1234567890",
             address="123 Street",
             borough="Borough",
@@ -79,6 +81,24 @@ class AccountViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "user/account.html")
         print("Completed: test for user autentication")
+
+    def test_authenticated_hospital_admin_can_access_account_view(self):
+        print("\nRunning: test for hospital admin accessing account view")
+        self.client.login(
+            username="testHospitalAdmin@example.com", password="testpassword"
+        )
+        response = self.client.get(reverse("user:account"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "user/account.html")
+        print("Completed: test for hospital admin accessing account view")
+
+    def test_authenticated_doctor_can_access_account_view(self):
+        print("\nRunning: test for doctor accessing account view")
+        self.client.login(username="testDoctor@example.com", password="testpassword")
+        response = self.client.get(reverse("user:account"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "user/account.html")
+        print("Completed: test for doctor accessing account view")
 
     def test_authenticated_user_can_update_account_info(self):
         print("\nRunning: test for user account edit")

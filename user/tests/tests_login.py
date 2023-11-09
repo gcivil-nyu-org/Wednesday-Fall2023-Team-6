@@ -1,7 +1,8 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.messages import get_messages, constants
+from django.urls import reverse
 
 from MediLink.settings import MESSAGE_TAGS
 
@@ -53,3 +54,30 @@ class LoginTests(TestCase):
 
     def tearDown(self):
         self.client.logout()
+
+
+class LogoutViewTest(TestCase):
+    def setUp(self):
+        # Create a new test client for each test case
+        self.client = Client()
+
+        self.user = User.objects.create_user(
+            username="testuser@example.com",
+            password="testpassword",
+            email="testuser@example.com",
+        )
+
+    def test_user_logout_redirects_to_home(self):
+        print("\nRunning: test for user logout")
+
+        self.client.login(username="testuser@example.com", password="testpassword")
+        # Perform logout
+        response = self.client.post(reverse("user:logout"))
+
+        # Check if the response status code is 302 (redirect)
+        self.assertEqual(response.status_code, 302)
+
+        # Check if the user is redirected to the home page
+        self.assertRedirects(response, reverse("user:home"))
+
+        print("Completed: test for user logout")

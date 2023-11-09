@@ -171,17 +171,13 @@ def accountView(request):
                 hospital_appointments = HospitalAppointment.objects.filter(
                     preferred_doctor=login_user
                 )
-            else:
+            elif len(hospital_admin) != 0:
                 login_user = hospital_admin.first()
                 userType = "hospitalAdmin"
-                doctor_appointments = DoctorAppointment.objects.filter(
-                    doctor=login_user
-                )
+                doctor_appointments = None
                 hospital_appointments = HospitalAppointment.objects.filter(
-                    preferred_doctor=login_user
+                    hospital=login_user.associated_hospital
                 )
-            print(doctor_appointments)
-            print(hospital_appointments)
 
             """
                 1. Get method
