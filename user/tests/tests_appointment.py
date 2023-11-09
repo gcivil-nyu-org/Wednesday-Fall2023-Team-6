@@ -78,8 +78,8 @@ class AppointmentViewTest(TestCase):
             status="REQ",
         )
 
-    def test_cancel_doctor_appointment(self):
-        print("\nRunning: test cancel doctor appointment")
+    def test_cancel_doctor_consultation(self):
+        print("\nRunning: test cancel doctor consultation")
         self.client.login(username="testuser@example.com", password="testpassword")
         response = self.client.post(
             reverse("user:cancelAppointment"),
@@ -96,7 +96,45 @@ class AppointmentViewTest(TestCase):
         )
         self.assertEqual(updated_appointment.status, "CCL")
         self.assertEqual(updated_appointment.cancel_msg, "Test Reason for Cancellation")
-        print("Completed: test cancel doctor appointment")
+        print("Completed: test cancel doctor consultaion")
+
+    def test_cancel_hospital_appointment(self):
+        print("\nRunning: test cancel hospital appointment")
+        self.client.login(username="testuser@example.com", password="testpassword")
+        response = self.client.post(
+            reverse("user:cancelAppointment"),
+            {
+                "appointment_id": self.hospital_appointment.id,
+                "appointment_type": "appointment",
+                "operation": "CCL",
+                "cancel_reason": "Test Reason for Cancellation",
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        updated_appointment = HospitalAppointment.objects.get(
+            id=self.hospital_appointment.id
+        )
+        self.assertEqual(updated_appointment.status, "CCL")
+        self.assertEqual(updated_appointment.cancel_msg, "Test Reason for Cancellation")
+        print("Completed: test cancel hospital appointment")
+
+    def test_confirm_doctor_consultation(self):
+        print("\nRunning: test confirm doctor consultation")
+        self.client.login(username="testuser@example.com", password="testpassword")
+        response = self.client.post(
+            reverse("user:confirmAppointment"),
+            {
+                "appointment_id": self.doctor_appointment.id,
+                "appointment_type": "consultation",
+                "operation": "CNF",
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        updated_appointment = DoctorAppointment.objects.get(
+            id=self.doctor_appointment.id
+        )
+        self.assertEqual(updated_appointment.status, "CNF")
+        print("Completed: test confirm doctor consultation")
 
     def test_confirm_hospital_appointment(self):
         print("\nRunning: test confirm hospital appointment")
@@ -105,7 +143,7 @@ class AppointmentViewTest(TestCase):
             reverse("user:confirmAppointment"),
             {
                 "appointment_id": self.hospital_appointment.id,
-                "appointment_type": "hospital",
+                "appointment_type": "appointment",
                 "operation": "CNF",
             },
         )
