@@ -1,11 +1,11 @@
 import re
 from django.shortcuts import redirect, render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
 from user.models import Choices, Patient
-from doctor.models import Doctor
-from hospital.models import HospitalAdmin, Hospital
+from doctor.models import Doctor, DoctorAppointment
+from hospital.models import HospitalAdmin, Hospital, HospitalAppointment
 from django.contrib.auth.models import User
 
 # import for email sending
@@ -148,7 +148,41 @@ def accountView(request):
     if request.user.is_authenticated:
         user = request.user
         if user.username != "admin":
-            login_user = Patient.objects.filter(email=user.email).first()
+            patient = Patient.objects.filter(email=user.email)
+            doctor = Doctor.objects.filter(email=user.email)
+            hospital_admin = HospitalAdmin.objects.filter(email=user.email)
+
+            # check user types
+            if len(patient) != 0:
+                login_user = patient.first()
+                userType = "patient"
+                doctor_appointments = DoctorAppointment.objects.filter(
+                    patient=login_user
+                )
+                hospital_appointments = HospitalAppointment.objects.filter(
+                    patient=login_user
+                )
+            elif len(doctor) != 0:
+                login_user = doctor.first()
+                userType = "doctor"
+                doctor_appointments = DoctorAppointment.objects.filter(
+                    doctor=login_user
+                )
+                hospital_appointments = HospitalAppointment.objects.filter(
+                    preferred_doctor=login_user
+                )
+            else:
+                login_user = hospital_admin.first()
+                userType = "hospitalAdmin"
+                doctor_appointments = DoctorAppointment.objects.filter(
+                    doctor=login_user
+                )
+                hospital_appointments = HospitalAppointment.objects.filter(
+                    preferred_doctor=login_user
+                )
+            print(doctor_appointments)
+            print(hospital_appointments)
+
             """
                 1. Get method
                 2. Post method
@@ -156,11 +190,32 @@ def accountView(request):
                     - upload avatar
             """
             if request.method == "GET":
-                return render(request, template_name, {"login_user": login_user})
+                return render(
+                    request,
+                    template_name,
+                    {
+                        "login_user": login_user,
+                        "userType": userType,
+                        "doctor_appointments": doctor_appointments,
+                        "hospital_appointments": hospital_appointments,
+                    },
+                )
             else:
                 # -------------- Upload Avatar --------------
                 if len(request.FILES) > 0:
                     uploaded_file = request.FILES["avatar"]
+                    MAX_FILE_SIZE_KB = 50
+
+                    # Check if the uploaded file size exceeds the maximum allowed size
+                    if (
+                        uploaded_file.size > MAX_FILE_SIZE_KB * 1024
+                    ):  # Convert KB to bytes
+                        return HttpResponseBadRequest(
+                            "File size is too large. Maximum allowed size is {} KB.".format(
+                                MAX_FILE_SIZE_KB
+                            )
+                        )
+
                     login_user.avatar = uploaded_file
                     login_user.save()
                     file_path = os.path.join(

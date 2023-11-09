@@ -2,6 +2,8 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from user.models import Patient
+from doctor.models import Doctor
+from hospital.models import HospitalAdmin, Hospital
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.files.storage import default_storage
 from django.test import override_settings
@@ -16,6 +18,7 @@ class AccountViewTest(TestCase):
             password="testpassword",
             email="testuser@example.com",
         )
+
         self.patient = Patient.objects.create(
             email="testuser@example.com",
             name="Test User",
@@ -26,6 +29,47 @@ class AccountViewTest(TestCase):
         )
         self.admin_user = User.objects.create_superuser(
             username="admin", password="adminpassword"
+        )
+
+        # test cases for new account version to validate different user types
+        self.userH = User.objects.create_user(
+            username="testHospitalAdmin@example.com",
+            password="testpassword",
+            email="testHospitalAdmin@example.com",
+        )
+
+        self.userD = User.objects.create_user(
+            username="testDoctor@example.com",
+            password="testpassword",
+            email="testDoctor@example.com",
+        )
+
+        self.hospital = Hospital.objects.create(
+            name="Test Hospital",
+            facility_type="Test Facility",
+            borough="Borough",
+            phone="1234567890",
+            location="Test Location",
+            postal_code=54321,
+        )
+        self.hospital_admin = HospitalAdmin.objects.create(
+            email="testHospitalAdmin@example.com",
+            name="Test User",
+            phone="1234567890",
+            address="123 Street",
+            borough="Borough",
+            zip="54321",
+            associated_hospital=self.hospital,
+        )
+        self.doctor = Doctor.objects.create(
+            email="testDoctor@example.com",
+            name="Test User",
+            phone="1234567890",
+            address="123 Street",
+            borough="Borough",
+            zip="54321",
+            primary_speciality="Test Speciality",
+            associated_hospital=self.hospital,
         )
 
     def test_authenticated_user_can_access_account_view(self):

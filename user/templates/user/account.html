@@ -19,6 +19,8 @@
     <!-- header part -->
     {% include "user/navbar.html" %}
     <link rel="stylesheet" href="{% static 'user/css/account.css' %}">
+
+    <!-- Left container part -->
     <div class="row container-fluid">
         <div class="Account-left container col">
             <!-- Area to upload user image (avatar) -->
@@ -29,7 +31,7 @@
                         {% if login_user.avatar %}
                         <img src="{{login_user.avatar.url}}" alt="Background Image">
                         {% else %}
-                        <img src="{% static "user/images/default-avatar.png" %}" alt="Background Image">
+                        <img src="{% static 'user/images/default-avatar.png' %}" alt="Background Image">
                         {% endif %}
                         <!-- Upload button or input element -->
                         <label for="avatar-upload-input" class="avatar-upload-area-1">
@@ -40,12 +42,12 @@
                     </form>
                 </div>
             </div>
-    
+
             <!-- name display part -->
             <div class="name-display container">
                 <span>{{login_user.name}}</span>
             </div>
-    
+
             <!-- user info -->
             <form id="user-info-form" method="POST" action="{% url 'user:account' %}">
                 {% csrf_token %}
@@ -57,24 +59,26 @@
                                 <input type="text" name="email" class="info-field-disable" disabled
                                     value="{{ login_user.email }}">
                             </div>
-    
+
                             <div class="info-row">
                                 <label class="info-label">Name</label>
-                                <input type="text" name="name" class="info-field" disabled value="{{ login_user.name }}">
+                                <input type="text" name="name" class="info-field" disabled
+                                    value="{{ login_user.name }}">
                             </div>
-    
+
                             <div class="info-row">
                                 <label class="info-label">Phone</label>
-                                <input type="text" name="phone" class="info-field" disabled value="{{ login_user.phone }}">
+                                <input type="text" name="phone" class="info-field" disabled
+                                    value="{{ login_user.phone }}">
                             </div>
                         </div>
-    
+
                         <div class="row">
                             <div class="info-row">
                                 <label class="info-label">Zip</label>
                                 <input type="text" name="zip" class="info-field" disabled value="{{ login_user.zip }}">
                             </div>
-    
+
                             <div class="info-row">
                                 <label class="info-label">Gender</label>
                                 <select class="info-field" id="sexSelect" name="sex" disabled>
@@ -83,7 +87,7 @@
                                     <option value="other">Other</option>
                                 </select>
                             </div>
-    
+
                             <div class="info-row">
                                 <label class="info-label">Borough</label>
                                 <select class="info-field" id="boroughSelect" name="borough" disabled>
@@ -95,7 +99,7 @@
                                 </select>
                             </div>
                         </div>
-    
+
                         <div class="row">
                             <div class="info-row-2">
                                 <label class="info-label">Address</label>
@@ -110,8 +114,8 @@
                         </div>
                     </div>
                 </div>
-    
-    
+
+
                 <!-- edit button -->
                 <div class="buttons">
                     <button class="edit-btn">Edit</button>
@@ -119,30 +123,236 @@
                 </div>
             </form>
         </div>
-    
-        <!-- appointment part -->
+
+        <!-- Right container part -->
         <div class="Account-right container col">
             <div class="tabs">
-                <div class="tab" name="appointments" onclick="showContent('appointments')">Appointments</div>
-                <div class="tab" name="chats" onclick="showContent('chats')">Chats</div>
+                <div class="tab active-tab" name="consultations" onclick="showContent('consultations')">Online
+                    Consultations</div>
+                <div class="tab" name="appointments" onclick="showContent('appointments')">Onsite Appointments</div>
+                {% if userType == "hospitalAdmin" %}
                 <div class="tab" name="requests" onclick="showContent('requests')">Requests</div>
+                {% endif %}
             </div>
+
+            {% if userType != "hospitalAdmin" %}
+            <div class="content" id="consultationsContent">
+                <!-- Content for Consltations tab -->
+                {% if doctor_appointments %}
+                {% for appointment in doctor_appointments %}
+                <div class="collapsible">
+                    <span class="collapsible-label">
+                        {% if userType == "patient" %}
+                        Consultation with Doctor
+                        <a href="{%url 'doctor:detail_view' appointment.doctor.id %}">{{ appointment.doctor.name }} </a>
+                        {% elif userType == "doctor"%}
+                        Consultation request from {{ appointment.patient.name }}
+                        {% endif %}
+                    </span>
+                    <span class="icon">+</span>
+                </div>
+                <div class="collapsible-content">
+                    <h3>Consultation Details: </h3>
+                    <div class="row">
+                        <div class="appointment-row">
+                            <label class="display-label">Time</label>
+                            <p>{{ appointment.start_time }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="appointment-row">
+                            <label class="display-label">Name</label>
+                            <p>{{ appointment.name }}</p>
+                        </div>
+
+                        <div class="appointment-row">
+                            <label class="display-label">Phone</label>
+                            <p>{{appointment.phone}}</p>
+                        </div>
+
+                        <div class="appointment-row">
+                            <label class="display-label">Email</label>
+                            <p>{{appointment.email}}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="appointment-row">
+                            <label class="display-label">Reason</label>
+                            <p>{{appointment.reason}}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="appointment-row">
+                            <label class="display-label">Status:
+                                {% if appointment.status == "REQ" %}
+                                Requested
+                                {% elif appointment.status == "CNF" %}
+                                Confirmed
+                                {% elif appointment.status == "CCL" %}
+                                Cancelled
+                                {% elif appointment.status == "REJ" %}
+                                Rejected
+                                {% endif %}
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- buttons for appointment operations -->
+                    <!-- for patient, only cancel operation is allowed when the status is not cancelled or rejected -->
+                    {% if userType == "patient" and appointment.status != "CCL" and appointment.status != "REJ" %}
+                    <div class="appointment-row">
+                        <button class="cancel-btn"> Cancel </button>
+                    </div>
+                    <!-- for docotr, if the status is requested, the doctor can confirm or reject it-->
+                        {% elif userType == "doctor" and appointment.status == "REQ" %}
+                    <div class="buttons">
+                        <button class="reject-btn"> Reject </button>
+                        <button class="confirm-btn"> Confirm </button>
+                    </div>
+                    <!-- for doctor, if the status is confirmed, the doctor can still cancel it -->
+                    {% elif userType == "doctor" and appointment.status == "CNF" %}
+                    <div class="appointment-row">
+                        <button class="cancel-btn"> Cancel </button>
+                    </div>
+                    {% endif %}
+
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="no-result">
+                    No onsite appointments available.
+                </p>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- onsite appointment section should be displayed to hospital admins but hide from patients and doctors -->
+            {% if userType == "hospitalAdmin"%}
             <div class="content" id="appointmentsContent">
+            {% else %}
+            <div class="content" id="appointmentsContent" style="display: none;">
+            {% endif %}
                 <!-- Content for Appointments tab -->
-                <p>appointments, to be implemented.</p>
+                {% if hospital_appointments %}
+                {% for appointment in hospital_appointments %}
+                <div class="collapsible">
+                    <span class="collapsible-label">
+                        {% if userType == "patient" %}
+                        Appointment in hospital 
+                        <a href="{%url 'hospital:detail_view' appointment.hospital.id %}">{{ appointment.hospital.name }} </a>
+                        {% elif userType == "doctor"%}
+                        Appointment at {{appointment.hospital.name}} 
+                        {% elif userType == "hospitalAdmin" %}
+                        Appointment request from {{ appointment.patient.name }}
+                        {% endif %}
+                    </span>
+                    <span class="icon">+</span>
+                </div>
+                <div class="collapsible-content">
+                    <h3>Appointment Details:</h3>
+
+                    <div class="row">
+                        <div class="appointment-row">
+                            <label class="display-label">Time</label>
+                            <p>{{ appointment.start_time }}</p>
+                        </div>
+                        <div class="appointment-row">
+                            <label class="display-label">Accessibility</label>
+                            {% if appointment.accessibility %}
+                            <p>{{ appointment.accessibility }}</p>
+                            {% else %}
+                            <p> Not Required </p>
+                            {% endif %}
+                        </div>
+                        <div class="appointment-row">
+                            <label class="display-label">Prefered Doctor</label>
+                            {% if appointment.doctor %}
+                            <a href="{%url 'doctor:detail_view' appointment.doctor.id %}">
+                                {{appointment.doctor.name}}
+                            </a>
+                            {% else %}
+                            <p> No Preferences </p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="appointment-row">
+                            <label class="display-label">Name</label>
+                            <p>{{ appointment.name }}</p>
+                        </div>
+
+                        <div class="appointment-row">
+                            <label class="display-label">Phone</label>
+                            <p>{{appointment.phone}}</p>
+                        </div>
+
+                        <div class="appointment-row">
+                            <label class="display-label">Email</label>
+                            <p>{{appointment.email}}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="appointment-row">
+                            <label class="display-label">Reason</label>
+                            <p>{{appointment.reason}}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="appointment-row">
+                            <label class="display-label">Status:
+                                {% if appointment.status == "REQ" %}
+                                Requested
+                                {% elif appointment.status == "CNF" %}
+                                Confirmed
+                                {% elif appointment.status == "CCL" %}
+                                Cancelled
+                                {% elif appointment.status == "REJ" %}
+                                Rejected
+                                {% endif %}
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- buttons for appointment operations, doctor don't have permission to make changes -->
+                        <!-- for user, only cancel operation is allowed when the status is not cancelled or rejected -->
+                    {% if userType == "patient" and appointment.status != "CCL" and appointment.status != "REJ" %}
+                    <div class="appointment-row">
+                        <button class="cancel-btn"> Cancel </button>
+                    </div>
+                        <!-- for hospitalAdmin, if the status is requested, the doctor can confirm or reject it-->
+                    {% elif userType == "hospitalAdmin" and appointment.status == "REQ" %}
+                    <div class="buttons">
+                        <button class="reject-btn"> Reject </button>
+                        <button class="confirm-btn"> Confirm </button>
+                    </div>
+                        <!-- for doctor, if the status is confirmed, the doctor can still cancel it -->
+                    {% elif userType == "hospitalAdmin" and appointment.status == "CNF" %}
+                    <div class="appointment-row">
+                        <button class="cancel-btn"> Cancel </button>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="no-result">
+                    No onsite appointments available.
+                </p>
+                {% endif %}
             </div>
-            <div class="content" id="chatsContent" style="display: none;">
-                <!-- Content for Chats tab -->
-                <p>chats, to be implemented.</p>
-            </div>
+
             <div class="content" id="requestsContent" style="display: none;">
                 <!-- Content for Requests tab -->
-                <p>requests, to be implemented.</p>
+                <p class="no-result">requests, to be implemented.</p>
             </div>
         </div>
     </div>
-    <!-- basic information part -->
-    
+
 </body>
 
 <!-- some js code for user interaction -->

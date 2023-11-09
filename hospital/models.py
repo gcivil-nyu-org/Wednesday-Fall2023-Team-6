@@ -16,6 +16,7 @@ class Choices:
         ("REQ", "Requested"),
         ("CNF", "Confirmed"),
         ("CCL", "Cancelled"),
+        ("REJ", "Rejected"),
     ]
 
 
@@ -56,3 +57,4 @@ class HospitalAppointment(models.Model):
         related_name="preferred_doctor",
     )
     status = models.CharField(max_length=50, choices=Choices.appointment_status)
+    cancel_msg = models.CharField(max_length=100, null=True)
