@@ -391,7 +391,6 @@ body {
   box-shadow: 3px 4px 10px rgb(141, 204, 240);
 }
 
-
 .cancel-btn:hover{
   background-color: rgb(201, 203, 204);
 }
@@ -402,4 +401,26 @@ body {
 
 .confirm-btn:hover{
   background-color: rgb(229, 234, 238);
+}
+
+/* modal part */
+.appointmentTimeSpan{
+  font-weight: bold;
+}
+
+.cancel-label {
+  margin-top: 10px;
+  margin-left: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff0000;
+}
+
+.cancel-reason{
+  border-radius: 5px;
+  border-width: 1px;
+  margin-right: 5px;
+  background-color: rgb(255, 255, 255, 0.8);
+  padding: 5px;
+  box-shadow: 1px 1px 3px rgba(17, 16, 16, 0.7);
 }

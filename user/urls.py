@@ -14,4 +14,6 @@ urlpatterns = [
         name="passwordResetConfirm",
     ),
     path("account/", views.accountView, name="account"),
+    path("cancelAppointment/", views.cancelAppointment, name="cancelAppointment"),
+    path("confirmAppointment/", views.confirmAppointment, name="confirmAppointment"),
 ]

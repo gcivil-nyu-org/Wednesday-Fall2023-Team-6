@@ -249,6 +249,42 @@ def accountView(request):
         return HttpResponseRedirect(reverse("user:login"))
 
 
+def cancelAppointment(request):
+    appointment_id = request.POST.get("appointment_id")
+    appointment_type = request.POST.get("appointment_type")
+    operation = request.POST.get("operation")
+    cancel_reason = request.POST.get("cancel_reason")
+
+    if appointment_type == "consultation":
+        consultation = DoctorAppointment.objects.filter(id=appointment_id).first()
+        consultation.cancel_msg = cancel_reason
+        consultation.status = operation
+        consultation.save()
+    else:
+        appointment = HospitalAppointment.objects.filter(id=appointment_id).first()
+        appointment.cancel_msg = cancel_reason
+        appointment.status = operation
+        appointment.save()
+
+    return redirect("user:account")
+
+
+def confirmAppointment(request):
+    appointment_id = request.POST.get("appointment_id")
+    appointment_type = request.POST.get("appointment_type")
+    operation = request.POST.get("operation")
+
+    if appointment_type == "consultation":
+        consultation = DoctorAppointment.objects.filter(id=appointment_id).first()
+        consultation.status = operation
+        consultation.save()
+    else:
+        appointment = HospitalAppointment.objects.filter(id=appointment_id).first()
+        appointment.status = operation
+        appointment.save()
+    return redirect("user:account")
+
+
 def isValidEmail(email):
     if not email:
         return False

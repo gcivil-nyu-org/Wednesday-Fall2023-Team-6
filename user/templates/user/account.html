@@ -198,24 +198,48 @@
                                 {% endif %}
                             </label>
                         </div>
+
+                        {% if appointment.cancel_msg %}
+                        <div class="appointment-row">
+                            <label class="display-label">Cancel Reason: {{appointment.cancel_msg}} </label>
+                        </div>
+                        {% else %}
+                        {% endif %}
+
                     </div>
 
-                    <!-- buttons for appointment operations -->
+                    <!-- buttons for consultation operations -->
                     <!-- for patient, only cancel operation is allowed when the status is not cancelled or rejected -->
                     {% if userType == "patient" and appointment.status != "CCL" and appointment.status != "REJ" %}
                     <div class="appointment-row">
-                        <button class="cancel-btn"> Cancel </button>
+                        <button class="cancel-btn" data-toggle="modal" data-target="#cancelModal"
+                            data-appointment-id="{{ appointment.id }}" data-appointment-type="consultation"
+                            data-operation="CCL" data-appointment-time="{{ appointment.start_time }}"> Cancel
+                        </button>
                     </div>
                     <!-- for docotr, if the status is requested, the doctor can confirm or reject it-->
-                        {% elif userType == "doctor" and appointment.status == "REQ" %}
+                    {% elif userType == "doctor" and appointment.status == "REQ" %}
                     <div class="buttons">
-                        <button class="reject-btn"> Reject </button>
-                        <button class="confirm-btn"> Confirm </button>
+                        <button class="reject-btn" data-toggle="modal" data-target="#rejectModal"
+                            data-appointment-id="{{ appointment.id }}" data-appointment-type="consultation"
+                            data-operation="REJ" data-appointment-time="{{ appointment.start_time }}"> Reject </button>
+
+                        <!-- operation to confirm the consultation -->
+                        <form action="{% url 'user:confirmAppointment' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="appointment_id" value="{{appointment.id}}">
+                            <input type="hidden" name="appointment_type" value="consultation">
+                            <input type="hidden" name="operation" value="CNF">
+                            <button class="confirm-btn" type="submit"> Confirm </button>
+                        </form>
+
                     </div>
                     <!-- for doctor, if the status is confirmed, the doctor can still cancel it -->
                     {% elif userType == "doctor" and appointment.status == "CNF" %}
                     <div class="appointment-row">
-                        <button class="cancel-btn"> Cancel </button>
+                        <button class="cancel-btn" data-toggle="modal" data-target="#cancelModal"
+                            data-appointment-id="{{ appointment.id }}" data-appointment-type="consultation"
+                            data-operation="CCL" data-appointment-time="{{ appointment.start_time }}"> Cancel </button>
                     </div>
                     {% endif %}
 
@@ -232,126 +256,235 @@
             <!-- onsite appointment section should be displayed to hospital admins but hide from patients and doctors -->
             {% if userType == "hospitalAdmin"%}
             <div class="content" id="appointmentsContent">
-            {% else %}
-            <div class="content" id="appointmentsContent" style="display: none;">
-            {% endif %}
-                <!-- Content for Appointments tab -->
-                {% if hospital_appointments %}
-                {% for appointment in hospital_appointments %}
-                <div class="collapsible">
-                    <span class="collapsible-label">
-                        {% if userType == "patient" %}
-                        Appointment in hospital 
-                        <a href="{%url 'hospital:detail_view' appointment.hospital.id %}">{{ appointment.hospital.name }} </a>
-                        {% elif userType == "doctor"%}
-                        Appointment at {{appointment.hospital.name}} 
-                        {% elif userType == "hospitalAdmin" %}
-                        Appointment request from {{ appointment.patient.name }}
-                        {% endif %}
-                    </span>
-                    <span class="icon">+</span>
-                </div>
-                <div class="collapsible-content">
-                    <h3>Appointment Details:</h3>
-
-                    <div class="row">
-                        <div class="appointment-row">
-                            <label class="display-label">Time</label>
-                            <p>{{ appointment.start_time }}</p>
-                        </div>
-                        <div class="appointment-row">
-                            <label class="display-label">Accessibility</label>
-                            {% if appointment.accessibility %}
-                            <p>{{ appointment.accessibility }}</p>
-                            {% else %}
-                            <p> Not Required </p>
+                {% else %}
+                <div class="content" id="appointmentsContent" style="display: none;">
+                    {% endif %}
+                    <!-- Content for Appointments tab -->
+                    {% if hospital_appointments %}
+                    {% for appointment in hospital_appointments %}
+                    <div class="collapsible">
+                        <span class="collapsible-label">
+                            {% if userType == "patient" %}
+                            Appointment in hospital
+                            <a href="{%url 'hospital:detail_view' appointment.hospital.id %}">
+                                {{appointment.hospital.name }} </a>
+                            {% elif userType == "doctor"%}
+                            Appointment at {{appointment.hospital.name}}
+                            {% elif userType == "hospitalAdmin" %}
+                            Appointment request from {{ appointment.patient.name }}
                             {% endif %}
-                        </div>
-                        <div class="appointment-row">
-                            <label class="display-label">Prefered Doctor</label>
-                            {% if appointment.doctor %}
-                            <a href="{%url 'doctor:detail_view' appointment.doctor.id %}">
-                                {{appointment.doctor.name}}
-                            </a>
-                            {% else %}
-                            <p> No Preferences </p>
-                            {% endif %}
-                        </div>
+                        </span>
+                        <span class="icon">+</span>
                     </div>
+                    <div class="collapsible-content">
+                        <h3>Appointment Details:</h3>
 
-                    <div class="row">
-                        <div class="appointment-row">
-                            <label class="display-label">Name</label>
-                            <p>{{ appointment.name }}</p>
-                        </div>
-
-                        <div class="appointment-row">
-                            <label class="display-label">Phone</label>
-                            <p>{{appointment.phone}}</p>
-                        </div>
-
-                        <div class="appointment-row">
-                            <label class="display-label">Email</label>
-                            <p>{{appointment.email}}</p>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="appointment-row">
-                            <label class="display-label">Reason</label>
-                            <p>{{appointment.reason}}</p>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="appointment-row">
-                            <label class="display-label">Status:
-                                {% if appointment.status == "REQ" %}
-                                Requested
-                                {% elif appointment.status == "CNF" %}
-                                Confirmed
-                                {% elif appointment.status == "CCL" %}
-                                Cancelled
-                                {% elif appointment.status == "REJ" %}
-                                Rejected
+                        <div class="row">
+                            <div class="appointment-row">
+                                <label class="display-label">Time</label>
+                                <p>{{ appointment.start_time }}</p>
+                            </div>
+                            <div class="appointment-row">
+                                <label class="display-label">Accessibility</label>
+                                {% if appointment.accessibility %}
+                                <p>{{ appointment.accessibility }}</p>
+                                {% else %}
+                                <p> Not Required </p>
                                 {% endif %}
-                            </label>
+                            </div>
+                            <div class="appointment-row">
+                                <label class="display-label">Prefered Doctor</label>
+                                {% if appointment.preferred_doctor %}
+                                <a href="{%url 'doctor:detail_view' appointment.preferred_doctor.id %}">
+                                    {{appointment.preferred_doctor.name}}
+                                </a>
+                                {% else %}
+                                <p> No Preferences </p>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
-                    
-                    <!-- buttons for appointment operations, doctor don't have permission to make changes -->
+
+                        <div class="row">
+                            <div class="appointment-row">
+                                <label class="display-label">Name</label>
+                                <p>{{ appointment.name }}</p>
+                            </div>
+
+                            <div class="appointment-row">
+                                <label class="display-label">Phone</label>
+                                <p>{{appointment.phone}}</p>
+                            </div>
+
+                            <div class="appointment-row">
+                                <label class="display-label">Email</label>
+                                <p>{{appointment.email}}</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="appointment-row">
+                                <label class="display-label">Reason</label>
+                                <p>{{appointment.reason}}</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="appointment-row">
+                                <label class="display-label">Status:
+                                    {% if appointment.status == "REQ" %}
+                                    Requested
+                                    {% elif appointment.status == "CNF" %}
+                                    Confirmed
+                                    {% elif appointment.status == "CCL" %}
+                                    Cancelled
+                                    {% elif appointment.status == "REJ" %}
+                                    Rejected
+                                    {% endif %}
+                                </label>
+                            </div>
+
+                            {% if appointment.cancel_msg %}
+                            <div class="appointment-row">
+                                <label class="display-label">Cancel Reason: {{appointment.cancel_msg}} </label>
+                            </div>
+                            {% else %}
+                            {% endif %}
+                        </div>
+
+                        <!-- buttons for appointment operations, doctor don't have permission to make changes -->
                         <!-- for user, only cancel operation is allowed when the status is not cancelled or rejected -->
-                    {% if userType == "patient" and appointment.status != "CCL" and appointment.status != "REJ" %}
-                    <div class="appointment-row">
-                        <button class="cancel-btn"> Cancel </button>
+                        {% if userType == "patient" and appointment.status != "CCL" and appointment.status != "REJ" %}
+                        <div class="appointment-row">
+                            <button class="cancel-btn" data-toggle="modal" data-target="#cancelModal"
+                                data-appointment-id="{{ appointment.id }}" data-appointment-type="appointment"
+                                data-operation="CCL" data-appointment-time="{{ appointment.start_time }}"> Cancel
+                            </button>
+                        </div>
+
+                        <!-- for hospitalAdmin, if the status is requested, the hospitalAdmin can confirm or reject it-->
+                        {% elif userType == "hospitalAdmin" and appointment.status == "REQ" %}
+                        <div class="buttons">
+                            <button class="reject-btn" data-toggle="modal" data-target="#rejectModal"
+                                data-appointment-id="{{ appointment.id }}" data-appointment-type="appointment"
+                                data-operation="REJ" data-appointment-time="{{ appointment.start_time }}"> Reject
+                            </button>
+
+                            <!-- operation to confirm the consultation -->
+                            <form action="{% url 'user:confirmAppointment' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="appointment_id" value="{{appointment.id}}">
+                                <input type="hidden" name="appointment_type" value="consultation">
+                                <input type="hidden" name="operation" value="CNF">
+                                <button class="confirm-btn" type="submit"> Confirm </button>
+                            </form>
+                        </div>
+
+                        <!-- for hospitalAdmin, if the status is confirmed, the hospitalAdmin can still cancel it -->
+                        {% elif userType == "hospitalAdmin" and appointment.status == "CNF" %}
+                        <div class="appointment-row">
+                            <button class="cancel-btn" data-toggle="modal" data-target="#cancelModal"
+                                data-appointment-id="{{ appointment.id }}" data-appointment-type="appointment"
+                                data-operation="CCL" data-appointment-time="{{ appointment.start_time }}"> Cancel
+                            </button>
+                        </div>
+                        {% endif %}
+                        
                     </div>
-                        <!-- for hospitalAdmin, if the status is requested, the doctor can confirm or reject it-->
-                    {% elif userType == "hospitalAdmin" and appointment.status == "REQ" %}
-                    <div class="buttons">
-                        <button class="reject-btn"> Reject </button>
-                        <button class="confirm-btn"> Confirm </button>
-                    </div>
-                        <!-- for doctor, if the status is confirmed, the doctor can still cancel it -->
-                    {% elif userType == "hospitalAdmin" and appointment.status == "CNF" %}
-                    <div class="appointment-row">
-                        <button class="cancel-btn"> Cancel </button>
-                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p class="no-result">
+                        No onsite appointments available.
+                    </p>
                     {% endif %}
                 </div>
-                {% endfor %}
-                {% else %}
-                <p class="no-result">
-                    No onsite appointments available.
-                </p>
-                {% endif %}
-            </div>
 
-            <div class="content" id="requestsContent" style="display: none;">
-                <!-- Content for Requests tab -->
-                <p class="no-result">requests, to be implemented.</p>
+                <div class="content" id="requestsContent" style="display: none;">
+                    <!-- Content for Requests tab -->
+                    <p class="no-result">requests, to be implemented.</p>
+                </div>
             </div>
         </div>
-    </div>
+
+        <!-- modals for Consultation operations -->
+        <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModal"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Cancel Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>You will
+                            <span class="appointmentTimeSpan">
+                                cancel
+                            </span>
+                            the consultation / appointment scheduled for
+                            <span id="appointmentTimeSpan" class="appointmentTimeSpan"></span>
+                            , and this operation cannot be undone. Are you sure to
+                            <span class="appointmentTimeSpan">
+                                cancel
+                            </span>
+                            it?
+                        </p>
+                        <form action="{% url 'user:cancelAppointment' %}" method="post">
+                            {% csrf_token %}
+                            <label class="cancel-label"> Cancel Reason: </label>
+                            <input class="cancel-reason" type="text" name="cancel_reason" required>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="appointmentId" name="appointment_id" value="">
+                        <input type="hidden" id="appointmentType" name="appointment_type" value="">
+                        <input type="hidden" id="operation" name="operation" value="">
+                        <button type="submit" class="btn btn-danger">Cancel</button>
+                        </form>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Exit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModal"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Reject Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>You will
+                            <span class="appointmentTimeSpan">
+                                reject
+                            </span>
+                            the consultation / appointment scheduled for
+                            <span id="appointmentTimeSpan2" class="appointmentTimeSpan"></span>
+                            , and this operation cannot be undone. Are you sure to
+                            <span class="appointmentTimeSpan">
+                                reject
+                            </span>
+                            it?
+                        </p>
+                        <form action="{% url 'user:cancelAppointment' %}" method="post">
+                            {% csrf_token %}
+                            <label class="cancel-label"> Cancel Reason: </label>
+                            <input class="cancel-reason" name="cancel_reason" type="text" required>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="appointmentId2" name="appointment_id" value="">
+                        <input type="hidden" id="appointmentType2" name="appointment_type" value="">
+                        <input type="hidden" id="operation2" name="operation" value="">
+                        <button type="submit" class="btn btn-danger">Reject</button>
+                        </form>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Exit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 </body>
 
