@@ -18,7 +18,3 @@ class TestWSGIConfig(unittest.TestCase):
         with open(wsgi_file_path, "rb") as wsgi_file:
             compile(wsgi_file.read(), wsgi_file_path, "exec")
         print("Complete: test for wsgi")
-
-
-if __name__ == "__main__":
-    unittest.main()
