@@ -258,17 +258,19 @@ def accountView(request):
 def OutdatedAppointments(doctor_appointments, hospital_appointments):
     now = timezone.now()
     # check consultations
-    for appointment in doctor_appointments:
-        if appointment.status == "REQ" and appointment.start_time <= now:
-            appointment.status = "CCL"
-            appointment.cancel_msg = "Consultation outdated, please book a new one."
-            appointment.save()
+    if doctor_appointments:
+        for appointment in doctor_appointments:
+            if appointment.status == "REQ" and appointment.start_time <= now:
+                appointment.status = "CCL"
+                appointment.cancel_msg = "Consultation outdated, please book a new one."
+                appointment.save()
     # check appointments
-    for appointment in hospital_appointments:
-        if appointment.status == "REQ" and appointment.start_time <= now:
-            appointment.status = "CCL"
-            appointment.cancel_msg = "Appointment outdated, please book a new one."
-            appointment.save()
+    if hospital_appointments:
+        for appointment in hospital_appointments:
+            if appointment.status == "REQ" and appointment.start_time <= now:
+                appointment.status = "CCL"
+                appointment.cancel_msg = "Appointment outdated, please book a new one."
+                appointment.save()
 
 
 def cancelAppointment(request):
