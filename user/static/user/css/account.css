@@ -307,11 +307,11 @@ body {
   justify-content: space-between;
 }
 
-.collapsible-content h3{
+.collapsible-content h3 {
   font-weight: 800;
 }
 
-.collapsible-content p{
+.collapsible-content p {
   font-size: 18px;
   font-weight: bold;
   margin-left: 10px;
@@ -364,11 +364,17 @@ body {
   align-self: flex-end;
 }
 
+.reject-confirm-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .reject-btn {
   width: 200px;
   padding: 5px;
   background-color: rgb(247, 244, 246);
-  margin-right: 20%;
   margin-bottom: 20px;
   font-size: 20px;
   border: none;
@@ -391,20 +397,20 @@ body {
   box-shadow: 3px 4px 10px rgb(141, 204, 240);
 }
 
-.cancel-btn:hover{
+.cancel-btn:hover {
   background-color: rgb(201, 203, 204);
 }
 
-.reject-btn:hover{
+.reject-btn:hover {
   background-color: rgb(229, 234, 238);
 }
 
-.confirm-btn:hover{
+.confirm-btn:hover {
   background-color: rgb(229, 234, 238);
 }
 
 /* modal part */
-.appointmentTimeSpan{
+.appointmentTimeSpan {
   font-weight: bold;
 }
 
@@ -416,7 +422,7 @@ body {
   color: #ff0000;
 }
 
-.cancel-reason{
+.cancel-reason {
   border-radius: 5px;
   border-width: 1px;
   margin-right: 5px;
