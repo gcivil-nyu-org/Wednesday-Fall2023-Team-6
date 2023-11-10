@@ -6,6 +6,7 @@ from user.models import Patient
 from doctor.models import Doctor, DoctorAppointment
 from hospital.models import Hospital, HospitalAppointment
 from user.views import OutdatedAppointments
+from django.utils import timezone
 
 
 class AppointmentViewTest(TestCase):
@@ -79,6 +80,45 @@ class AppointmentViewTest(TestCase):
             status="REQ",
         )
 
+    def test_outdated_appointments(self):
+        print("\nRunning: test outdated appointments")
+        # Call the function to handle outdated appointments
+        doctor_appointment = DoctorAppointment.objects.create(
+            doctor=self.doctor,
+            patient=self.patient,
+            # Set start_time one day in the past
+            start_time=timezone.now() - timezone.timedelta(days=1),
+            name="Test Appointment",
+            phone="1234567890",
+            email="test@example.com",
+            reason="Test Reason",
+            status="REQ",
+        )
+        doctor_appointments = [doctor_appointment]
+
+        hospital_appointment = HospitalAppointment.objects.create(
+            hospital=self.hospital,
+            patient=self.patient,
+            # Set start_time one day in the past
+            start_time=timezone.now() - timezone.timedelta(days=1),
+            name="Test Hospital Appointment",
+            phone="1234567890",
+            email="test@example.com",
+            reason="Test Reason",
+            status="REQ",
+        )
+        hospital_appointments = [hospital_appointment]
+
+        OutdatedAppointments(doctor_appointments, hospital_appointments)
+
+        doctor_appointment.refresh_from_db()
+        hospital_appointment.refresh_from_db()
+        self.assertEqual(doctor_appointment.status, "CCL")
+        self.assertEqual(hospital_appointment.status, "CCL")
+        self.assertIsNotNone(doctor_appointment.cancel_msg)
+        self.assertIsNotNone(hospital_appointment.cancel_msg)
+        print("Completed: test outdated appointments")
+
     def test_cancel_doctor_consultation(self):
         print("\nRunning: test cancel doctor consultation")
         self.client.login(username="testuser@example.com", password="testpassword")
@@ -97,16 +137,6 @@ class AppointmentViewTest(TestCase):
         )
         self.assertEqual(updated_appointment.status, "CCL")
         self.assertEqual(updated_appointment.cancel_msg, "Test Reason for Cancellation")
-
-        # Call the function to handle outdated appointments
-        OutdatedAppointments(
-            DoctorAppointment.objects.filter(patient=self.patient),
-            HospitalAppointment.objects.filter(patient=self.patient),
-        )
-
-        updated_appointment.refresh_from_db()
-        self.assertEqual(updated_appointment.status, "CCL")
-        self.assertIsNotNone(updated_appointment.cancel_msg)
 
         print("Completed: test cancel doctor consultaion")
 
@@ -128,16 +158,6 @@ class AppointmentViewTest(TestCase):
         )
         self.assertEqual(updated_appointment.status, "CCL")
         self.assertEqual(updated_appointment.cancel_msg, "Test Reason for Cancellation")
-
-        # Call the function to handle outdated appointments
-        OutdatedAppointments(
-            DoctorAppointment.objects.filter(patient=self.patient),
-            HospitalAppointment.objects.filter(patient=self.patient),
-        )
-
-        updated_appointment.refresh_from_db()
-        self.assertEqual(updated_appointment.status, "CCL")
-        self.assertIsNotNone(updated_appointment.cancel_msg)
 
         print("Completed: test cancel hospital appointment")
 
