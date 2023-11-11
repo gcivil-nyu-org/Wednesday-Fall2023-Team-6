@@ -430,3 +430,22 @@ body {
   padding: 5px;
   box-shadow: 1px 1px 3px rgba(17, 16, 16, 0.7);
 }
+
+.custom-autocomplete-menu {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ced4da; /* Add a border for a select-like appearance */
+  border-radius: 0.25rem; /* Add rounded corners for a select-like appearance */
+}
+
+.custom-autocomplete-menu .ui-menu-item {
+  padding: 8px 12px; /* Adjust padding for better spacing */
+}
+
+.custom-autocomplete-menu .ui-menu-item:hover {
+background-color: #007bff; /* Use the desired shade of blue */
+color: white; /* Ensure text is readable on the hover background */
+}
