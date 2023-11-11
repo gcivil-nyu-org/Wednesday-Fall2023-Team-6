@@ -21,6 +21,9 @@ from django.contrib.auth import logout
 import os
 from django.conf import settings
 
+# import for checking appointment status
+from django.utils import timezone
+
 
 PASSWORD_RESET_SUBJECT = "MediLink Account Password Reset Request"
 
@@ -179,6 +182,9 @@ def accountView(request):
                     hospital=login_user.associated_hospital
                 )
 
+            # check and update the outdated appointments
+            OutdatedAppointments(doctor_appointments, hospital_appointments)
+
             """
                 1. Get method
                 2. Post method
@@ -247,6 +253,24 @@ def accountView(request):
         messages.error(request, alert_message)
         # auto redirect to login page
         return HttpResponseRedirect(reverse("user:login"))
+
+
+def OutdatedAppointments(doctor_appointments, hospital_appointments):
+    now = timezone.now()
+    # check consultations
+    if doctor_appointments:
+        for appointment in doctor_appointments:
+            if appointment.status == "REQ" and appointment.start_time <= now:
+                appointment.status = "CCL"
+                appointment.cancel_msg = "Consultation outdated, please book a new one."
+                appointment.save()
+    # check appointments
+    if hospital_appointments:
+        for appointment in hospital_appointments:
+            if appointment.status == "REQ" and appointment.start_time <= now:
+                appointment.status = "CCL"
+                appointment.cancel_msg = "Appointment outdated, please book a new one."
+                appointment.save()
 
 
 def cancelAppointment(request):
