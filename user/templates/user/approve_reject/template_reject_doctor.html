@@ -1,0 +1,10 @@
+{% autoescape off %}
+Hello {{ user.email }},
+
+Unfortunately, your request to be associated with {{ hospital_name }} has been rejected by the hospital.
+The reason they provided is: {{ reason }}
+
+Sincerely,
+MediLink Team
+
+{% endautoescape %}
