@@ -34,7 +34,7 @@ class User(models.Model):
         null=True,
         blank=True,
     )
-    
+
     active_status = models.BooleanField(default=True)
 
     def __str__(self):

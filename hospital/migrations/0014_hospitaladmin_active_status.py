@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('hospital', '0013_alter_hospitalappointment_cancel_msg'),
+        ("hospital", "0013_alter_hospitalappointment_cancel_msg"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='hospitaladmin',
-            name='active_status',
+            model_name="hospitaladmin",
+            name="active_status",
             field=models.BooleanField(default=True),
         ),
     ]

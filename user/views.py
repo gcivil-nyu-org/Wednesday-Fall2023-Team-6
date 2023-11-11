@@ -1,4 +1,3 @@
-import inspect
 import re
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
@@ -61,10 +60,13 @@ def passwordResetView(request):
 
     else:
         user_email = request.POST.get("user_email")
-        if(send_email(request, user_email, "user/resetPassword/template_reset_password.html", PASSWORD_RESET_SUBJECT)):
-            alert_message = (
-                "Email sent. Please follow the link to reset your password."
-            )
+        if send_email(
+            request,
+            user_email,
+            "user/resetPassword/template_reset_password.html",
+            PASSWORD_RESET_SUBJECT,
+        ):
+            alert_message = "Email sent. Please follow the link to reset your password."
             messages.success(request, alert_message)
             return HttpResponseRedirect(reverse("user:login"))
         else:
@@ -121,7 +123,7 @@ def home(request):
     return render(request, "user/home.html")
 
 
-def accountView(request):
+def accountView(request):  # noqa: C901
     template_name = "user/account.html"
     """
     check weather a user is logged in
@@ -162,8 +164,10 @@ def accountView(request):
                 hospital_appointments = HospitalAppointment.objects.filter(
                     hospital=login_user.associated_hospital
                 )
-                requests = Doctor.objects.filter(Q(associated_hospital=login_user.associated_hospital) & Q(active_status=False)
-                )
+
+                hospital_query = Q(associated_hospital=login_user.associated_hospital)
+                status_query = Q(active_status=False)
+                requests = Doctor.objects.filter(hospital_query & status_query)
 
             """
                 1. Get method
@@ -180,7 +184,7 @@ def accountView(request):
                         "userType": userType,
                         "doctor_appointments": doctor_appointments,
                         "hospital_appointments": hospital_appointments,
-                        "requests": requests
+                        "requests": requests,
                     },
                 )
             else:
@@ -222,13 +226,15 @@ def accountView(request):
                     zip = request.POST.get("zip")
                     specialization = request.POST.get("specialization")
                     associated_hospital = request.POST.get("hospital")
-                    
+
                     form_data = {
                         "name": name,
                         "email": login_user.email,
                         "phone": phone,
                         "sex": sex,
-                        "user_type": userType if userType != "hospitalAdmin" else "hospital-admin",
+                        "user_type": userType
+                        if userType != "hospitalAdmin"
+                        else "hospital-admin",
                         "primary_speciality": specialization,
                         "associated_hospital": associated_hospital,
                         "insurance_provider": insurance_provider,
@@ -236,35 +242,48 @@ def accountView(request):
                         "borough": borough,
                         "zip": zip,
                     }
-                    
+
                     ret, msg = check_user_validity(form_data)
-                    
-                    if ret:                   
+
+                    if ret:
                         if userType == "doctor":
-                            valid_fields = {field.name for field in Doctor._meta.get_fields()}
+                            valid_fields = {
+                                field.name for field in Doctor._meta.get_fields()
+                            }
                         elif userType == "patient":
-                            valid_fields = {field.name for field in Patient._meta.get_fields()}
+                            valid_fields = {
+                                field.name for field in Patient._meta.get_fields()
+                            }
                         elif userType == "hospitalAdmin":
-                            valid_fields = {field.name for field in HospitalAdmin._meta.get_fields()}
-                            
-                        filtered_form = {k: v for k, v in form_data.items() if k in valid_fields}
+                            valid_fields = {
+                                field.name for field in HospitalAdmin._meta.get_fields()
+                            }
+
+                        filtered_form = {
+                            k: v for k, v in form_data.items() if k in valid_fields
+                        }
                         filtered_form["active_status"] = True
-                        
-                        if (userType == "doctor") and ((associated_hospital and (not login_user.associated_hospital)) or (associated_hospital and (associated_hospital != login_user.associated_hospital.id))):
+
+                        if userType == "doctor":
+                            old_hos = login_user.associated_hospital
+                            is_new_hos = associated_hospital and not old_hos
+                            hos_change = associated_hospital != old_hos.id
+                            is_update_hos = associated_hospital and hos_change
+                            if is_new_hos or is_update_hos:
+                                filtered_form["active_status"] = False
+                        elif userType == "hospitalAdmin":
                             filtered_form["active_status"] = False
-                        elif (userType == "hospitalAdmin"):
-                            filtered_form["active_status"] = False
-                        
+
                         try:
-                            login_user.__dict__.update(filtered_form)   
-                            login_user.full_clean()             
+                            login_user.__dict__.update(filtered_form)
+                            login_user.full_clean()
                             login_user.save()
                         except Exception as e:
                             print(e)
                             messages.error(request, "Error: Invalid Data")
                     else:
                         messages.error(request, msg)
-                    
+
                     return redirect("user:account")
 
         # admin user logged in, redirect to admin page
@@ -333,6 +352,7 @@ def isValidPassword(password):
         return False
     return True
 
+
 def check_user_validity(form_data):  # noqa: C901
     try:
         if not form_data["name"]:
@@ -348,26 +368,30 @@ def check_user_validity(form_data):  # noqa: C901
         if not form_data["address"]:
             return False, "Invalid Address"
         if not form_data["zip"]:
-            return False,  "Invalid Zip"
+            return False, "Invalid Zip"
         if form_data["borough"] not in [opt[0] for opt in Choices.boroughs]:
             return False, "Error: Invalid Borough"
 
         # Conditionally set fields based on user type
         if form_data["user_type"] not in ["doctor", "hospital-admin"]:
             form_data["associated_hospital"] = None
-        elif form_data["user_type"] == "doctor" and (not form_data["associated_hospital"]):
+        elif form_data["user_type"] == "doctor" and (
+            not form_data["associated_hospital"]
+        ):
             form_data["associated_hospital"] = None
         else:
             try:
-                form_data["associated_hospital"] = Hospital.objects.get(id=int(form_data["associated_hospital"]))
+                form_data["associated_hospital"] = Hospital.objects.get(
+                    id=int(form_data["associated_hospital"])
+                )
             except Exception as e:
                 print("Error: ", e)
                 return False, "Error: Invalid Hospital selected."
         if form_data["user_type"] != "patient":
             form_data["insurance_provider"] = None
-        
+
         return True, ""
-    
+
     except Exception as e:
         print(e)
         return False, "Invalid User Details"
@@ -387,7 +411,7 @@ def get_form_data(request):  # noqa: C901
     address = request.POST.get("address") or None
     borough = request.POST.get("borough") or None
     zip = request.POST.get("zip") or None
-    
+
     form_data = {
         "name": name,
         "email": email,
@@ -405,26 +429,13 @@ def get_form_data(request):  # noqa: C901
 
     if not isValidPassword(password):
         return "Error: Invalid Password"
-    
+
     ret, msg = check_user_validity(form_data)
-    
+
     if not ret:
         return msg
 
-    return {
-        "name": name,
-        "email": email,
-        "phone": phone,
-        "sex": sex,
-        "user_type": user_type,
-        "primary_speciality": specialization,
-        "associated_hospital": associated_hospital,
-        "insurance_provider": insurance_provider,
-        "password": password,
-        "address": address,
-        "borough": borough,
-        "zip": zip,
-    }
+    return form_data
 
 
 def user_exists(email):
@@ -449,7 +460,7 @@ def create_user_profile(user_type, **kwargs):
         raise ValueError(f"Invalid user type: {user_type}")
     filtered_kwargs = {k: v for k, v in kwargs.items() if k in valid_fields}
     if user_type == "doctor":
-        if filtered_kwargs["associated_hospital"] != None:
+        if filtered_kwargs["associated_hospital"] is not None:
             filtered_kwargs["active_status"] = False
         Doctor.objects.create(**filtered_kwargs)
     elif user_type == "patient":
@@ -491,7 +502,12 @@ def register(request):
 
     else:
         hospitals = Hospital.objects.all()
-        return render(request, template_name="user/user_registration.html", context={"hospitals": hospitals})
+        return render(
+            request,
+            template_name="user/user_registration.html",
+            context={"hospitals": hospitals},
+        )
+
 
 def associate_doctor(request):
     doctor_id = request.POST.get("doctor_id")
@@ -502,36 +518,49 @@ def associate_doctor(request):
     else:
         messages.error(request, "Doctor does not exist!")
         return redirect("user:account")
-    
+
     if decision == "APPROVE":
         doc.active_status = True
         doc.save()
     else:
-        if not (send_email(request, doc.email, "user/approve_reject/template_reject_doctor.html", DOCTOR_REJECT_SUBJECT, reason=reason, hospital_name=doc.associated_hospital)):
+        if not (
+            send_email(
+                request,
+                doc.email,
+                "user/approve_reject/template_reject_doctor.html",
+                DOCTOR_REJECT_SUBJECT,
+                reason=reason,
+                hospital_name=doc.associated_hospital,
+            )
+        ):
             messages.error(request, "Failed to send reject email to doctor.")
         else:
             doc.associated_hospital = None
             doc.active_status = True
             doc.save()
-    
+
     return redirect("user:account")
 
+
 def send_email(request, user_email, email_template, subject, **kwargs):
-    user = User.objects.get(email=user_email)
-    token_generator = PasswordResetTokenGenerator()
-    context = kwargs
-    context["user"] = user
-    context["domain"] = get_current_site(request).domain,
-    context["uid"] = urlsafe_base64_encode(user.email.encode("utf-8")),
-    context["token"] = token_generator.make_token(user),
-    context["protocol"] = "https" if request.is_secure() else "http",
-    message = render_to_string(
-        email_template,
-        context,
-    )
-    email = EmailMessage(subject, message, to=[user.email])
-    if email.send():
-        return True
-    else:
+    try:
+        user = User.objects.get(email=user_email)
+        token_generator = PasswordResetTokenGenerator()
+        context = kwargs
+        context["user"] = user
+        context["domain"] = get_current_site(request).domain
+        context["uid"] = urlsafe_base64_encode(user.email.encode("utf-8"))
+        context["token"] = token_generator.make_token(user)
+        context["protocol"] = "https" if request.is_secure() else "http"
+        message = render_to_string(
+            email_template,
+            context,
+        )
+        email = EmailMessage(subject, message, to=[user.email])
+        if email.send():
+            return True
+        else:
+            return False
+    except Exception as e:
+        print(e)
         return False
-        

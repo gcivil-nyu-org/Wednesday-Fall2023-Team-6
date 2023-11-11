@@ -57,23 +57,66 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.addEventListener("DOMContentLoaded", function () {
   var rejectButtons = document.querySelectorAll(".reject-btn");
-  var appointmentTimeSpan = document.getElementById("appointmentTimeSpan2");
-  var appointmentIdInput = document.getElementById("appointmentId2");
-  var appointmentIdType = document.getElementById("appointmentType2");
-  var operationType = document.getElementById("operation2")
 
   rejectButtons.forEach(function (button) {
     button.addEventListener("click", function () {
-      var appointmentId = this.getAttribute("data-appointment-id");
-      var appointmentTime = this.getAttribute("data-appointment-time");
-      var appointmentType = this.getAttribute("data-appointment-type");
-      var operation = this.getAttribute("data-operation")
+      if(this.getAttribute("data-target") == "#rejectModal") {
+        var appointmentId = this.getAttribute("data-appointment-id");
+        var appointmentTime = this.getAttribute("data-appointment-time");
+        var appointmentType = this.getAttribute("data-appointment-type");
+        var operation = this.getAttribute("data-operation")
 
-      appointmentIdInput.value = appointmentId;
-      appointmentIdType.value = appointmentType;
-      operationType.value = operation
-      appointmentTimeSpan.textContent = appointmentTime;
+        var appointmentTimeSpan = document.getElementById("appointmentTimeSpan2");
+        var appointmentIdInput = document.getElementById("appointmentId2");
+        var appointmentIdType = document.getElementById("appointmentType2");
+        var operationType = document.getElementById("operation2")
+
+        appointmentIdInput.value = appointmentId;
+        appointmentIdType.value = appointmentType;
+        operationType.value = operation
+        appointmentTimeSpan.textContent = appointmentTime;
+      } else if(this.getAttribute("data-target") == "#rejectRequestModal") {
+          var doctor_id = this.getAttribute("data-doctor-id");
+          var doctor_name = this.getAttribute("data-doctor-name");
+          
+          var doctor_id_input = document.getElementById("doctor_id");
+          var doctor_name_span = document.getElementById("doctor_name_span");
+          doctor_name_span.textContent = doctor_name;
+          doctor_id_input.value = doctor_id
+      }
     });
+  });
+});
+
+$(document).ready(function () {
+  const baseURL = window.location.origin;
+  $('#associatedHospital').autocomplete({
+      source: function (request, response) {
+          $.ajax({
+              url: baseURL + '/hospital/autocomplete/',
+              data: { 'search': request.term },
+              dataType: 'json',
+              success: function (data) {
+                  response($.map(data, function (item) {
+                      return {
+                          label: item.name.replace(/^:/, ''),
+                          value: item.id
+                      };
+                  }));
+              }
+          });
+      },
+      select: function (event, ui) {
+          $('#associatedHospital').val(ui.item.label);
+          $('#selectedId').val(ui.item.value);
+          return false;
+      },
+      minLength: 2,
+      open: function (event, ui) {
+          // Add a custom class to the autocomplete menu for styling
+          $(".ui-autocomplete").css("width", $('#associatedHospital').outerWidth());
+          $(".ui-autocomplete").addClass("custom-autocomplete-menu");
+      }
   });
 });
 

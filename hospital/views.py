@@ -191,8 +191,9 @@ def book_appointment(request, hospital_id):
 
     return HttpResponseBadRequest("Invalid Request Method")
 
+
 def autocomplete_hospitals(request):
-    search_term = request.GET.get('search', '')
+    search_term = request.GET.get("search", "")
     objects = Hospital.objects.filter(name__icontains=search_term)[:5]
-    data = [{'id': obj.id, 'name': obj.name} for obj in objects]
+    data = [{"id": obj.id, "name": obj.name} for obj in objects]
     return JsonResponse(data, safe=False)

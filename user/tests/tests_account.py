@@ -24,7 +24,7 @@ class AccountViewTest(TestCase):
             name="Test User",
             phone="1234567890",
             address="123 Street",
-            borough="Borough",
+            borough="BKN",
             zip="54321",
         )
         self.admin_user = User.objects.create_superuser(
@@ -107,9 +107,9 @@ class AccountViewTest(TestCase):
             "email": "testuser@example.com",
             "name": "Updated User",
             "phone": "9876543210",
-            "sex": "Male",
+            "sex": "male",
             "address": "123 Updated Street",
-            "borough": "Updated Borough",
+            "borough": "BKN",
             "zip": "54321",
         }
 
