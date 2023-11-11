@@ -1,24 +1,36 @@
 {% load static %}
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="{% static 'user/javascript/account.js' %}"></script>
 
 <title>{{login_user.name}} Account</title>
 
 <body>
     <!-- header part -->
     {% include "user/navbar.html" %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="{% static 'user/javascript/account.js' %}"></script>
     <link rel="stylesheet" href="{% static 'user/css/account.css' %}">
+
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible shadow fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message | safe }}
+        </div>
+    {% endfor %}
+    {% endif %}
 
     <!-- Left container part -->
     <div class="row container-fluid">
@@ -106,11 +118,30 @@
                                 <input type="text" name="address" class="info-field" disabled
                                     value="{{ login_user.address }}">
                             </div>
+                            {% if userType == "patient" %}
                             <div class="info-row-2">
                                 <label class="info-label">Insurance Provider</label>
                                 <input type="text" name="insurance" class="info-field" disabled
                                     value="{{ login_user.insurance_provider }}">
                             </div>
+                            {% elif userType == "doctor" %}
+                            <div class="info-row-2">
+                                <label class="info-label">Medical Specialization</label>
+                                <input type="text" name="specialization" class="info-field" disabled
+                                    value="{{ login_user.primary_speciality }}">
+                            </div>
+                            {% endif %}
+                            {% if userType != "patient" %}
+                            <div class="info-row-2">
+                                <label class="info-label"> 
+                                    {% if login_user.active_status == False %}Requested {% else %}Associated {% endif %}
+                                    Hospital
+                                </label>
+                                <input type="text" id="associatedHospital" name="associatedHospital" class="info-field" disabled
+                                    value="{{ login_user.associated_hospital.name }}">
+                                <input type="hidden" id="selectedId" name="hospital">
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -127,10 +158,12 @@
         <!-- Right container part -->
         <div class="Account-right container col">
             <div class="tabs">
+                {% if userType != "hospitalAdmin" %}
                 <div class="tab active-tab" name="consultations" onclick="showContent('consultations')">Online
                     Consultations</div>
                 <div class="tab" name="appointments" onclick="showContent('appointments')">Onsite Appointments</div>
-                {% if userType == "hospitalAdmin" %}
+                {% else %}
+                <div class="tab active-tab" name="appointments" onclick="showContent('appointments')">Onsite Appointments</div>
                 <div class="tab" name="requests" onclick="showContent('requests')">Requests</div>
                 {% endif %}
             </div>
@@ -398,9 +431,73 @@
                     {% endif %}
                 </div>
 
-                <div class="content" id="requestsContent" style="display: none;">
-                    <!-- Content for Requests tab -->
-                    <p class="no-result">requests, to be implemented.</p>
+                <div class="content" id="requestsContent" style="display: none">
+                    {% if requests %}
+                    {% for doctor in requests %}
+                    <div class="collapsible">
+                        <span class="collapsible-label">
+                            Request from {{doctor.name }}
+                        </span>
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <h3>Doctor Details:</h3>
+
+                        <div class="row">
+                            <div class="appointment-row">
+                                <label class="display-label">Name</label>
+                                <p>{{ doctor.name }}</p>
+                            </div>
+
+                            <div class="appointment-row">
+                                <label class="display-label">Phone</label>
+                                <p>{{doctor.phone}}</p>
+                            </div>
+
+                            <div class="appointment-row">
+                                <label class="display-label">Sex</label>
+                                <p>{{doctor.sex}}</p>
+                            </div>
+
+                            <div class="appointment-row">
+                                <label class="display-label">Email</label>
+                                <p>{{doctor.email}}</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="appointment-row">
+                                <label class="display-label">Zip</label>
+                                <p>{{doctor.zip}}</p>
+                            </div>
+                            
+                            <div class="appointment-row">
+                                <label class="display-label">Address</label>
+                                <p>{{doctor.address}}</p>
+                            </div>
+                        </div>
+
+                        <div class="buttons">
+                            <button class="reject-btn" data-toggle="modal" data-target="#rejectRequestModal"
+                                data-doctor-id="{{ doctor.id }}" data-doctor-name="{{ doctor.name }}"> Reject
+                            </button>
+
+                            <form action="{% url 'user:associate_doctor' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="doctor_id" value="{{doctor.id}}">
+                                <input type="hidden" name="decision" value="APPROVE">
+                                <input type="hidden" name="cancel_reason" value="">
+                                <button class="confirm-btn" type="submit"> Approve </button>
+                            </form>
+                        </div>
+                        
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p class="no-result">
+                        No Requests Available.
+                    </p>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -478,6 +575,40 @@
                         <input type="hidden" id="appointmentId2" name="appointment_id" value="">
                         <input type="hidden" id="appointmentType2" name="appointment_type" value="">
                         <input type="hidden" id="operation2" name="operation" value="">
+                        <button type="submit" class="btn btn-danger">Reject</button>
+                        </form>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Exit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="rejectRequestModal" tabindex="-1" role="dialog" aria-labelledby="rejectRequestModal"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutModalLabel">Reject Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>You will <strong> reject </strong>
+                            the request by
+                            <strong><span id="doctor_name_span"></span></strong>
+                            , and this operation cannot be undone. Are you sure you want to
+                            <strong>reject</strong>
+                            the request?
+                        </p>
+                        <form action="{% url 'user:associate_doctor' %}" method="post">
+                            {% csrf_token %}
+                            <label class="cancel-label"> Reject Reason: </label>
+                            <input class="cancel-reason" name="cancel_reason" type="text" required>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="doctor_id" name="doctor_id" value="">
+                        <input type="hidden" id="decision" name="decision" value="REJECT">
                         <button type="submit" class="btn btn-danger">Reject</button>
                         </form>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Exit</button>

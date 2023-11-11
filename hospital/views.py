@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views import generic
 from .models import Hospital, HospitalAppointment
 from user.models import Choices, Patient
@@ -190,3 +190,9 @@ def book_appointment(request, hospital_id):
             )
 
     return HttpResponseBadRequest("Invalid Request Method")
+
+def autocomplete_hospitals(request):
+    search_term = request.GET.get('search', '')
+    objects = Hospital.objects.filter(name__icontains=search_term)[:5]
+    data = [{'id': obj.id, 'name': obj.name} for obj in objects]
+    return JsonResponse(data, safe=False)
