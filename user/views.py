@@ -288,14 +288,16 @@ def cancelAppointment(request):
 
     if appointment_type == "consultation":
         consultation = DoctorAppointment.objects.filter(id=appointment_id).first()
-        consultation.cancel_msg = cancel_reason
-        consultation.status = operation
-        consultation.save()
+        if consultation.status != "CCL" and consultation.status != "REJ":
+            consultation.cancel_msg = cancel_reason
+            consultation.status = operation
+            consultation.save()
     else:
         appointment = HospitalAppointment.objects.filter(id=appointment_id).first()
-        appointment.cancel_msg = cancel_reason
-        appointment.status = operation
-        appointment.save()
+        if appointment.status != "CCL" and appointment.status != "REJ":
+            appointment.cancel_msg = cancel_reason
+            appointment.status = operation
+            appointment.save()
 
     return redirect("user:account")
 

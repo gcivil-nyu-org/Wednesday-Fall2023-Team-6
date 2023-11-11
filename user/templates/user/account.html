@@ -252,7 +252,7 @@
                     </div>
                     <!-- for docotr, if the status is requested, the doctor can confirm or reject it-->
                     {% elif userType == "doctor" and appointment.status == "REQ" %}
-                    <div class="buttons">
+                    <div class="reject-confirm-buttons">
                         <button class="reject-btn" data-toggle="modal" data-target="#rejectModal"
                             data-appointment-id="{{ appointment.id }}" data-appointment-type="consultation"
                             data-operation="REJ" data-appointment-time="{{ appointment.start_time }}"> Reject </button>
@@ -396,7 +396,8 @@
 
                         <!-- for hospitalAdmin, if the status is requested, the hospitalAdmin can confirm or reject it-->
                         {% elif userType == "hospitalAdmin" and appointment.status == "REQ" %}
-                        <div class="buttons">
+
+                        <div class="reject-confirm-buttons">
                             <button class="reject-btn" data-toggle="modal" data-target="#rejectModal"
                                 data-appointment-id="{{ appointment.id }}" data-appointment-type="appointment"
                                 data-operation="REJ" data-appointment-time="{{ appointment.start_time }}"> Reject
@@ -421,7 +422,7 @@
                             </button>
                         </div>
                         {% endif %}
-                        
+
                     </div>
                     {% endfor %}
                     {% else %}
