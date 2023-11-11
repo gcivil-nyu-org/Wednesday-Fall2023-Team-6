@@ -32,7 +32,7 @@
                 <br>
                 <p class="h6 my-5">Dr. {{object.name}} is
                     a doctor 
-                    {% if object.associated_hospital.name %}
+                    {% if object.associated_hospital.name and object.active_status == True %}
                     working at {{object.associated_hospital.name}}
                     {% endif %}
                     whose primary speciality is {{object.primary_speciality}}. </p>
@@ -64,7 +64,7 @@
             <h2>Primary Speciality</h2>
             <p>{{object.primary_speciality}}</p>
         </div>
-        {% if object.associated_hospital.name %}
+        {% if object.associated_hospital.name and object.active_status == True %}
         <div class="navigator-item pr-3">
             <h2>Hospital</h2>
             <p>{{object.associated_hospital.name}}</p>

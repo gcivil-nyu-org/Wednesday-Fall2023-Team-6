@@ -43,7 +43,7 @@
                         {% if login_user.avatar %}
                         <img src="{{login_user.avatar.url}}" alt="Background Image">
                         {% else %}
-                        <img src="{% static 'user/images/default-avatar.png' %}" alt="Background Image">
+                        <img src="{% static 'media/avatars/default-avatar.png' %}" alt="Background Image">
                         {% endif %}
                         <!-- Upload button or input element -->
                         <label for="avatar-upload-input" class="avatar-upload-area-1">
@@ -479,7 +479,7 @@
                         </div>
 
                         <div class="buttons">
-                            <button class="reject-btn" data-toggle="modal" data-target="#rejectRequestModal"
+                            <button class="reject-btn mr-5" data-toggle="modal" data-target="#rejectRequestModal"
                                 data-doctor-id="{{ doctor.id }}" data-doctor-name="{{ doctor.name }}"> Reject
                             </button>
 

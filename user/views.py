@@ -135,9 +135,9 @@ def accountView(request):  # noqa: C901
     if request.user.is_authenticated:
         user = request.user
         if user.username != "admin":
-            patient = Patient.objects.filter(email=user.email)
-            doctor = Doctor.objects.filter(email=user.email)
-            hospital_admin = HospitalAdmin.objects.filter(email=user.email)
+            patient = Patient.objects.filter(email=user.username)
+            doctor = Doctor.objects.filter(email=user.username)
+            hospital_admin = HospitalAdmin.objects.filter(email=user.username)
 
             # check user types
             if len(patient) != 0:
@@ -272,16 +272,21 @@ def accountView(request):  # noqa: C901
 
                         if userType == "doctor":
                             old_hos = login_user.associated_hospital
-                            is_new_hos = associated_hospital and not old_hos
-                            hos_change = associated_hospital != old_hos.id
-                            is_update_hos = associated_hospital and hos_change
+                            is_new_hos = (
+                                form_data["associated_hospital"] and not old_hos
+                            )
+                            hos_change = form_data["associated_hospital"] != old_hos
+                            is_update_hos = (
+                                form_data["associated_hospital"] and hos_change
+                            )
                             if is_new_hos or is_update_hos:
                                 filtered_form["active_status"] = False
                         elif userType == "hospitalAdmin":
                             filtered_form["active_status"] = False
 
                         try:
-                            login_user.__dict__.update(filtered_form)
+                            for field, value in filtered_form.items():
+                                setattr(login_user, field, value)
                             login_user.full_clean()
                             login_user.save()
                         except Exception as e:
