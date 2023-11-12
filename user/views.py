@@ -232,6 +232,17 @@ def accountView(request):  # noqa: C901
                     zip = request.POST.get("zip")
                     specialization = request.POST.get("specialization")
                     associated_hospital = request.POST.get("hospital")
+                    hos_name = request.POST.get("associatedHospital")
+
+                    if userType != "patient":
+                        if str(hos_name).strip() == "":
+                            associated_hospital = None
+                        elif not Hospital.objects.filter(name=hos_name).exists():
+                            associated_hospital = (
+                                login_user.associated_hospital.id
+                                if login_user.associated_hospital
+                                else None
+                            )
 
                     form_data = {
                         "name": name,
@@ -270,19 +281,16 @@ def accountView(request):  # noqa: C901
                         }
                         filtered_form["active_status"] = True
 
-                        if userType == "doctor":
-                            old_hos = login_user.associated_hospital
-                            is_new_hos = (
-                                form_data["associated_hospital"] and not old_hos
-                            )
-                            hos_change = form_data["associated_hospital"] != old_hos
-                            is_update_hos = (
-                                form_data["associated_hospital"] and hos_change
-                            )
-                            if is_new_hos or is_update_hos:
-                                filtered_form["active_status"] = False
-                        elif userType == "hospitalAdmin":
-                            filtered_form["active_status"] = False
+                        if userType == "doctor" or userType == "hospitalAdmin":
+                            curr_hos = filtered_form["associated_hospital"]
+                            prev_hos = login_user.associated_hospital
+                            if curr_hos:
+                                if curr_hos != prev_hos:
+                                    filtered_form["active_status"] = False
+                                else:
+                                    filtered_form[
+                                        "active_status"
+                                    ] = login_user.active_status
 
                         try:
                             for field, value in filtered_form.items():
