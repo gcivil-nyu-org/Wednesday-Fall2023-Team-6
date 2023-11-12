@@ -32,8 +32,9 @@ class HospitalDetailView(generic.DetailView):
             ]
         except Exception as e:
             print("Doctor Borough Exception: ", e)
+
         context["doctors"] = Doctor.objects.all().filter(
-            associated_hospital=context["object"]
+            associated_hospital=context["object"], active_status=True
         )
         return context
 
