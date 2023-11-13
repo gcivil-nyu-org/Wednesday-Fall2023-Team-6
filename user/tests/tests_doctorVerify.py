@@ -1,11 +1,9 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
-from user.models import Patient
 from doctor.models import Doctor
 from hospital.models import Hospital, HospitalAdmin
 from unittest.mock import patch
-from django.core import mail
 
 
 class AssociateDoctorViewTest(TestCase):
