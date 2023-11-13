@@ -202,6 +202,15 @@ class AccountViewTest(TestCase):
             username="testHospitalAdmin@example.com", password="testpassword"
         )
 
+        new_hospital = Hospital.objects.create(
+            name="New Hospital",
+            facility_type="Test Facility",
+            borough="Borough",
+            phone="1234567890",
+            location="Test Location",
+            postal_code=54321,
+        )
+
         # Provide an empty string for associated hospital name
         updated_data = {
             "email": "testHospitalAdmin@example.com",
@@ -218,12 +227,38 @@ class AccountViewTest(TestCase):
         response = self.client.post(reverse("user:account"), data=updated_data)
         self.assertEqual(response.status_code, 302)
         # Check if the associated hospital is still the same
+
         self.assertEqual(
             HospitalAdmin.objects.get(
                 email="testHospitalAdmin@example.com"
             ).associated_hospital.name,
             "Test Hospital",
         )
+
+        # Provide another existing hospital
+        updated_data2 = {
+            "email": "testHospitalAdmin@example.com",
+            "name": "Updated Hospital Admin",
+            "phone": "9876543210",
+            "sex": "male",
+            "address": "123 Updated Street",
+            "borough": "BKN",
+            "zip": "54321",
+            "user_type": "hospital-admin",
+            "associatedHospital": "New Hospital",  # Empty string for associated hospital
+            "hospital": new_hospital.id,
+        }
+
+        response = self.client.post(reverse("user:account"), data=updated_data2)
+        self.assertEqual(response.status_code, 302)
+        # Check response status
+
+        self.assertFalse(
+            HospitalAdmin.objects.get(
+                email="testHospitalAdmin@example.com"
+            ).active_status
+        )
+
         print("Completed: test_associated_hospital_logic")
 
     def test_user_validity_check_and_update(self):
@@ -269,6 +304,26 @@ class AccountViewTest(TestCase):
         self.assertEqual(
             Doctor.objects.get(email="testDoctor@example.com").associated_hospital.name,
             self.hospital.name,
+        )
+
+        # Test with no hospital name
+        invalid_data = {
+            "email": "testDoctor@example.com",
+            "name": "Updated Doctor 2",
+            "phone": "9876543210",
+            "sex": "male",
+            "user_type": "doctor",
+            "specialization": "Updated Speciality",
+            "associatedHospital": "",
+            "address": "123 Updated Street",
+            "borough": "BKN",
+            "zip": "54321",
+        }
+        response = self.client.post(reverse("user:account"), data=invalid_data)
+        self.assertEqual(response.status_code, 302)
+        # Check if an error message is displayed or handle it based on your actual implementation
+        self.assertIsNone(
+            Doctor.objects.get(email="testDoctor@example.com").associated_hospital
         )
 
         print("Completed: test user validity check and update")
