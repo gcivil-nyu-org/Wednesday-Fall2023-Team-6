@@ -38,7 +38,7 @@ deploy:
       region: $PROD_AWS_REGION
       app: $PROD_AWS_APP_NAME
       env: $PROD_AWS_ENV_NAME
-      bucket_name: elasticbeanstalk-us-west-2-475338120318
+      bucket_name: $PROD_AWS_BUCKET_NAME
       on:
           branch: master
     - provider: elasticbeanstalk
