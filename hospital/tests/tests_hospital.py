@@ -2,24 +2,14 @@ from django.test import TestCase
 from django.urls import reverse
 from hospital.models import Hospital
 
-# from hospital.views import HospitalListView, HospitalDetailView, book_appointment
-# from django.contrib.auth.models import User
-# from doctor.models import Doctor
-# import json
-
-
-class CustomLogicTest(TestCase):
-    def test_custom_logic(self):
-        pass
-        # Write test cases for your custom application logic
-        # Ensure to test both success and error cases.
-
 
 class HospitalListViewTest(TestCase):
-    def test_hospital_filtering(self):
+    def test_hospital_filtering_name(self):
+        print("\nRunning: test for filtering hospitals by name")
+
         # Create a test Hospital
         Hospital.objects.create(
-            name="Test Hospital",
+            name="Hospital A",
             facility_type="Type A",
             borough="BKN",
             phone="123-456-7890",
@@ -27,20 +17,34 @@ class HospitalListViewTest(TestCase):
             postal_code=12345,
         )
 
-        # Perform a search with a filter form
-        response = self.client.get(
-            reverse("hospital:list_view"), {"name": "Test Hospital"}
+        Hospital.objects.create(
+            name="Hospital B",
+            facility_type="Type B",
+            borough="QNS",
+            phone="576-293-4829",
+            location="Location B",
+            postal_code=54321,
         )
+
+        url = "/hospital/"
+        url += "?page=1&facility_type=All&borough=All&location=All&postal_code=All&name=Hospital A"
+
+        # Perform a search of name
+        response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Test Hospital")
+        # Check if only borough doctors are displayed
+        self.assertNotContains(response, "Hospital B")
+        self.assertContains(response, "Hospital A")
 
+        print("Completed: test for filtering hospitals by name")
 
-class BookAppointmentViewTest(TestCase):
-    def test_invalid_appointment_booking(self):
+    def test_hospital_filtering_facility(self):
+        print("\nRunning: test for filtering hospitals by facility type")
+
         # Create a test Hospital
-        hospital = Hospital.objects.create(
-            name="Test Hospital",
+        Hospital.objects.create(
+            name="Hospital A",
             facility_type="Type A",
             borough="BKN",
             phone="123-456-7890",
@@ -48,21 +52,136 @@ class BookAppointmentViewTest(TestCase):
             postal_code=12345,
         )
 
-        # Attempt to book an appointment with invalid data
-        response = self.client.post(
-            reverse("hospital:book_appointment", args=[hospital.id]),
-            {
-                "date": "2023-11-03",
-                "time": "10:00",
-                "name": "John Doe",
-                "phone": "invalid_phone",  # Invalid phone format
-                "email": "johndoe@example.com",
-                "reason": "Checkup",
-                "accebility": "Wheelchair access",
-            },
+        Hospital.objects.create(
+            name="Hospital B",
+            facility_type="Type B",
+            borough="QNS",
+            phone="576-293-4829",
+            location="Location B",
+            postal_code=54321,
         )
 
-        self.assertEqual(response.status_code, 400)  # Should return a bad request
+        url = "/hospital/"
+        url += "?page=1&facility_type=Type A&borough=All&location=All&postal_code=All&name="
+
+        # Perform a search of name
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        # Check if only borough doctors are displayed
+        self.assertNotContains(response, "Hospital B")
+        self.assertContains(response, "Hospital A")
+
+        print("Completed: test for filtering hospitals by facility type")
+
+    def test_hospital_filtering_borough(self):
+        print("\nRunning: test for filtering hospitals by borough")
+
+        # Create a test Hospital
+        Hospital.objects.create(
+            name="Hospital A",
+            facility_type="Type A",
+            borough="BKN",
+            phone="123-456-7890",
+            location="Location A",
+            postal_code=12345,
+        )
+
+        Hospital.objects.create(
+            name="Hospital B",
+            facility_type="Type B",
+            borough="QNS",
+            phone="576-293-4829",
+            location="Location B",
+            postal_code=54321,
+        )
+
+        url = "/hospital/"
+        url += (
+            "?page=1&facility_type=All&borough=BKN&location=All&postal_code=All&name="
+        )
+
+        # Perform a search of name
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        # Check if only borough doctors are displayed
+        self.assertNotContains(response, "Hospital B")
+        self.assertContains(response, "Hospital A")
+
+        print("Completed: test for filtering hospitals by borough")
+
+    def test_hospital_filtering_location(self):
+        print("\nRunning: test for filtering hospitals by location")
+
+        # Create a test Hospital
+        Hospital.objects.create(
+            name="Hospital A",
+            facility_type="Type A",
+            borough="BKN",
+            phone="123-456-7890",
+            location="Location A",
+            postal_code=12345,
+        )
+
+        Hospital.objects.create(
+            name="Hospital B",
+            facility_type="Type B",
+            borough="QNS",
+            phone="576-293-4829",
+            location="Location B",
+            postal_code=54321,
+        )
+
+        url = "/hospital/"
+        url += "?page=1&facility_type=All&borough=All&location=Location A&postal_code=All&name="
+
+        # Perform a search of name
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        # Check if only borough doctors are displayed
+        self.assertNotContains(response, "Hospital B")
+        self.assertContains(response, "Hospital A")
+
+        print("Completed: test for filtering hospitals by location")
+
+    def test_hospital_filtering_postal(self):
+        print("\nRunning: test for filtering hospitals by postal code")
+
+        # Create a test Hospital
+        Hospital.objects.create(
+            name="Hospital A",
+            facility_type="Type A",
+            borough="BKN",
+            phone="123-456-7890",
+            location="Location A",
+            postal_code=12345,
+        )
+
+        Hospital.objects.create(
+            name="Hospital B",
+            facility_type="Type B",
+            borough="QNS",
+            phone="576-293-4829",
+            location="Location B",
+            postal_code=54321,
+        )
+
+        url = "/hospital/"
+        url += (
+            "?page=1&facility_type=All&borough=All&location=All&postal_code=12345&name="
+        )
+
+        # Perform a search of name
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        # Check if only borough doctors are displayed
+        self.assertNotContains(response, "Hospital B")
+        self.assertContains(response, "Hospital A")
+
+        print("Completed: test for filtering hospitals by postal code")
 
 
 class HospitalDetailViewTest(TestCase):
@@ -82,5 +201,3 @@ class HospitalDetailViewTest(TestCase):
         self.assertTemplateUsed(response, "hospital/hospital_details.html")
 
         self.assertContains(response, "Test Hospital")
-
-        # Add more assertions to test the view's behavior.

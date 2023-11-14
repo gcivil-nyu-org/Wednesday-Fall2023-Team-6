@@ -68,7 +68,7 @@ class RegistrationTests(TestCase):
             "address": "73rd Street",
             "borough": "BKN",
             "zip": 11209,
-            "hospital": self.hosiptal.id,
+            "hospital": int(self.hosiptal.id),
         }
 
         User.objects.create_user(

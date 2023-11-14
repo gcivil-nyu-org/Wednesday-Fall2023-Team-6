@@ -1,195 +1,362 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #ebf1f3;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    position: relative;
-    background-color: #0a2049;
-    height: 40px;
-    color: white;
-  }
-  
-  .header span {
-    font-size: 40px;
-    font-weight: bold;
-  }
-  
-  nav a {
-    margin: 0 10px;
-    text-decoration: none;
-    color: rgb(255, 255, 255);
-  }
-  
-  nav p {
-    margin: 0 10px;
-  }
-  
-  .search-and-filter {
-    background-color: rgb(255, 255, 255);
-    position: relative;
-    height: 200px;
-    margin-bottom: 10px;
-    margin-left: 3%;
-    margin-right: 3%;
-    border-radius: 10px;
-    box-shadow: 0 12px 8px rgba(51, 51, 51, 0.1);
-  }
-  
-  .search-and-filter span {
-    padding-left: 20px;
-    font-size: 60px;
-    font-weight: 800;
-    color: #0a2049;
-  }
-  
-  .hospital-list {
-    /* background-color: rgb(255, 255, 255); */
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(auto, 1fr));
-    grid-gap: 20px;
-    height: auto;
-    margin-bottom: 10px;
-    margin-left: 3%;
-    margin-right: 3%;
-    border-radius: 10px;
-  }
-  
-  .hospital-list a {
-    text-decoration: none;
-    color: black;
-  }
-  
-  /* pagination */
-  
-  .pagination {
-    /* background-color: rgb(255, 255, 255); */
-    position: relative;
-    display: inline-block;
-    text-align: center;
-    margin-left: 3%;
-    margin-right: 3%;
-    border-radius: 10px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .pagination span{
-      font-weight: bold;
-  }
-  
-  .page-numbers {
-      display: inline-block;
-      margin: 0 10px;
-      border-radius: 50%;
-  }
-  
-  .prev, .next, .first, .last {
-      text-decoration: none;
-      background-color: #b8ebf1;
-      border-radius: 10px;
-      color: #333;
-      padding: 5px 10px;
-      border: 1px solid #94c0f1;
-      margin: 10px 2px;
-  }
-  
-  .page{
-      text-decoration: none;
-      background-color: #b8ebf1;
-      border-radius: 50%;
-      color: #333;
-      padding: 5px 10px;
-      border: 1px solid #94c0f1;
-      margin: 10px 2px;
-  }
-  
-  .page:hover, .prev:hover, .next:hover, .first:hover, .last:hover {
-      background-color: #ebb3b3;
-      cursor: pointer;
-  }
-  
-  .page.active{
-      color: #fff;
-      background-image: linear-gradient(#e9b4bd, #ff4568);
-      border: 1px solid #f32775;
-      background-repeat: no-repeat;
-  }
-  
-  /* card list */
-  .card {
-    background-color: rgb(255, 255, 255);
-    padding: 10px;
-    display: grid;
-    align-items: center;
-    border-radius: 10px;
-    max-height: 350px;
-    min-width: 400px;
-    box-shadow: 0 12px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .row {
-      display: flex;
-  }
-  
-  .left-column {
-      flex: 1;   
-      display: flex;
-      align-items: center;
-  }
-  
-  .right-column {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-  }
-  
-  .avatar {
-    min-width: 80%;
-    height: auto;
-  }
-  
-  .border {
-    padding: 10px;
-    font-size: 15px;
-  }
-  
-  .card p{
-      font-weight: 900;
-      font-size: 20px;
-  }
-  
-  .card h3{
-      font-size: 15px;
-  }
-  
-  .book-appointment{
-      position: sticky;
-      bottom: 0;
-      background-color: rgb(0, 0, 0);
-      color: white;
-      border-radius: 10px;
-      padding: 10px 20px;
-      cursor: pointer;
-      width: 100%;
-  }
-  
-  button:hover{
-      position: sticky;
-      bottom: 0;
-      background: #040d5f;
-      color: #ffffff;
-      border-radius: 10px;
-      padding: 10px 20px;
-      cursor: pointer;
-      width: 100%;
-  }
-  
+  font-family: Arial, sans-serif;
+  background-color: #ebf1f3;
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  position: relative;
+  background-color: #0a2049;
+  height: 40px;
+  color: white;
+}
+
+.header span {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+nav a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: rgb(255, 237, 237);
+}
+
+nav p {
+  margin: 0 10px;
+}
+
+.rating-color{
+  color:#fbc634 !important;
+}
+
+.ratings {
+  margin-top: 15px;
+}
+
+/* search and filter */
+.search-and-filter {
+  background-color: rgba(199, 221, 255, 0.534);
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  padding-left: 3%;
+  padding-right: 3%;
+  box-shadow: 0 12px 8px rgba(51, 51, 51, 0.1);
+  display: flex;
+}
+
+.search-and-filter span {
+  font-size: 60px;
+  font-weight: 800;
+  color: #0a2049;
+  border-bottom: 3px solid #0a2049;
+}
+
+.dropdown-menu {
+  margin-left: 20px;
+}
+
+.dropdown-menu a{
+  font-weight: 600;
+  color: #0a2049;
+  font-size: 20px;
+}
+
+.search-and-filter h3 {
+  padding-left: 20px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #000000;
+  margin-top: 20px;
+}
+
+.search-and-filter h2 {
+  padding-left: 20px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #0bb6fa;
+}
+
+.filter-left-column {
+  width: 50%
+}
+
+.form-name-input {
+  margin-top: 10px;
+  padding-left: 20px;
+  position: absolute;
+  bottom: 45;
+  width: 30%;
+}
+
+legend {
+  font-weight: 900;
+  font-size: larger;
+  margin-left: 5px;
+}
+
+.hospital-name-input {
+  width: 80%;
+  height: 40px;
+  border-radius: 5px;
+  border-width: 3px;
+  margin-right: 5px;
+  border-color: #0753c5;
+  padding: 2%;
+}
+
+.hospital-name-input::placeholder {
+  font-weight: 400;
+}
+
+.filter-right-column {
+  /* flex: 1; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-top: 10px;
+  margin-left: 5px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.custom-select {
+  width: 350px;
+  padding: 5px;
+  margin: 5px;
+  border: 1px solid #599ecc;
+  border-radius: 5px;
+}
+
+/* search icon */
+.search {
+  padding-left: 10px;
+  background-color: #fff;
+  border: 0px;
+  font-size: 20px;
+  color: #3194d6;
+  cursor: pointer;
+}
+
+.search:hover {
+  padding-left: 10px;
+  background-color: #ffffff;
+  border: 0px;
+  font-size: 20px;
+  color: #315dd6;
+  cursor: pointer;
+}
+
+.hospital-list {
+  /* background-color: rgb(255, 255, 255); */
+  position: relative;
+  display: grid;
+  margin-top: 40px;
+  grid-template-columns: repeat(2, minmax(auto, 1fr));
+  grid-gap: 20px;
+  height: auto;
+  margin-bottom: 10px;
+  margin-left: 3%;
+  margin-right: 3%;
+  border-radius: 10px;
+}
+
+#speciality {
+  font-weight: bold;
+  font-size: 20;
+}
+
+#address {
+  font-weight: 700;
+  color: rgb(63, 63, 63);
+}
+
+.hospital-list a {
+  text-decoration: none;
+  color: black;
+}
+
+/* pagination */
+
+.pagination {
+  background-color: rgba(199, 221, 255, 0.219);
+  display: flex;
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding: 20px;
+  border: 2px solid grey;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+  flex-wrap: wrap;
+  align-content: stretch;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination span {
+  font-weight: bold;
+}
+
+.page-numbers {
+  display: inline-block;
+  margin: 0 10px;
+  border-radius: 50%;
+}
+
+.prev,
+.next,
+.first,
+.last {
+  text-decoration: none;
+  border-radius: 10px;
+  color: #333;
+  padding: 5px 10px;
+  border: 2px solid #94c0f1;
+  margin: 10px 2px;
+}
+
+.page {
+  text-decoration: none;
+  border-radius: 20%;
+  color: #333;
+  padding: 5px 10px;
+  border: 2px solid #94c0f1;
+  margin: 10px 2px;
+}
+
+.page:hover,
+.prev:hover,
+.next:hover,
+.first:hover,
+.last:hover {
+  background-color: #bed3ff;
+  cursor: pointer;
+}
+
+.page.active {
+  color: #fff;
+  background-image: linear-gradient(#9bbaff, #378cfc);
+  border: 2px solid #2600ad;
+  background-repeat: no-repeat;
+}
+
+/* card list */
+.card {
+  background-color: rgb(255, 255, 255);
+  padding: 20px;
+  display: grid;
+  align-items: center;
+  min-width: 500px;
+  max-width: 800px;
+  min-height: 350px;
+  border-radius: 5px;
+  box-shadow: 0 12px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-left-column {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.card-left-column a img{
+  border: 2px solid black;
+}
+
+.card-right-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.card-avatar {
+  min-width: 80%;
+  height: auto;
+}
+
+.card-border {
+  font-size: 15px;
+  margin-top: 30px;
+  margin-left: 2px;
+  color: rgb(80, 80, 80);
+  font-weight: 700;
+}
+
+.card p {
+  font-weight: 900;
+  font-size: 25px;
+  margin-right: 3px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 10px;
+}
+
+.card h3 {
+  font-size: 15px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.book-appointment {
+  background-color: rgb(55, 135, 255);
+  color: white;
+  border-radius: 5px;
+  border-color: black;
+  padding: 10px 20px;
+  cursor: pointer;
+  width: 100%;
+}
+
+#book_appointment_button:hover {
+  border-radius: 5px;
+}
+
+.contact {
+  position: absolute;
+  bottom: 0;
+  width: 80%;
+}
+
+.hospital-list button:hover {
+  position: sticky;
+  bottom: 0;
+  background: #040d5f;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* no result */
+.no-result {
+  padding-left: 20px;
+  font-weight: bold;
+  width: 700px;
+  font-size: 30px;
+}

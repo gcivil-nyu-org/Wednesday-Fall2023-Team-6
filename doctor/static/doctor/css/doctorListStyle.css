@@ -36,7 +36,7 @@ nav p {
 }
 
 .ratings {
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 /* search and filter */
@@ -92,7 +92,7 @@ nav p {
   margin-top: 10px;
   padding-left: 20px;
   position: absolute;
-  bottom: 40;
+  bottom: 45;
   width: 30%;
 }
 
@@ -114,13 +114,6 @@ legend {
 
 .doctor-name-input::placeholder {
   font-weight: 400;
-}
-
-.filter-title {
-  margin-left: 40px;
-  font-weight: bold;
-  font-size: 20px;
-  color: #0753c5;
 }
 
 .filter-right-column {
@@ -175,7 +168,7 @@ legend {
   position: relative;
   display: grid;
   margin-top: 40px;
-  grid-template-columns: repeat(3, minmax(auto, 1fr));
+  grid-template-columns: repeat(2, minmax(auto, 1fr));
   grid-gap: 20px;
   height: auto;
   margin-bottom: 10px;
@@ -186,10 +179,11 @@ legend {
 
 #speciality {
   font-weight: bold;
+  font-size: 20;
 }
 
 #address {
-  font-weight: lighter;
+  font-weight: 700;
   color: rgb(63, 63, 63);
 }
 
@@ -201,15 +195,20 @@ legend {
 /* pagination */
 
 .pagination {
-  /* background-color: rgb(255, 255, 255); */
-  position: relative;
-  display: inline-block;
+  background-color: rgba(199, 221, 255, 0.219);
+  display: flex;
   text-align: center;
-  margin-left: 3%;
-  margin-right: 3%;
-  border-radius: 10px;
-  margin-top: 20px;
+  margin-top: 50px;
   margin-bottom: 50px;
+  padding: 20px;
+  border: 2px solid grey;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+  flex-wrap: wrap;
+  align-content: stretch;
+  justify-content: center;
+  align-items: center;
 }
 
 .pagination span {
@@ -230,7 +229,7 @@ legend {
   border-radius: 10px;
   color: #333;
   padding: 5px 10px;
-  border: 1px solid #94c0f1;
+  border: 2px solid #94c0f1;
   margin: 10px 2px;
 }
 
@@ -239,7 +238,7 @@ legend {
   border-radius: 20%;
   color: #333;
   padding: 5px 10px;
-  border: 1px solid #94c0f1;
+  border: 2px solid #94c0f1;
   margin: 10px 2px;
 }
 
@@ -255,17 +254,19 @@ legend {
 .page.active {
   color: #fff;
   background-image: linear-gradient(#9bbaff, #378cfc);
-  border: 1px solid #2600ad;
+  border: 2px solid #2600ad;
   background-repeat: no-repeat;
 }
 
 /* card list */
 .card {
   background-color: rgb(255, 255, 255);
-  padding: 10px;
+  padding: 20px;
   display: grid;
   align-items: center;
   min-width: 500px;
+  max-width: 800px;
+  min-height: 350px;
   border-radius: 5px;
   box-shadow: 0 12px 8px rgba(0, 0, 0, 0.1);
 }
@@ -274,6 +275,10 @@ legend {
   flex: 1;
   display: flex;
   align-items: center;
+}
+
+.card-left-column a img{
+  border: 2px solid black;
 }
 
 .card-right-column {
@@ -298,17 +303,23 @@ legend {
 
 .card p {
   font-weight: 900;
-  font-size: 20px;
+  font-size: 25px;
   margin-right: 3px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 10px;
+}
+
+.card h3 {
+  font-size: 15px;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.card h3 {
-  font-size: 15px;
 }
 
 .book-appointment {
