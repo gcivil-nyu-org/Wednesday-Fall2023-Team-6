@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Any
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views import generic
 from user.models import Choices, Doctor_Reviews, Patient
@@ -11,8 +10,9 @@ from django.core.paginator import Paginator
 from .forms import DoctorFilterForm
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from user.models import Doctor_Reviews
 from django.db.models import Avg
+from django.contrib import messages
+
 
 class DoctorDetailView(generic.DetailView):
     model = Doctor
@@ -26,13 +26,14 @@ class DoctorDetailView(generic.DetailView):
         context = super().get_context_data(**kwargs)
 
         # Get doctor reviews related to the current doctor
-        doctor_reviews = Doctor_Reviews.objects.filter(
-            doctor_name=context["object"].name
-        )
-        average_rating = doctor_reviews.aggregate(Avg('rating'))['rating__avg']
+        doctor_reviews = Doctor_Reviews.objects.filter(doctor=context["object"])
+        if doctor_reviews.aggregate(Avg("rating"))["rating__avg"]:
+            average_rating = doctor_reviews.aggregate(Avg("rating"))["rating__avg"]
+        else:
+            average_rating = 0
         # Add doctor reviews to the context
         context["doctor_reviews"] = doctor_reviews
-        context['average_rating'] = average_rating
+        context["average_rating"] = average_rating
         try:
             context["object"].borough = self.borough_converter[
                 context["object"].borough
@@ -117,8 +118,9 @@ def check_appointment_overlap(patient, appointment_dtime):
 
     start_check = Q(start_time__lte=end_time)
     end_check = Q(start_time__gte=(appointment_dtime - timedelta(minutes=30)))
+    status_check = Q(status="REQ") | Q(status="CNF")
     overlapping_appointments = DoctorAppointment.objects.filter(
-        start_check & end_check,
+        start_check & end_check & status_check,
         patient=patient,
     )
 
@@ -187,3 +189,34 @@ def book_consultation(request, doctor_id):
             )
 
     return HttpResponseBadRequest("Invalid Request Method")
+
+
+def add_review(request, doctor_id):
+    if request.method == "POST":
+        # Checks to ensure only patient can add reviews
+        if request.user.is_authenticated:
+            user = request.user
+            if not Patient.objects.filter(email=user.username).exists():
+                messages.error(
+                    request,
+                    "Error: You need to have a patient account to post reviews!",
+                )
+            else:
+                # Fetch items here from request like:
+                patient = Patient.objects.filter(email=user.username).first()
+                title = request.POST.get("Title")
+                rating = request.POST.get("rating")
+                description = request.POST.get("Description")
+                doctor = get_object_or_404(Doctor, pk=doctor_id)
+
+                review = Doctor_Reviews()
+                review.doctor = doctor
+                review.review_from = patient.name
+                review.rating = rating
+                review.description = description
+                review.title = title
+                review.posted = datetime.now()
+                review.save()
+        else:
+            messages.error(request, "Error: You need to be logged-in to post reviews!")
+    return redirect("doctor:detail_view", pk=doctor_id)

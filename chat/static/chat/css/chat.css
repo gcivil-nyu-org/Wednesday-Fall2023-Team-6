@@ -1,0 +1,94 @@
+/* chat.css */
+
+/* General page styles */
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #e9ebee;
+  margin: 0;
+  padding: 20px;
+}
+
+h2 {
+  color: #1a1a1a;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* Chat log styles */
+#chat-log {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1);
+  padding: 20px;
+  background-color: white;
+  margin-bottom: 24px;
+  overflow-y: auto;
+  max-height: 500px;
+}
+
+#chat-log p {
+  background-color: #f7f7f7;
+  padding: 12px 16px;
+  border-radius: 15px;
+  line-height: 1.5;
+  margin: 8px 0;
+  border: 1px solid #ebebeb;
+  position: relative;
+  max-width: 75%;
+}
+
+/* Differentiate between sent and received messages */
+#chat-log p.sent {
+  background-color: #dcf8c6;
+  align-self: flex-end;
+  border-color: #d0e6a5;
+  order: 1; /* Flex order to push sent messages to the bottom */
+}
+
+#chat-log p.received {
+  background-color: #f7f7f7;
+  align-self: flex-start;
+  border-color: #ebebeb;
+}
+
+/* Chat form styles */
+#chat-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+
+#chat-form input[type="text"], #chat-form input[type="file"] {
+  padding: 12px 16px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+}
+
+#chat-form button {
+  padding: 12px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#chat-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+  #chat-form {
+    grid-template-columns: 1fr;
+  }
+
+  #chat-form button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+  }
+}

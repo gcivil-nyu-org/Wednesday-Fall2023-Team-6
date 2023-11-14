@@ -1,4 +1,5 @@
 import re
+from datetime import timedelta
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse
@@ -94,6 +95,8 @@ def passwordResetConfirmView(request, uidb64, token):
         try:
             user_email = urlsafe_base64_decode(uidb64).decode("utf-8")
             new_password = request.POST.get("password")
+            if not isValidPassword(new_password):
+                raise Exception("Invalid Password")
             token_generator = PasswordResetTokenGenerator()
         except Exception as e:
             print(e)
@@ -195,9 +198,14 @@ def accountView(request):  # noqa: C901
                     hospital=login_user.associated_hospital
                 )
 
-                hospital_query = Q(associated_hospital=login_user.associated_hospital)
-                status_query = Q(active_status=False)
-                requests = Doctor.objects.filter(hospital_query & status_query)
+                if login_user.active_status:
+                    hospital_query = Q(
+                        associated_hospital=login_user.associated_hospital
+                    )
+                    status_query = Q(active_status=False)
+                    requests = Doctor.objects.filter(hospital_query & status_query)
+                else:
+                    requests = []
 
             # check and update the outdated appointments
             OutdatedAppointments(doctor_appointments, hospital_appointments)
@@ -259,6 +267,17 @@ def accountView(request):  # noqa: C901
                     zip = request.POST.get("zip")
                     specialization = request.POST.get("specialization")
                     associated_hospital = request.POST.get("hospital")
+                    hos_name = request.POST.get("associatedHospital")
+
+                    if userType != "patient":
+                        if str(hos_name).strip() == "":
+                            associated_hospital = None
+                        elif not Hospital.objects.filter(name=hos_name).exists():
+                            associated_hospital = (
+                                login_user.associated_hospital.id
+                                if login_user.associated_hospital
+                                else None
+                            )
 
                     form_data = {
                         "name": name,
@@ -297,19 +316,16 @@ def accountView(request):  # noqa: C901
                         }
                         filtered_form["active_status"] = True
 
-                        if userType == "doctor":
-                            old_hos = login_user.associated_hospital
-                            is_new_hos = (
-                                form_data["associated_hospital"] and not old_hos
-                            )
-                            hos_change = form_data["associated_hospital"] != old_hos
-                            is_update_hos = (
-                                form_data["associated_hospital"] and hos_change
-                            )
-                            if is_new_hos or is_update_hos:
-                                filtered_form["active_status"] = False
-                        elif userType == "hospitalAdmin":
-                            filtered_form["active_status"] = False
+                        if userType == "doctor" or userType == "hospitalAdmin":
+                            curr_hos = filtered_form["associated_hospital"]
+                            prev_hos = login_user.associated_hospital
+                            if curr_hos:
+                                if curr_hos != prev_hos:
+                                    filtered_form["active_status"] = False
+                                else:
+                                    filtered_form[
+                                        "active_status"
+                                    ] = login_user.active_status
 
                         try:
                             for field, value in filtered_form.items():
@@ -377,6 +393,21 @@ def cancelAppointment(request):
     return redirect("user:account")
 
 
+def check_consultation_overlap(doctor, appointment_dtime):
+    end_time = appointment_dtime + timedelta(minutes=30)
+
+    start_check = Q(start_time__lte=end_time)
+    end_check = Q(start_time__gte=(appointment_dtime - timedelta(minutes=30)))
+    overlapping_appointments = DoctorAppointment.objects.filter(
+        start_check & end_check, doctor=doctor, status="CNF"
+    )
+
+    if overlapping_appointments.exists():
+        return True
+    else:
+        return False
+
+
 def confirmAppointment(request):
     appointment_id = request.POST.get("appointment_id")
     appointment_type = request.POST.get("appointment_type")
@@ -384,8 +415,13 @@ def confirmAppointment(request):
 
     if appointment_type == "consultation":
         consultation = DoctorAppointment.objects.filter(id=appointment_id).first()
-        consultation.status = operation
-        consultation.save()
+        if check_consultation_overlap(consultation.doctor, consultation.start_time):
+            messages.error(
+                "Error: You have an overlapping appointment during that time."
+            )
+        else:
+            consultation.status = operation
+            consultation.save()
     else:
         appointment = HospitalAppointment.objects.filter(id=appointment_id).first()
         appointment.status = operation

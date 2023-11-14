@@ -1,4 +1,6 @@
 from django.db import models
+from datetime import datetime
+import pytz
 
 
 class Choices:
@@ -61,22 +63,28 @@ class Doctor(User):
 
 
 class Hospital_Reviews(models.Model):
-    hospital_name = models.CharField(max_length=100)
+    hospital = models.ForeignKey("hospital.Hospital", on_delete=models.CASCADE)
     review_from = models.CharField(max_length=100)
     rating = models.PositiveIntegerField()
-    likes = models.TextField()
+    title = models.TextField()
     description = models.TextField()
+    posted = models.DateTimeField(
+        default=datetime(2023, 11, 15, 9, 0, 0, 0, tzinfo=pytz.UTC)
+    )
 
     def __str__(self):
-        return f"Review for {self.hospital_name} by {self.review_from}"
+        return f"Review for {self.hospital} by {self.review_from}"
 
 
 class Doctor_Reviews(models.Model):
-    doctor_name = models.CharField(max_length=100)
+    doctor = models.ForeignKey("doctor.Doctor", on_delete=models.CASCADE)
     review_from = models.CharField(max_length=255)
     rating = models.IntegerField()
-    likes = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
     description = models.TextField()
+    posted = models.DateTimeField(
+        default=datetime(2023, 11, 15, 9, 0, 0, 0, tzinfo=pytz.UTC)
+    )
 
     def __str__(self):
-        return f"Review for {self.doctor_name} by {self.review_from}"
+        return f"Review for {self.doctor} by {self.review_from}"

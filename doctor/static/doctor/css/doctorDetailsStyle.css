@@ -1,22 +1,5 @@
-/* New features */
-.page {
+.body {
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  background-color: #cfcece;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-  background-color: #f5f5f5;
-}
-
-.header span{
-  font-weight: bold;
-  font-size: 20px;
 }
 
 .logo {
@@ -35,10 +18,10 @@ nav p {
 
 .main-content {
   background-color: #cfcece;
-  width: auto;
+  width: 100%;
 }
 
-.background-jpg{
+.background-jpg {
   width: 50%;
   height: 500px;
   position: absolute;
@@ -50,13 +33,13 @@ nav p {
   border-right: 1px solid #333;
 }
 
-.detail-info{
+.detail-info {
   margin-top: auto;
   margin-bottom: auto;
   margin-right: 3% !important;
 }
 
-.detail-info p{
+.detail-info p {
   font-weight: bold;
 }
 
@@ -77,7 +60,7 @@ nav p {
   margin-left: 10%;
   margin-right: 10%;
   margin-top: 2%;
-  margin-bottom: 2%;
+  margin-bottom: 2% !important;
 }
 
 .navigator-item {
@@ -87,27 +70,57 @@ nav p {
 .navigator-item h2 {
   font-size: 20px;
   font-weight: 800;
-  color:#f5f5f5;
+  color: #f5f5f5;
+}
+
+.location {
+  display: flex;
+  flex-direction: row;
+}
+
+.location-button {
+  background-color: transparent;
+  border: none;
+  color: transparent;
+  outline: none;
+}
+
+.location-button:hover,
+.location-button:focus {
+  background-color: transparent;
+  border: none;
+  color: transparent;
+  outline: none;
+  cursor: pointer; /* Change cursor on hover/focus to indicate it's clickable */
+}
+
+.material-icons {
+  color: white;
+  padding-left: 15px;
+}
+
+.material-icons:hover {
+  color: rgb(211, 24, 24);
+  padding-left: 15px;
 }
 
 .navigator-item p {
   margin: 5px 0;
-  color:#f5f5f5;
+  color: #f5f5f5;
 }
 
 .formbold-btn {
-    text-align: center;
-    font-size: 16px;
-    border-radius: 6px;
-    padding: 14px 32px;
-    border: none;
-    font-weight: 600;
-    background-color: #144907;
-    color: rgb(22, 13, 13);
-    width: 100%;
-    cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 6px;
+  padding: 14px 32px;
+  border: none;
+  font-weight: 600;
+  background-color: #144907;
+  color: rgb(22, 13, 13);
+  width: 100%;
+  cursor: pointer;
 }
-
 
 .fixed-alert {
   position: fixed;
@@ -117,6 +130,33 @@ nav p {
   z-index: 9999;
 }
 
+.user-reviews {
+  margin: 20px 0;
+}
+
+.review-card {
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
 .fa-star.checked {
   color: orange;
+}
+
+.review_fluid button:not(.book-appointment) {
+  margin-top: 120px;
+  margin-bottom: 120px;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: #3887c9;
+}
+
+#reviewCarousel {
+  height: 250px;
+  overflow-y: auto;
+}
+
+.hr {
+  background: #afafaf38;
+  height: 1px;
 }

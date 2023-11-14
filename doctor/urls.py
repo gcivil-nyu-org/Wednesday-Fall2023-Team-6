@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import DoctorDetailView, book_consultation, DoctorListView
+from .views import DoctorDetailView, book_consultation, DoctorListView, add_review
 
 app_name = "doctor"
 
@@ -9,4 +9,5 @@ urlpatterns = [
     path(
         "<int:doctor_id>/bookConsultation/", book_consultation, name="book_consultation"
     ),
+    path("<int:doctor_id>/addHospitalReview", add_review, name="add_review"),
 ]

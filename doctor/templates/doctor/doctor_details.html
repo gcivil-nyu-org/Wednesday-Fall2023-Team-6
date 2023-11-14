@@ -1,58 +1,72 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'doctor/css/doctorDetailsStyle.css' %}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 
 <div class="page">
+
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Doctor {{object.name}} </title>
     </head>
 
     {% include "user/navbar.html" %}
 
-    <div class="alert alert-danger alert-dismissible shadow fade show" id="alert-container" 
-        role="alert" style="display: none">
+    {% if messages %} 
+        {% for message in messages %}
+        <div
+        class="alert {{ message.tags }} alert-dismissible shadow fade show"
+        role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message | safe }}
+        </div>
+        {% endfor %} 
+    {% endif %}
+
+    <div class="alert alert-danger alert-dismissible shadow fade show" id="alert-container" role="alert"
+        style="display: none">
         <button type="button" class="close" onclick="$('#alert-container').hide();" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
         <strong><span id="alert_message">Error</span></strong>
     </div>
 
-    <div class="main-content row my-2 container-fluid">
-        <div class="background-jpg col">
-            <!-- <img src="{% static 'doctor/images/ww-min.jpg' %}" alt="Doctor" class="doctor-image"> -->
-        </div>
+    <div class="main-content row mx-0">
+        <div class="background-jpg col"></div>
         <div class="detail-info container col px-3">
             <div class="description">
                 <span class="h1">Dr. {{object.name}}</span>
-                <br>
-                <br>
+                <br />
+                <br />
                 <p class="h6 my-5">Dr. {{object.name}} is
-                    a doctor 
+                    a doctor
                     {% if object.associated_hospital.name and object.active_status == True %}
                     working at {{object.associated_hospital.name}}
                     {% endif %}
                     whose primary speciality is {{object.primary_speciality}}. </p>
             </div>
-            <div class="ratings">
-                <p>Average Ratings {{ average_rating }}</p>
-<p>ratings
-    {% if average_rating %}
-        {% for star in "12345" %}
-            {% if star|add:"0" <= average_rating %}
-                <span class="fa fa-star checked" style="color: orange;"></span>
-            {% else %}
-                <span class="fa fa-star"></span>
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        <span>No ratings available</span>
-    {% endif %}
-</p>
 
+            <div class="ratings">
+                <p>Average User Rating: 
+                    {% if average_rating %}
+                        {% for i in "12345" %}
+                            {% if i|add:"0" <= average_rating %}
+                                <span class="fa fa-star checked"></span>
+                            {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                      {% for i in "12345" %}
+                          <span class="fa fa-star"></span>
+                      {% endfor %}
+                    {% endif %}
+                </p>
             </div>
         
             <button style="font-size:18px" class="book-appointment mt-5" data-toggle="modal"
@@ -60,72 +74,142 @@
             </button>
         </div>
     </div>
-    <div class="navigator">
+
+    <div class="navigator container">
         <div class="navigator-item">
             <h2>Phone Number</h2>
             <p>{{object.phone}}</p>
         </div>
-        <div class="navigator-item pr-3">
-            <h2>Location</h2>
-            <p>{{object.address}}, {{object.borough}}, NY{{object.zip}}</p>
-        </div>
-        <div class="navigator-item pr-3">
-            <h2>Primary Speciality</h2>
-            <p>{{object.primary_speciality}}</p>
+        <div class="navigator-item pr-3 container">
+            <form action="{% url 'googleMaps:map' %}" method="get">
+                {% csrf_token %}
+                <button class="location-button" type="submit">
+                    <div class="location">
+                        <h2>Location </h2>
+                        <i class="material-icons">place</i>
+                    </div>
+                </button>
+                <input type="hidden" name="name" value="{{object.name}}">
+                <input type="hidden" name="address" value="{{object.address}}">
+                <input type="hidden" name="borough" value="{{object.borough}}">
+                <input type="hidden" name="zip" value="{{object.zip}}">
+                <input type="hidden" name="type" value="doctor">
+            </form>
+            <a
+                href="{% url 'googleMaps:map' %}?address={{ object.address }}&borough={{ object.borough }}&zip={{ object.zip }}&name={{ object.name }}&type=hospital">
+                <p>{{object.address}}, {{object.borough}}, NY{{object.zip}}</p>
+            </a>
         </div>
         {% if object.associated_hospital.name and object.active_status == True %}
-        <div class="navigator-item pr-3">
+        <div class="navigator-item pr-3 container">
             <h2>Hospital</h2>
             <p>{{object.associated_hospital.name}}</p>
         </div>
-        {% endif %}        
-        <div class="navigator-item">
-            <h2>Hours</h2>
-            <p>Mon - Fri: 11 am - 8 pm</p>
-            <p>Sat: 6 am - 8 pm</p>
+        {% endif %}
+        <div class="navigator-item container">
+            <h2>Primary Speciality</h2>
+            <p>{{object.primary_speciality}}</p>
         </div>
     </div>
 
-    <div class="reviews-section container">
-        <h2>Reviews</h2>
-        <div class="carousel-container">
-            {% if doctor_reviews %}
+    <hr class="hr mx-5 my-5" />
+
+    <div class="row container review_fluid ml-auto mr-auto">
+        <button class="btn btn-primary" id="leftPageBtn" onclick="carousel_left()"><i class="fas fa-chevron-left col"></i></button>
+        <div class="reviews-section col container px-0 py-0 card">
+            <nav class="navbar navbar-light bg-light justify-content-between" id="reviews_nav">
+              <h2 class='display-4'>Patient Reviews</h2>
+              <button
+                style="font-size: 18px"
+                class="book-appointment my-0 form-inline"
+                data-toggle="modal"
+                data-target="#add_review_model">
+                Add Review
+              </button>
+            </nav>
+            <div class="carousel-container">
+                {% if doctor_reviews %}
                 <div id="reviewCarousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
                         {% for review in doctor_reviews %}
                             <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                <div class="review-card">
-                                    <p>Title: {{ review.likes }}</p>
-                                    <p>Patient Name: {{ review.review_from }}</p>
-                                    <p>Rating: {{ review.rating }}</p>
-                                    <p>{{ review.description }}</p>
+                                <div class="review-card mb-0">
+                                    <p><span class="h6">Title: </span>{{ review.title }}</p>
+                                    <p><span class="h6">Patient Name: </span>{{ review.review_from }}</p>
+                                    <p><span class="h6">Rating: </span>{{ review.rating }}/5</p>
+                                    <p class="lead">{{ review.description }}</p>
                                 </div>
                             </div>
                         {% endfor %}
                     </div>
-                    <a class="carousel-control-prev" href="#reviewCarousel" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#reviewCarousel" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
                 </div>
-            {% else %}
-                <p>No reviews available.</p>
-            {% endif %}
+                {% else %}
+                    <p class="mx-5 my-5 h2">No reviews available.</p>
+                {% endif %}
+            </div>
         </div>
+        <button class="btn btn-primary" id="rightPageBtn" onclick="carousel_right()"><i class="fas fa-chevron-right col"></i></button>
     </div>
     
 
-    <!-- <h1 id="doctor_heading" class="display-4">{{ object.first_name }}</h1>
+    <div class="pb-5" style="justify-content: center; display: flex; align-items: center;">
+        <div
+        class="modal fade"
+        id="add_review_model"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="add_review_model"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="formbold-main-wrapper">
+                <div class="formbold-form-wrapper">
+                <h1>Add Reviews</h1>
+                <!-- form action needed -->
+                <form
+                    action="{% url 'doctor:add_review' doctor.id %}"
+                    method="post">
+                    {% csrf_token %}
+                    <div class="formbold-mb-5">
+                    <label for="Tile" class="formbold-form-label"> Title* </label>
+                    <input
+                        type="text"
+                        name="Title"
+                        id="Title"
+                        placeholder="Title"
+                        class="formbold-form-input"/>
+                    </div>
 
-    <div class="details-main-wrapper">
-        <button id="btn_book_online_consultation" class="formbold-btn" data-toggle="modal" data-target="#book_appointment_modal">Book Online Appointment</button>
-    </div> -->
+                    <label for="rating">Rating:</label>
+                    <br />
+                    <select name="rating" id="rating" placeholder="Scale">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    </select>
+                    <div class="formbold-mb-5">
+                    <label for="Description" class="formbold-form-label">
+                        Description*
+                    </label>
+                    <textarea
+                        type="Description"
+                        name="Description"
+                        id="Description"
+                        placeholder="Please write down any description"
+                        class="formbold-form-input"></textarea>
+                    </div>
+                    <button class="formbold-btn" class="formbold-btn">
+                    Submit
+                    </button>
+                </form>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
     {% include "doctor/online_appointment_form.html" %}
-
     <script src="{% static 'doctor/javascript/doctor_details.js' %}"></script>
-    <footer class="filled"></footer>
-</div>

@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views import generic
 from .models import Hospital, HospitalAppointment
@@ -12,6 +12,8 @@ from django.core.paginator import Paginator
 from .forms import HospitalFilterForm
 from django.db.models import Q
 from django.db.models import Avg
+from django.contrib import messages
+
 
 class HospitalDetailView(generic.DetailView):
     model = Hospital
@@ -28,21 +30,27 @@ class HospitalDetailView(generic.DetailView):
 
         # Get hospital reviews related to the current hospital
         hospital_reviews = Hospital_Reviews.objects.filter(
-            hospital_name=context["object"]
-        )
-        average_rating = hospital_reviews.aggregate(Avg('rating'))['rating__avg']
+            hospital=context["object"]
+        ).order_by("-posted")
+        if hospital_reviews.aggregate(Avg("rating"))["rating__avg"]:
+            average_rating = round(
+                float(hospital_reviews.aggregate(Avg("rating"))["rating__avg"])
+            )
+        else:
+            average_rating = 0
 
         # Add hospital reviews to the context
         context["hospital_reviews"] = hospital_reviews
-        context['average_rating'] = average_rating
+        context["average_rating"] = average_rating
         try:
             context["object"].borough = self.borough_converter[
                 context["object"].borough
             ]
         except Exception as e:
             print("Doctor Borough Exception: ", e)
+
         context["doctors"] = Doctor.objects.all().filter(
-            associated_hospital=context["object"]
+            associated_hospital=context["object"], active_status=True
         )
         return context
 
@@ -95,7 +103,7 @@ class HospitalListView(generic.ListView):
         """
         paginator = Paginator(context["hospital_list"], 12)
         page_number = self.request.GET.get("page")
-        reviews = paginator.get_page(page_number)
+        paginator.get_page(page_number)
         hospital_list = paginator.get_page(page_number)
         context["hospital_list"] = hospital_list
 
@@ -207,3 +215,34 @@ def autocomplete_hospitals(request):
     objects = Hospital.objects.filter(name__icontains=search_term)[:5]
     data = [{"id": obj.id, "name": obj.name} for obj in objects]
     return JsonResponse(data, safe=False)
+
+
+def add_review(request, hospital_id):
+    if request.method == "POST":
+        # Checks to ensure only patient can add reviews
+        if request.user.is_authenticated:
+            user = request.user
+            if not Patient.objects.filter(email=user.username).exists():
+                messages.error(
+                    request,
+                    "Error: You need to have a patient account to post reviews!",
+                )
+            else:
+                # Fetch items here from request like:
+                patient = Patient.objects.filter(email=user.username).first()
+                title = request.POST.get("Title")
+                rating = request.POST.get("rating")
+                description = request.POST.get("Description")
+                hospital = get_object_or_404(Hospital, pk=hospital_id)
+
+                review = Hospital_Reviews()
+                review.hospital = hospital
+                review.review_from = patient.name
+                review.rating = rating
+                review.description = description
+                review.title = title
+                review.posted = datetime.today()
+                review.save()
+        else:
+            messages.error(request, "Error: You need to be logged-in to post reviews!")
+    return redirect("hospital:detail_view", pk=hospital_id)
