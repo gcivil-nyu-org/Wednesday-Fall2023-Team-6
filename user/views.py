@@ -1,4 +1,5 @@
 import re
+from datetime import timedelta
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse
@@ -89,6 +90,8 @@ def passwordResetConfirmView(request, uidb64, token):
         try:
             user_email = urlsafe_base64_decode(uidb64).decode("utf-8")
             new_password = request.POST.get("password")
+            if not isValidPassword(new_password):
+                raise Exception("Invalid Password")
             token_generator = PasswordResetTokenGenerator()
         except Exception as e:
             print(e)
@@ -357,6 +360,21 @@ def cancelAppointment(request):
 
     return redirect("user:account")
 
+def check_consultation_overlap(doctor, appointment_dtime):
+    end_time = appointment_dtime + timedelta(minutes=30)
+
+    start_check = Q(start_time__lte=end_time)
+    end_check = Q(start_time__gte=(appointment_dtime - timedelta(minutes=30)))
+    overlapping_appointments = DoctorAppointment.objects.filter(
+        start_check & end_check,
+        doctor=doctor,
+        status="CNF"
+    )
+
+    if overlapping_appointments.exists():
+        return True
+    else:
+        return False
 
 def confirmAppointment(request):
     appointment_id = request.POST.get("appointment_id")
@@ -365,8 +383,11 @@ def confirmAppointment(request):
 
     if appointment_type == "consultation":
         consultation = DoctorAppointment.objects.filter(id=appointment_id).first()
-        consultation.status = operation
-        consultation.save()
+        if check_consultation_overlap(consultation.doctor, consultation.start_time):
+            messages.error("Error: You have an overlapping appointment during that time.")
+        else:
+            consultation.status = operation
+            consultation.save()
     else:
         appointment = HospitalAppointment.objects.filter(id=appointment_id).first()
         appointment.status = operation
