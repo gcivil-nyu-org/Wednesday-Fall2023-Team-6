@@ -86,6 +86,52 @@
             <p>Sat: 7 am - 9 pm</p>
         </div>
     </div>
+    <div style="justify-content: center; display: flex; align-items: center;">
+
+        <button style="font-size:18px" class="book-appointment mt-5" data-toggle="modal"
+            data-target="#add_review_model">Add Reviews
+        </button>
+
+
+        <div class="modal fade" id="add_review_model" tabindex="-1" role="dialog" aria-labelledby="add_review_model"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="formbold-main-wrapper">
+
+                        <div class="formbold-form-wrapper">
+                            <h1>Add Reviews</h1>
+                            <!-- form action needed -->
+                            <form id="booking_form" name="booking_form">
+                                <div class="formbold-mb-5">
+                                    <label for="Tile" class="formbold-form-label"> Title* </label>
+                                    <input type="text" name="Title" id="Title" placeholder="Title" class="formbold-form-input" required/>
+                                </div>
+                
+                                <label for="rating">Rating:</label>
+                                <br>
+                                <select name="rating" id="rating" placeholder="Scale">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                </select> 
+                                <div class="formbold-mb-5">
+                                    <label for="Description" class="formbold-form-label"> Description* </label>
+                                    <textarea type="Description" name="Description" id="Description"
+                                        placeholder="Please write down any description" class="formbold-form-input" required> </textarea>
+                                        <button id="btn_confirm_details"  class="formbold-btn">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     {% include "hospital/hospital_appointment_form.html" %}
     <script src="{% static 'hospital/javascript/hospital_details.js' %}"></script>
