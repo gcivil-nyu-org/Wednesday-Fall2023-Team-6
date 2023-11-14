@@ -8,3 +8,4 @@ black
 coveralls
 pyyaml
 Pillow
+psycopg
