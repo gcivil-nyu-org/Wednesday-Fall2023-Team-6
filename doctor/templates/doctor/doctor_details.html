@@ -77,6 +77,25 @@
         </div>
     </div>
 
+    <div class="reviews-section container">
+        <h2>Reviews</h2>
+        <div class="user-reviews">
+            {% if doctor_reviews %}
+                {% for review in doctor_reviews %}
+                    <div class="review-card">
+                        <p>Title: {{ review.likes }}</p>
+                        <p>Patient Name: {{ review.review_from }}</p>
+                        <p>Rating: {{ review.rating }}</p>
+                        <p>{{ review.description }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No reviews available.</p>
+            {% endif %}
+        </div>
+    </div>
+
+
     <!-- <h1 id="doctor_heading" class="display-4">{{ object.first_name }}</h1>
 
     <div class="details-main-wrapper">

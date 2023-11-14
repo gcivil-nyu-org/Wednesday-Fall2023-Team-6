@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views import generic
 from .models import Hospital, HospitalAppointment
-from user.models import Choices, Patient
+from user.models import Choices, Hospital_Reviews, Patient
 from doctor.models import Doctor
 from django.utils import timezone
 import json
@@ -25,7 +25,12 @@ class HospitalDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(HospitalDetailView, self).get_context_data(**kwargs)
+    
+        # Get hospital reviews related to the current hospital
+        hospital_reviews = Hospital_Reviews.objects.filter(hospital_name=context['object'])
 
+        # Add hospital reviews to the context
+        context['hospital_reviews'] = hospital_reviews
         try:
             context["object"].borough = self.borough_converter[
                 context["object"].borough
@@ -86,6 +91,7 @@ class HospitalListView(generic.ListView):
         """
         paginator = Paginator(context["hospital_list"], 12)
         page_number = self.request.GET.get("page")
+        reviews = paginator.get_page(page_number)
         hospital_list = paginator.get_page(page_number)
         context["hospital_list"] = hospital_list
 

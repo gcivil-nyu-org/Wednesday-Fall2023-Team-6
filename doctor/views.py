@@ -3,7 +3,7 @@ from typing import Any
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views import generic
-from user.models import Choices, Patient
+from user.models import Choices, Doctor_Reviews, Patient
 from django.utils import timezone
 import json
 from .models import Doctor, DoctorAppointment
@@ -11,29 +11,34 @@ from django.core.paginator import Paginator
 from .forms import DoctorFilterForm
 from django.core.exceptions import ValidationError
 from django.db.models import Q
+from user.models import Doctor_Reviews
 
 
 class DoctorDetailView(generic.DetailView):
     model = Doctor
     template_name = "doctor/doctor_details.html"
     borough_converter = {}
+
     for borough in Choices.boroughs:
         borough_converter[borough[0]] = borough[1]
 
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # Get doctor reviews related to the current doctor
+        doctor_reviews = Doctor_Reviews.objects.filter(doctor_name=context['object'].name)
+
+        # Add doctor reviews to the context
+        context['doctor_reviews'] = doctor_reviews
+
         try:
-            context["object"].borough = self.borough_converter[
-                context["object"].borough
-            ]
+            context["object"].borough = self.borough_converter[context["object"].borough]
         except Exception as e:
             print("Doctor Borough Exception: ", e)
 
         return context
+
+
 
 
 class DoctorListView(generic.ListView):

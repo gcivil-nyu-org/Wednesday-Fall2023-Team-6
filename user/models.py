@@ -1,6 +1,7 @@
 from django.db import models
 
 
+
 class Choices:
     boroughs = [
         ("BKN", "Brooklyn"),
@@ -46,3 +47,36 @@ class User(models.Model):
 
 class Patient(User):
     insurance_provider = models.CharField(max_length=100, blank=True, null=True)
+
+class Doctor(User):
+    primary_speciality = models.CharField(max_length=50)
+    associated_hospital = models.ForeignKey(
+        "hospital.Hospital",
+        max_length=100,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='user_doctors' 
+    )
+
+
+class Hospital_Reviews(models.Model):
+    hospital_name = models.CharField(max_length=100)
+    review_from = models.CharField(max_length=100)
+    rating = models.PositiveIntegerField()
+    likes = models.TextField()
+    description = models.TextField()
+
+    def __str__(self):
+        return f"Review for {self.hospital_name} by {self.review_from}"
+
+
+class Doctor_Reviews(models.Model):
+    doctor_name = models.CharField(max_length=100)
+    review_from = models.CharField(max_length=255)
+    rating = models.IntegerField()
+    likes = models.CharField(max_length=255)
+    description = models.TextField()
+
+    def __str__(self):
+        return f"Review for {self.doctor_name} by {self.review_from}"

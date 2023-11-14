@@ -117,5 +117,33 @@ nav p {
   z-index: 9999;
 }
 
+.user-reviews {
+  margin: 20px 0;
+}
 
-/* rating card */
+.review-card {
+  background-color: #fff;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pagination {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.page-arrow {
+  cursor: pointer;
+  font-size: 24px;
+  margin: 0 10px;
+  color: #333;
+}
+
+.page-arrow:hover {
+  color: #007bff;
+}
+
+.fa-star.checked {
+        color: orange;
+    }
