@@ -21,6 +21,17 @@
         <title>Hospital {{object.name}} </title>
     </head>
 
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible shadow fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message | safe }}
+        </div>
+    {% endfor %}
+    {% endif %}
+
     <div class="alert alert-danger alert-dismissible shadow fade show" id="alert-container" 
         role="alert" style="display: none">
         <button type="button" class="close" onclick="$('#alert-container').hide();" aria-label="Close">
@@ -125,7 +136,7 @@
                         <div class="formbold-form-wrapper">
                             <h1>Add Reviews</h1>
                             <!-- form action needed -->
-                            <form id="booking_form" name="booking_form">
+                            <form id="booking_form" name="booking_form" action="{% url "hospital:add_review" %}" method="POST">
                                 <div class="formbold-mb-5">
                                     <label for="Tile" class="formbold-form-label"> Title* </label>
                                     <input type="text" name="Title" id="Title" placeholder="Title" class="formbold-form-input" required/>

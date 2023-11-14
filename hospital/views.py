@@ -11,6 +11,7 @@ import json
 from django.core.paginator import Paginator
 from .forms import HospitalFilterForm
 from django.db.models import Q
+from django.contrib import messages
 
 
 class HospitalDetailView(generic.DetailView):
@@ -205,3 +206,26 @@ def autocomplete_hospitals(request):
     objects = Hospital.objects.filter(name__icontains=search_term)[:5]
     data = [{"id": obj.id, "name": obj.name} for obj in objects]
     return JsonResponse(data, safe=False)
+
+def add_review(request):
+    if request.method == "POST":        
+        #Checks to ensure only patient can add reviews
+        if request.user.is_authenticated:
+            user = request.user
+            if not Patient.objects.filter(email=user.username).exists():
+                messages.error("Error: You need to have a patient account to post reviews!")
+            else:            
+                #Fetch items here from request like:
+                title = request.POST.get("Title")
+                ##Rating
+                ##Description
+                
+                review = Hospital_Reviews()
+                ##review.likes = title
+                #Add review parameters here and save
+                
+                messages.success("Review added successfully")
+        else:
+            messages.error("Error: You need to be logged-in to post reviews!")
+            
+        
