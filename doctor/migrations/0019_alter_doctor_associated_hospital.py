@@ -5,16 +5,22 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('hospital', '0014_hospitaladmin_active_status'),
-        ('doctor', '0018_alter_doctor_associated_hospital'),
+        ("hospital", "0014_hospitaladmin_active_status"),
+        ("doctor", "0018_alter_doctor_associated_hospital"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='doctor',
-            name='associated_hospital',
-            field=models.ForeignKey(blank=True, max_length=100, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='doctor_doctors', to='hospital.hospital'),
+            model_name="doctor",
+            name="associated_hospital",
+            field=models.ForeignKey(
+                blank=True,
+                max_length=100,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="doctor_doctors",
+                to="hospital.hospital",
+            ),
         ),
     ]

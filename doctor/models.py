@@ -19,7 +19,7 @@ class Doctor(User):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name='doctor_doctors'
+        related_name="doctor_doctors",
     )
 
 

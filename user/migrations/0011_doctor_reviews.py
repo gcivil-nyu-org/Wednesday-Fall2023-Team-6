@@ -4,21 +4,28 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('user', '0010_hospital_reviews'),
+        ("user", "0010_hospital_reviews"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Doctor_Reviews',
+            name="Doctor_Reviews",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('doctor', models.CharField(max_length=100)),
-                ('review_from', models.CharField(max_length=255)),
-                ('rating', models.IntegerField()),
-                ('likes', models.CharField(max_length=255)),
-                ('description', models.TextField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("doctor", models.CharField(max_length=100)),
+                ("review_from", models.CharField(max_length=255)),
+                ("rating", models.IntegerField()),
+                ("likes", models.CharField(max_length=255)),
+                ("description", models.TextField()),
             ],
         ),
     ]

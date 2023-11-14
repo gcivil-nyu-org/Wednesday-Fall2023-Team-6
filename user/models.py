@@ -1,7 +1,6 @@
 from django.db import models
 
 
-
 class Choices:
     boroughs = [
         ("BKN", "Brooklyn"),
@@ -48,6 +47,7 @@ class User(models.Model):
 class Patient(User):
     insurance_provider = models.CharField(max_length=100, blank=True, null=True)
 
+
 class Doctor(User):
     primary_speciality = models.CharField(max_length=50)
     associated_hospital = models.ForeignKey(
@@ -56,7 +56,7 @@ class Doctor(User):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name='user_doctors' 
+        related_name="user_doctors",
     )
 
 

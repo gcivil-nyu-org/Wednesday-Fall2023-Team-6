@@ -26,19 +26,21 @@ class DoctorDetailView(generic.DetailView):
         context = super().get_context_data(**kwargs)
 
         # Get doctor reviews related to the current doctor
-        doctor_reviews = Doctor_Reviews.objects.filter(doctor_name=context['object'].name)
+        doctor_reviews = Doctor_Reviews.objects.filter(
+            doctor_name=context["object"].name
+        )
 
         # Add doctor reviews to the context
-        context['doctor_reviews'] = doctor_reviews
+        context["doctor_reviews"] = doctor_reviews
 
         try:
-            context["object"].borough = self.borough_converter[context["object"].borough]
+            context["object"].borough = self.borough_converter[
+                context["object"].borough
+            ]
         except Exception as e:
             print("Doctor Borough Exception: ", e)
 
         return context
-
-
 
 
 class DoctorListView(generic.ListView):

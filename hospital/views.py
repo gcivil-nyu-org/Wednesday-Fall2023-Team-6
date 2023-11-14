@@ -25,12 +25,14 @@ class HospitalDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(HospitalDetailView, self).get_context_data(**kwargs)
-    
+
         # Get hospital reviews related to the current hospital
-        hospital_reviews = Hospital_Reviews.objects.filter(hospital_name=context['object'])
+        hospital_reviews = Hospital_Reviews.objects.filter(
+            hospital_name=context["object"]
+        )
 
         # Add hospital reviews to the context
-        context['hospital_reviews'] = hospital_reviews
+        context["hospital_reviews"] = hospital_reviews
         try:
             context["object"].borough = self.borough_converter[
                 context["object"].borough
