@@ -2,6 +2,7 @@ from django.db import models
 from datetime import datetime
 import pytz
 
+
 class Choices:
     boroughs = [
         ("BKN", "Brooklyn"),
@@ -67,7 +68,9 @@ class Hospital_Reviews(models.Model):
     rating = models.PositiveIntegerField()
     likes = models.TextField()
     description = models.TextField()
-    posted = models.DateTimeField(default=datetime(2023, 11, 15, 9, 0, 0, 0, tzinfo=pytz.UTC))
+    posted = models.DateTimeField(
+        default=datetime(2023, 11, 15, 9, 0, 0, 0, tzinfo=pytz.UTC)
+    )
 
     def __str__(self):
         return f"Review for {self.hospital_name} by {self.review_from}"
@@ -79,7 +82,9 @@ class Doctor_Reviews(models.Model):
     rating = models.IntegerField()
     likes = models.CharField(max_length=255)
     description = models.TextField()
-    posted = models.DateTimeField(default=datetime(2023, 11, 15, 9, 0, 0, 0, tzinfo=pytz.UTC))
+    posted = models.DateTimeField(
+        default=datetime(2023, 11, 15, 9, 0, 0, 0, tzinfo=pytz.UTC)
+    )
 
     def __str__(self):
         return f"Review for {self.doctor_name} by {self.review_from}"
