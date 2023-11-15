@@ -41,7 +41,7 @@
                     <form method="POST" action="{% url 'user:account' %}" enctype="multipart/form-data">
                         {% csrf_token %}
                         {% if login_user.avatar %}
-                        <img id="profile_pic" src="{{login_user.avatar.url}}" alt="" onerror="loadDefaultImage('{% static 'media/avatars/default-avatar.png' %}')">
+                        <img id="profile_pic" src="{{login_user.avatar.url}}" alt="" onerror="loadDefaultImage('{% static 'user/images/default-avatar.png' %}')">
                         {% else %}
                         <img src="{% static 'user/images/default-avatar.png' %}" alt="Background Image">
                         {% endif %}

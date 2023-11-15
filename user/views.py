@@ -171,9 +171,14 @@ def accountView(request):  # noqa: C901
                     hospital=login_user.associated_hospital
                 )
 
-                hospital_query = Q(associated_hospital=login_user.associated_hospital)
-                status_query = Q(active_status=False)
-                requests = Doctor.objects.filter(hospital_query & status_query)
+                if login_user.active_status:
+                    hospital_query = Q(
+                        associated_hospital=login_user.associated_hospital
+                    )
+                    status_query = Q(active_status=False)
+                    requests = Doctor.objects.filter(hospital_query & status_query)
+                else:
+                    requests = []
 
             # check and update the outdated appointments
             OutdatedAppointments(doctor_appointments, hospital_appointments)
@@ -360,21 +365,21 @@ def cancelAppointment(request):
 
     return redirect("user:account")
 
+
 def check_consultation_overlap(doctor, appointment_dtime):
     end_time = appointment_dtime + timedelta(minutes=30)
 
     start_check = Q(start_time__lte=end_time)
     end_check = Q(start_time__gte=(appointment_dtime - timedelta(minutes=30)))
     overlapping_appointments = DoctorAppointment.objects.filter(
-        start_check & end_check,
-        doctor=doctor,
-        status="CNF"
+        start_check & end_check, doctor=doctor, status="CNF"
     )
 
     if overlapping_appointments.exists():
         return True
     else:
         return False
+
 
 def confirmAppointment(request):
     appointment_id = request.POST.get("appointment_id")
@@ -384,7 +389,9 @@ def confirmAppointment(request):
     if appointment_type == "consultation":
         consultation = DoctorAppointment.objects.filter(id=appointment_id).first()
         if check_consultation_overlap(consultation.doctor, consultation.start_time):
-            messages.error("Error: You have an overlapping appointment during that time.")
+            messages.error(
+                "Error: You have an overlapping appointment during that time."
+            )
         else:
             consultation.status = operation
             consultation.save()
