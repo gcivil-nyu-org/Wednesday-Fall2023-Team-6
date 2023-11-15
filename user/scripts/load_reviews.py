@@ -3,7 +3,6 @@ import csv
 from user.models import Hospital_Reviews
 
 
-
 # Assuming your CSV file is named hospital_reviews.csv
 csv_file_path = "/Users/shreya/desktop/hospital_reviews.csv"
 
