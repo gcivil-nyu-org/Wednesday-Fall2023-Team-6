@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404,redirect
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views import generic
 from .models import Hospital, HospitalAppointment
@@ -208,7 +208,9 @@ def autocomplete_hospitals(request):
     return JsonResponse(data, safe=False)
 
 
-def add_review(request):
+def add_review(request,hospital_id):
+
+
     if request.method == "POST":
         # Checks to ensure only patient can add reviews
         if request.user.is_authenticated:
@@ -220,13 +222,18 @@ def add_review(request):
             else:
                 # Fetch items here from request like:
                 title = request.POST.get("Title")
-                ##Rating
-                ##Description
+                rating = request.POST.get("rating")
+                description = request.POST.get("Description")
+                hospital = get_object_or_404(Hospital, pk=hospital_id)
+
 
                 review = Hospital_Reviews()
-                ##review.likes = title
-                # Add review parameters here and save
-
-                messages.success("Review added successfully")
+                review.hospital_name=hospital.name
+                review.review_from=user.username
+                review.rating=rating
+                review.description=description
+                review.likes=title
+                review.save()
         else:
             messages.error("Error: You need to be logged-in to post reviews!")
+    return redirect('hospital:detail_view', pk=hospital_id)

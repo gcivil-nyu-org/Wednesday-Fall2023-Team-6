@@ -13,5 +13,5 @@ urlpatterns = [
         views.book_appointment,
         name="book_appointment",
     ),
-    path("addHospitalReview/", views.add_review, name="add_review"),
+    path("<int:hospital_id>/addHospitalReview", views.add_review, name="add_review"),
 ]
