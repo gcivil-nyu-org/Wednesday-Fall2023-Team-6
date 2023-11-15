@@ -11,7 +11,7 @@ import json
 from django.core.paginator import Paginator
 from .forms import HospitalFilterForm
 from django.db.models import Q
-
+from django.db.models import Avg
 
 class HospitalDetailView(generic.DetailView):
     model = Hospital

@@ -12,7 +12,7 @@ from .forms import DoctorFilterForm
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from user.models import Doctor_Reviews
-
+from django.db.models import Avg
 
 class DoctorDetailView(generic.DetailView):
     model = Doctor

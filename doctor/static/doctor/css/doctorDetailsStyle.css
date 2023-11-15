@@ -117,5 +117,6 @@ nav p {
   z-index: 9999;
 }
 
-
-/* rating card */
+.fa-star.checked {
+  color: orange;
+}

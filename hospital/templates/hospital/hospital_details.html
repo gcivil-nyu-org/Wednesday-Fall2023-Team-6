@@ -55,14 +55,24 @@
             </div>
 
             <div class="ratings">
+                <p>Average Ratings {{ average_rating }}</p>
                 <p>ratings
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
+                    {% if average_rating %}
+                        {% for i in "12345" %}
+                            {% if i|add:"0" <= average_rating %}
+                                <span class="fa fa-star checked"></span>
+                            {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <span>No ratings available</span>
+                    {% endif %}
                 </p>
             </div>
+
+            
+            
             
             <button style="font-size:18px" class="book-appointment mt-5" data-toggle="modal"
                 data-target="#book_appointment_modal">Book Appointment
@@ -91,16 +101,30 @@
 
     <div class="reviews-section container">
         <h2>Reviews</h2>
-        <div class="user-reviews">
+        <div class="carousel-container">
             {% if hospital_reviews %}
-                {% for review in hospital_reviews %}
-                    <div class="review-card">
-                        <p>Title: {{review.likes }}</p>
-                        <p>Patient Name: {{ review.review_from }}</p>
-                        <p>Rating: {{ review.rating }}</p>
-                        <p>{{review.description }}</p>
+                <div id="reviewCarousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for review in hospital_reviews %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                <div class="review-card">
+                                    <p>Title: {{ review.likes }}</p>
+                                    <p>Patient Name: {{ review.review_from }}</p>
+                                    <p>Rating: {{ review.rating }}</p>
+                                    <p>{{ review.description }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                    <a class="carousel-control-prev" href="#reviewCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#reviewCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
             {% else %}
                 <p>No reviews available.</p>
             {% endif %}
