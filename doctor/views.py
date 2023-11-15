@@ -12,7 +12,6 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 
 
-
 class DoctorDetailView(generic.DetailView):
     model = Doctor
     template_name = "doctor/doctor_details.html"

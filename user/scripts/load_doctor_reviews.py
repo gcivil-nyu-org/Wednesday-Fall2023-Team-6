@@ -4,7 +4,6 @@ from user.models import Doctor_Reviews
 # Add Doctor to the import statement
 
 
-
 # Assuming your CSV file is named doctor_reviews.csv
 csv_file_path = "/Users/shreya/desktop/doctor_reviews.csv"
 
