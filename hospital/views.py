@@ -30,9 +30,11 @@ class HospitalDetailView(generic.DetailView):
         hospital_reviews = Hospital_Reviews.objects.filter(
             hospital_name=context["object"]
         )
+        average_rating = hospital_reviews.aggregate(Avg('rating'))['rating__avg']
 
         # Add hospital reviews to the context
         context["hospital_reviews"] = hospital_reviews
+        context['average_rating'] = average_rating
         try:
             context["object"].borough = self.borough_converter[
                 context["object"].borough
