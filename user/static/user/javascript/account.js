@@ -138,3 +138,7 @@ function showContent(tabName) {
   var selectedContent = document.getElementById(tabName + "Content");
   selectedContent.style.display = "block";
 }
+
+function loadDefaultImage(default_img){
+  document.getElementById("profile_pic").src = default_img
+}
