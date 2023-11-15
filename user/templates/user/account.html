@@ -41,9 +41,9 @@
                     <form method="POST" action="{% url 'user:account' %}" enctype="multipart/form-data">
                         {% csrf_token %}
                         {% if login_user.avatar %}
-                        <img src="{{login_user.avatar.url}}" alt="Background Image">
+                        <img id="profile_pic" src="{{login_user.avatar.url}}" alt="" onerror="loadDefaultImage('{% static 'user/images/default-avatar.png' %}')">
                         {% else %}
-                        <img src="{% static 'media/avatars/default-avatar.png' %}" alt="Background Image">
+                        <img src="{% static 'user/images/default-avatar.png' %}" alt="Background Image">
                         {% endif %}
                         <!-- Upload button or input element -->
                         <label for="avatar-upload-input" class="avatar-upload-area-1">
@@ -139,7 +139,7 @@
                                 </label>
                                 <input type="text" id="associatedHospital" name="associatedHospital" class="info-field" disabled
                                     value="{{ login_user.associated_hospital.name }}">
-                                <input type="hidden" id="selectedId" name="hospital">
+                                <input type="hidden" id="selectedId" name="hospital" value="{{ login_user.associated_hospital.id }}">
                             </div>
                             {% endif %}
                         </div>
@@ -280,7 +280,7 @@
                 {% endfor %}
                 {% else %}
                 <p class="no-result">
-                    No onsite appointments available.
+                    No online appointments available.
                 </p>
                 {% endif %}
             </div>

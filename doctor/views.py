@@ -115,8 +115,9 @@ def check_appointment_overlap(patient, appointment_dtime):
 
     start_check = Q(start_time__lte=end_time)
     end_check = Q(start_time__gte=(appointment_dtime - timedelta(minutes=30)))
+    status_check = Q(status="REQ") | Q(status="CNF")
     overlapping_appointments = DoctorAppointment.objects.filter(
-        start_check & end_check,
+        start_check & end_check & status_check,
         patient=patient,
     )
 
