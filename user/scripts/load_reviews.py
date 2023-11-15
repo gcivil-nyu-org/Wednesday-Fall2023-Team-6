@@ -1,8 +1,6 @@
 # user/scripts/load_reviews.py
 import csv
 from user.models import Hospital_Reviews
-from django.core.exceptions import ObjectDoesNotExist
-from hospital.models import Hospital
 
 # Assuming your CSV file is named hospital_reviews.csv
 csv_file_path = "/Users/shreya/desktop/hospital_reviews.csv"

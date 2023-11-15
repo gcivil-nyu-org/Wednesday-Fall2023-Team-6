@@ -23,7 +23,7 @@ before_script:
 
 script:
   - black --check . --skip-string-normalization
-  - python -m flake8 --ignore=E303,E501 --max-line-length=88
+  - python -m flake8 --ignore=E303,E501 --max-line-length=100
   - python -m coverage run --source=doctor,hospital,user,MediLink manage.py test
   - rm -rf static
   - python manage.py collectstatic --noinput
