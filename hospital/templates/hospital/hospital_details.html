@@ -167,7 +167,10 @@
             <div class="formbold-form-wrapper">
               <h1>Add Reviews</h1>
               <!-- form action needed -->
-              <form action="{% url 'hospital:add_review' hospital.id %}" method="post">
+              <form
+                action="{% url 'hospital:add_review' hospital.id %}"
+                method="post"
+              >
                 {% csrf_token %}
                 <div class="formbold-mb-5">
                   <label for="Tile" class="formbold-form-label"> Title* </label>
@@ -202,38 +205,16 @@
                   >
                   </textarea>
                 </div>
-                <button class="formbold-btn"  class="formbold-btn">Submit</button>
+                <button class="formbold-btn" class="formbold-btn">
+                  Submit
+                </button>
               </form>
             </div>
-            <div class="ratings">
-                <p>ratings
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                </p>
-            </div>
-            <button style="font-size:18px" class="book-appointment mt-5" data-toggle="modal"
-                data-target="#book_appointment_modal">Book Appointment
-            </button>
+          </div>
         </div>
-    </div>
-    <div class="navigator container">
-        <div class="navigator-item container">
-            <h2>Phone Number</h2>
-            <p>{{object.phone}}</p>
-        </div>
-        <div class="navigator-item pr-5 container">
-            <h2>Location</h2>
-            <p>{{object.location}}, {{object.borough}}, NY{{object.postal_code}}</p>
-        </div>
-        <div class="navigator-item pr-5 container">
-            <h2>Facility Type</h2>
-            <p>{{object.facility_type}}</p>
-        </div>
+      </div>
+      
+      {% include "hospital/hospital_appointment_form.html" %}
     </div>
   </div>
-
-  {% include "hospital/hospital_appointment_form.html" %}
 </div>
