@@ -30,7 +30,7 @@ class HospitalDetailView(generic.DetailView):
         # Get hospital reviews related to the current hospital
         hospital_reviews = Hospital_Reviews.objects.filter(
             hospital_name=context["object"]
-        )
+        ).order_by("-posted")
 
         # Add hospital reviews to the context
         context["hospital_reviews"] = hospital_reviews
@@ -230,6 +230,7 @@ def add_review(request, hospital_id):
                 review.rating = rating
                 review.description = description
                 review.likes = title
+                review.posted = datetime.today()
                 review.save()
         else:
             messages.error("Error: You need to be logged-in to post reviews!")
