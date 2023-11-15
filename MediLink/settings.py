@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from django.contrib.messages import constants as messages
 import os
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -100,14 +101,21 @@ WSGI_APPLICATION = "MediLink.wsgi.application"
 # }
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "medilinkdev",
         "NAME": "medilink_database",  # The database you just created
         "USER": "medilink",  # Your new role
         "PASSWORD": "abc123xyz",  # Your role's password
-        "HOST": "localhost",  # or '127.0.0.1'
+        "HOST": "medilinkdevelop.cm4axl89kef3.us-west-2.rds.amazonaws.com",  # or '127.0.0.1'
         "PORT": "5432",  # PostgreSQL's default port
     }
 }
+if "test" in sys.argv:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": ":memory:",
+        }
+    }
 
 
 # Password validation
