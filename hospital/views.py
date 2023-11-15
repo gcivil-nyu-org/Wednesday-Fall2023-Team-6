@@ -94,7 +94,7 @@ class HospitalListView(generic.ListView):
         """
         paginator = Paginator(context["hospital_list"], 12)
         page_number = self.request.GET.get("page")
-        reviews = paginator.get_page(page_number)
+        # reviews = paginator.get_page(page_number)
         hospital_list = paginator.get_page(page_number)
         context["hospital_list"] = hospital_list
 

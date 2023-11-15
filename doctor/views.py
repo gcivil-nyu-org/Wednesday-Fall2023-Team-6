@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from typing import Any
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views import generic
@@ -11,7 +10,7 @@ from django.core.paginator import Paginator
 from .forms import DoctorFilterForm
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from user.models import Doctor_Reviews
+
 
 
 class DoctorDetailView(generic.DetailView):
