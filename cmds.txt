@@ -1,0 +1,31 @@
+create django project:
+$ django-admin startproject mysite
+
+test django server:
+$ python manage.py runserver
+($ python manage.py runserver 8080)
+($ python manage.py runserver 0.0.0.0:8000)
+
+create Polls app:
+$ python manage.py startapp polls
+
+database setup (sqlite):
+$ python manage.py migrate
+$ python manage.py makemigrations polls
+
+return their SQL:
+$ python manage.py sqlmigrate polls 0001
+
+create models in databse:
+$ python manage.py migrate
+
+
+
+###
+Change your models (in models.py).
+Run python manage.py makemigrations to create migrations for those changes
+Run python manage.py migrate to apply those changes to the database.
+###
+
+
+
