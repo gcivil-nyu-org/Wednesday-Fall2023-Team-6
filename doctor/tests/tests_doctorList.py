@@ -28,7 +28,7 @@ class TestDoctorListView(TestCase):
 
         # Pagination checks
         # Check if a pagination element exists in the HTML
-        self.assertContains(response, '<div class="pagination">')
+        self.assertContains(response, '<div class="pagination')
         # Check if there are 2 pagination links (2 pages)
         self.assertContains(response, 'class="page active"', count=1)
         self.assertContains(response, 'class="page"', count=2)

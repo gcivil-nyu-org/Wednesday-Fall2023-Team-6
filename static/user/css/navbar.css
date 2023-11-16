@@ -1,0 +1,30 @@
+.header {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    position: relative;
+    background-color: #0a2049;
+    height: 40px;
+    color: white;
+  }
+  
+  .header span {
+    font-size: 30px;
+    font-weight: bold;
+  }
+
+  nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+  }
+
+  nav a:hover {
+    color: rgb(255, 255, 255);
+  }
+
+  form {
+    margin: 0;
+  }

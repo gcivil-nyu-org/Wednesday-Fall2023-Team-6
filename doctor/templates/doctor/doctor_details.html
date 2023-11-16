@@ -1,48 +1,27 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'doctor/css/doctorDetailsStyle.css' %}">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
 
 <div class="page">
-
-    <div id="alert-container" class="alert alert-success alert-dismissible fade show fixed-alert" role="alert"
-        style="display: none;">
-        <strong><span id="alert_message">Hello There</span></strong>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Doctor {{object.name}} </title>
     </head>
 
-    <div class="header">
-        <span><a href="/user/home/">
-                MediLink
-            </a>
-        </span>
-        <nav>
-            <a href="#" id="searchLink" onclick=window.history.back()>Back</a>
-            <a href="#">Account</a>
-            <a href="#">Logout</a>
-        </nav>
+    {% include "user/navbar.html" %}
+
+    <div class="alert alert-danger alert-dismissible shadow fade show" id="alert-container" 
+        role="alert" style="display: none">
+        <button type="button" class="close" onclick="$('#alert-container').hide();" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <strong><span id="alert_message">Error</span></strong>
     </div>
-    <div class="main-content row my-2">
+
+    <div class="main-content row my-2 container-fluid">
         <div class="background-jpg col">
             <!-- <img src="{% static 'doctor/images/ww-min.jpg' %}" alt="Doctor" class="doctor-image"> -->
         </div>
@@ -53,7 +32,7 @@
                 <br>
                 <p class="h6 my-5">Dr. {{object.name}} is
                     a doctor 
-                    {% if object.associated_hospital.name %}
+                    {% if object.associated_hospital.name and object.active_status == True %}
                     working at {{object.associated_hospital.name}}
                     {% endif %}
                     whose primary speciality is {{object.primary_speciality}}. </p>
@@ -66,8 +45,6 @@
                     <span class="fa fa-star"></span>
                     <span class="fa fa-star"></span>
                 </p>
-
-                <p>reviews</p>
             </div>
             <button style="font-size:18px" class="book-appointment mt-5" data-toggle="modal"
                 data-target="#book_appointment_modal">Book Online Appointment
@@ -79,24 +56,19 @@
             <h2>Phone Number</h2>
             <p>{{object.phone}}</p>
         </div>
-        <div class="navigator-item pr-3">
+        <div class="navigator-item pr-3 container">
             <h2>Location</h2>
             <p>{{object.address}}, {{object.borough}}, NY{{object.zip}}</p>
         </div>
-        <div class="navigator-item pr-3">
-            <h2>Primary Speciality</h2>
-            <p>{{object.primary_speciality}}</p>
-        </div>
-        {% if object.associated_hospital.name %}
-        <div class="navigator-item pr-3">
+        {% if object.associated_hospital.name and object.active_status == True %}
+        <div class="navigator-item pr-3 container">
             <h2>Hospital</h2>
             <p>{{object.associated_hospital.name}}</p>
         </div>
-        {% endif %}        
-        <div class="navigator-item">
-            <h2>Hours</h2>
-            <p>Mon - Fri: 11 am - 8 pm</p>
-            <p>Sat: 6 am - 8 pm</p>
+        {% endif %}
+        <div class="navigator-item container">
+            <h2>Primary Speciality</h2>
+            <p>{{object.primary_speciality}}</p>
         </div>
     </div>
 

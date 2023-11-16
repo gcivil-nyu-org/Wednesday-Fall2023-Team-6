@@ -5,55 +5,22 @@ body {
   padding: 0;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 30px;
-  position: relative;
-  background-color: #0a2049;
-  height: 40px;
-  color: white;
-}
-
-.header span {
-  font-size: 30px;
-  font-weight: bold;
-}
-
-nav a {
-  margin: 0 10px;
-  text-decoration: none;
-  color: rgb(255, 237, 237);
-}
-
-nav p {
-  margin: 0 10px;
+.Account-left {
+  margin-left: 20px;
+  padding-bottom: 80px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: #ebf1f3;
 }
 
 .name-display {
-  padding-top: 10px;
-  padding-left: 100px;
-  position: relative;
+  margin-top: 30px;
 }
 
 .name-display span {
   color: #0a2049;
   font-size: 60px;
   font-weight: 900;
-}
-
-/* --------- account left part ---------- */
-.account-left {
-  position: relative;
-  width: 50%;
-  float: left;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  background-color: #ebf1f3;
 }
 
 /* avatar part */
@@ -69,7 +36,6 @@ nav p {
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
@@ -77,6 +43,7 @@ nav p {
   background-color: #ebf1f3;
   background-size: cover;
   background-position: center;
+  border: 5px black solid;
 }
 
 .avatar-upload-area img {
@@ -121,20 +88,15 @@ nav p {
 .user-info {
   background-color: rgb(10, 32, 73, 0.92);
   border-radius: 15px;
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-bottom: 30px;
-  position: relative;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-left: 20px;
-  margin-right: 20px;
   box-shadow: 3px 4px 10px #0a2049;
 }
 
 .user-info input {
-  border-radius: 10px;
+  border-radius: 5px;
   border-width: 1px;
   margin-right: 5px;
   background-color: rgb(255, 255, 255, 0.8);
@@ -149,17 +111,17 @@ nav p {
   border-color: #0d2850;
 }
 
-.user-info select{
-  border-radius: 10px;
+.user-info select {
+  border-radius: 5px;
   border-width: 1px;
   margin-right: 5px;
   background-color: rgb(255, 255, 255, 0.8);
   padding: 7.5px;
-  width: 210px;
+  min-width: 150px;
   box-shadow: 5px 5px 10px rgba(17, 16, 16, 0.7);
 }
 
-.user-info select option{
+.user-info select option {
   color: #333; /* Text color */
   background-color: #f2f2f2; /* Background color */
   font-family: Arial, sans-serif; /* Font family */
@@ -168,7 +130,7 @@ nav p {
   padding: 5px; /* Padding inside the options */
 }
 
-.user-info select:disabled{
+.user-info select:disabled {
   background-color: transparent;
   color: #ffffff;
   cursor: not-allowed;
@@ -193,7 +155,7 @@ nav p {
   display: flex;
   flex-direction: column;
   margin: 10px;
-  width: 47%;
+  min-width: 40%;
 }
 
 /* buttons */
@@ -244,15 +206,10 @@ nav p {
 
 /* --------- account right part ---------- */
 .account-right {
-  position: relative;
-  width: 50%;
-  float: left;
-  margin-bottom: 10px;
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
+  margin-bottom: auto;
+  margin-top: auto;
+  margin-left: 20px;
+  margin-right: 20px;
   background-color: #ebf1f3;
 }
 
@@ -260,9 +217,10 @@ nav p {
   display: flex;
   justify-content: space-around;
   margin-bottom: 20px;
-  width: 80%;
-  background-color: #f1f5f7; 
-  border-radius: 20px;
+  margin-left: 40px;
+  margin-right: 40px;
+  background-color: #f1f5f7;
+  border-radius: 10px;
   font-weight: 700;
   box-shadow: 3px 4px 10px rgb(128, 200, 241);
   color: #0a2049;
@@ -271,23 +229,223 @@ nav p {
 .tab {
   cursor: pointer;
   padding: 10px 20px;
-  width: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 5px;
+  width: 100%;
 }
 
 .tab:hover {
-  background-color:  rgb(128, 200, 241);
+  background-color: rgb(112, 195, 243);
+}
+
+.active-tab {
+  background-color: rgb(
+    145,
+    205,
+    240
+  ); /* Set the background color for active tab */
 }
 
 .content {
-  /* Styles for the content area go here */
   background-color: #f1f5f7;
-  border-radius: 20px;
+  border-radius: 10px;
   box-shadow: 3px 4px 10px rgb(128, 200, 241);
   margin-top: 30px;
-  width: 90%;
   height: 600px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+/* Appointment, Consultation part */
+.no-result {
+  padding-left: 20px;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.collapsible {
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  background-color: rgb(205, 230, 245);
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 5px;
+}
+
+.collapsible-label {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.collapsible a:hover {
+  text-decoration: none;
+}
+
+.collapsible .icon {
+  float: right;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.collapsible-content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: rgb(226, 239, 247);
+  margin-bottom: 15px;
+  width: 98%;
+  border-radius: 10px;
+  margin: 0 auto;
+  margin-bottom: 5px;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.collapsible-content h3 {
+  font-weight: 800;
+}
+
+.collapsible-content p {
+  font-size: 18px;
+  font-weight: bold;
+  margin-left: 10px;
+  min-width: 200px;
+}
+
+.appointment-row {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  margin-right: 60px;
+}
+
+.content label {
+  margin-left: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #000000;
+}
+
+.content input {
+  border-radius: 5px;
+  border-width: 1px;
+  margin-right: 5px;
+  padding: 5px;
+  box-shadow: 2px 2px 2px rgba(82, 80, 80, 0.7);
+}
+
+.content input:disabled {
+  background-color: rgb(220, 232, 240);
+  color: #000000;
+  cursor: not-allowed;
+}
+
+.collapsible.active,
+.collapsible:hover {
+  background-color: rgb(170, 213, 240);
+}
+
+.cancel-btn {
+  width: 200px;
+  padding: 5px;
+  background-color: rgb(244, 245, 247);
+  font-size: 20px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  color: #0a2049;
+  box-shadow: 3px 4px 10px rgb(141, 204, 240);
+  align-self: flex-end;
+}
+
+.reject-confirm-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reject-btn {
+  width: 200px;
+  padding: 5px;
+  background-color: rgb(247, 244, 246);
+  margin-bottom: 20px;
+  font-size: 20px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  color: #e7151f;
+  box-shadow: 3px 4px 10px rgb(141, 204, 240);
+}
+
+.confirm-btn {
+  width: 200px;
+  padding: 5px;
+  margin-bottom: 20px;
+  background-color: rgb(244, 245, 247);
+  font-size: 20px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  color: rgb(20, 196, 99);
+  box-shadow: 3px 4px 10px rgb(141, 204, 240);
+}
+
+.cancel-btn:hover {
+  background-color: rgb(201, 203, 204);
+}
+
+.reject-btn:hover {
+  background-color: rgb(229, 234, 238);
+}
+
+.confirm-btn:hover {
+  background-color: rgb(229, 234, 238);
+}
+
+/* modal part */
+.appointmentTimeSpan {
+  font-weight: bold;
+}
+
+.cancel-label {
+  margin-top: 10px;
+  margin-left: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff0000;
+}
+
+.cancel-reason {
+  border-radius: 5px;
+  border-width: 1px;
+  margin-right: 5px;
+  background-color: rgb(255, 255, 255, 0.8);
+  padding: 5px;
+  box-shadow: 1px 1px 3px rgba(17, 16, 16, 0.7);
+}
+
+.custom-autocomplete-menu {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ced4da; /* Add a border for a select-like appearance */
+  border-radius: 0.25rem; /* Add rounded corners for a select-like appearance */
+}
+
+.custom-autocomplete-menu .ui-menu-item {
+  padding: 8px 12px; /* Adjust padding for better spacing */
+}
+
+.custom-autocomplete-menu .ui-menu-item:hover {
+background-color: #007bff; /* Use the desired shade of blue */
+color: white; /* Ensure text is readable on the hover background */
 }

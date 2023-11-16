@@ -34,9 +34,8 @@ nav p {
 }
 
 .main-content {
-  position: relative;
-  height: 500px;
   background-color: #cfcece;
+  width: auto;
 }
 
 .background-jpg{
@@ -48,45 +47,20 @@ nav p {
   background-size: 80% auto;
   background-position: center;
   margin: 50px;
+  border-right: 1px solid #333;
 }
 
 .detail-info{
-  width: 50%;
-  height: 500px;
-  position: absolute;
-  top: 20px;
-  left: 50%;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 3% !important;
 }
 
 .detail-info p{
   font-weight: bold;
 }
 
-.description {
-  position: absolute;
-  top: 20%;
-  left: 10%;
-  right: 15%;
-}
-
-.ratings {
-  position: absolute;
-  top: 50%;
-  left: 10%;
-  right: 15%;
-}
-
-.reviews {
-  position: absolute;
-  top: 55%;
-  left: 10%;
-  right: 15%;
-}
-
 .book-appointment {
-  position: absolute;
-  left: 20%;
-  bottom: 10%;
   background-color: rgb(0, 0, 0);
   color: white;
   border: none;
@@ -102,7 +76,8 @@ nav p {
   padding: 30px;
   margin-left: 10%;
   margin-right: 10%;
-  margin-top: 5%;
+  margin-top: 2%;
+  margin-bottom: 2%;
 }
 
 .navigator-item {
@@ -110,7 +85,8 @@ nav p {
 }
 
 .navigator-item h2 {
-  font-size: 16px;
+  font-size: 20px;
+  font-weight: 800;
   color:#f5f5f5;
 }
 
@@ -140,6 +116,3 @@ nav p {
   right: 0;
   z-index: 9999;
 }
-
-
-/* rating card */
