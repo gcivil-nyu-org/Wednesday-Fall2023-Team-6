@@ -1,0 +1,27 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'googleMaps/css/doctorMap.css' %}">
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{doctor.name}} Position</title>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5D37u8CYmG2wOkDJniUIBO-OBWXvCgbI&libraries=places"></script>
+</head>
+
+<body>
+    <div id="inputContainer">
+        <div id="inputForm">
+            <input id="origin" type="text" placeholder="Enter your location">
+            <input id="destination" type="text" placeholder="Enter destination">
+            <button onclick="calculateRoute()">Get Route</button>
+        </div>
+    </div>
+    <div id="map"></div>
+    <div id="output"></div>
+    <script src="{% static 'googleMaps/javascript/doctorMap.js' %}"></script>
+</body>
+
+</html>
