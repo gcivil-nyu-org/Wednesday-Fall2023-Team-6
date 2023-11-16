@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-z2if98e5x^l*zx4!r(72d^(_+ax0pwsflq_s)0pqiey(t_d3lv"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "medilink-integration.eba-ywbzcdwm.us-west-2.elasticbeanstalk.com",
@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "hospital",
     "user",
     "doctor",
+    "googleMaps",
     "chat",
     "channels",
 ]

@@ -1,9 +1,11 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'hospital/css/hospitalDetailsStyle.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <div class="page">
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,8 +14,8 @@
 
     {% include "user/navbar.html" %}
 
-    <div class="alert alert-danger alert-dismissible shadow fade show" id="alert-container" 
-        role="alert" style="display: none">
+    <div class="alert alert-danger alert-dismissible shadow fade show" id="alert-container" role="alert"
+        style="display: none">
         <button type="button" class="close" onclick="$('#alert-container').hide();" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -53,8 +55,24 @@
             <p>{{object.phone}}</p>
         </div>
         <div class="navigator-item pr-5 container">
-            <h2>Location</h2>
-            <p>{{object.location}}, {{object.borough}}, NY{{object.postal_code}}</p>
+            <form action="{% url 'googleMaps:map' %}" method="get">
+                {% csrf_token %}
+                <button class="location-button" type="submit">
+                    <div class="location">
+                        <h2>Location </h2>
+                        <i class="material-icons">place</i>
+                    </div>
+                </button>
+                <input type="hidden" name="name" value="{{object.name}}">
+                <input type="hidden" name="address" value="{{object.location}}">
+                <input type="hidden" name="borough" value="{{object.borough}}">
+                <input type="hidden" name="zip" value="{{object.postal_code}}">
+                <input type="hidden" name="type" value="hospital">
+            </form>
+            <a
+                href="{% url 'googleMaps:map' %}?address={{ object.location }}&borough={{ object.borough }}&zip={{ object.postal_code }}&name={{ object.name }}&type=hospital">
+                <p>{{object.location}}, {{object.borough}}, NY{{object.postal_code}}</p>
+            </a>
         </div>
         <div class="navigator-item pr-5 container">
             <h2>Facility Type</h2>

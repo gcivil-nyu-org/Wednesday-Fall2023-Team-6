@@ -117,5 +117,35 @@ nav p {
   z-index: 9999;
 }
 
+.location {
+  display: flex;
+  flex-direction: row;
+}
+
+.location-button {
+  background-color: transparent;
+  border: none;
+  color: transparent;
+  outline: none;
+}
+
+.location-button:hover,
+.location-button:focus {
+  background-color: transparent;
+  border: none;
+  color: transparent;
+  outline: none;
+  cursor: pointer; /* Change cursor on hover/focus to indicate it's clickable */
+}
+
+.material-icons {
+  color: white;
+  padding-left: 15px;
+}
+
+.material-icons:hover {
+  color: rgb(211, 24, 24);
+  padding-left: 15px;
+}
 
 /* rating card */

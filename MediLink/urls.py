@@ -10,6 +10,7 @@ urlpatterns = [
     path("user/", include("user.urls")),
     path("doctor/", include("doctor.urls")),
     path("hospital/", include("hospital.urls")),
+    path("googleMaps/", include("googleMaps.urls")),
     path("chat/", include("chat.urls")),
 ]
 
