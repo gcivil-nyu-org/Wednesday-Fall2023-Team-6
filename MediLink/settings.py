@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "hospital",
     "user",
     "doctor",
+    "googleMaps",
 ]
 
 MIDDLEWARE = [
