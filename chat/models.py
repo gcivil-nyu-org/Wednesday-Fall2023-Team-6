@@ -11,6 +11,7 @@ class Message(models.Model):
     )
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    attachment = models.FileField(upload_to="attachments/", null=True, blank=True)
 
     def __str__(self):
         return f"{self.sender.username} to {self.recipient.username}: {self.content}"

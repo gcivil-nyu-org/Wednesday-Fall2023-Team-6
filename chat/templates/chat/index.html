@@ -7,46 +7,58 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <title>Chat with {{ recipient.username }}</title>
  </head>
- <body>
-     <h2>Chat with {{ recipient.username }}</h2>
-     <div id="chat-log">
-         {% for message in messages %}
-             <p>{{ message.sender.username }}: {{ message.content }}</p>
-         {% endfor %}
-     </div>
-     <form id="chat-form" method="post" action="">
-         {% csrf_token %}
-         {{ form.message }}
-         <button type="submit">Send</button>
-     </form>
+<body>
+    <h2>Chat with {{ recipient.username }}</h2>
+    <div id="chat-log">
+        {% for message in messages %}
+            <p>{{ message.sender.username }}: {{ message.content }}</p>
+            {% if message.attachment %}
+                <a href="{{ message.attachment.url }}">Download Attachment</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <form id="chat-form" method="post" action="{% url 'chat' recipient_id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Send</button>
+    </form>
+
 
      <script>
-         // WebSocket connection setup
-         const chatSocket = new WebSocket(
-             'ws://' + window.location.host + '/ws/chat/{{ recipient.id }}/'
-         );
+        // WebSocket connection setup
+        const chatSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/{{ recipient.id }}/'
+        );
 
-         // Handle incoming messages from WebSocket
-         chatSocket.onmessage = function(e) {
-             const data = JSON.parse(e.data);
-             document.querySelector('#chat-log').innerHTML += '<p>' + data.message + '</p>';
-         };
+        // Handle incoming messages from WebSocket
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            document.querySelector('#chat-log').innerHTML += '<p>' + data.message + '</p>';
+        };
 
-         // Handle form submission
-         document.querySelector('#chat-form').addEventListener('submit', function(e) {
-             e.preventDefault();
-             const messageInput = document.querySelector('#id_message');
-             const message = messageInput.value.trim();
+        // Handle form submission
+        document.querySelector('#chat-form').addEventListener('submit', function(e) {
+            const messageInput = document.querySelector('#id_message');
+            const fileInput = document.querySelector('#id_attachment');
+            const message = messageInput.value.trim();
+            const file = fileInput.files[0];
 
-             if (message) {
-                 chatSocket.send(JSON.stringify({
-                     'message': message,
-                     'sender_id': {{ request.user.id }},
-                     'recipient_id': {{ recipient.id }}
-                 }));
-                 messageInput.value = '';
-             }
-         });
+            // If there's a file attached, let the form submit normally
+            if (file) {
+                return;
+            }
+
+            // If there's no file, prevent the default form submission and send via WebSocket
+            if (message && !file) {
+                e.preventDefault();
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'sender_id': {{ request.user.id }},
+                    'recipient_id': {{ recipient.id }}
+                }));
+                messageInput.value = '';
+            }
+        });
      </script>
  </body>
  </html>
