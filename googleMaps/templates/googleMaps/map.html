@@ -1,12 +1,17 @@
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'googleMaps/css/doctorMap.css' %}">
+<link rel="stylesheet" href="{% static 'googleMaps/css/map.css' %}">
+<script src="{% static 'googleMaps/javascript/map.js' %}"></script>
 
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>{{doctor.name}} Position</title>
+    {% if type == "doctor" %}
+    <title>Doctor {{name}} Map Position</title>
+    {% else %}
+    <title>{{name}} Map Position</title>
+    {% endif %}
     <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5D37u8CYmG2wOkDJniUIBO-OBWXvCgbI&libraries=places"></script>
 </head>
@@ -15,13 +20,11 @@
     <div id="inputContainer">
         <div id="inputForm">
             <input id="origin" type="text" placeholder="Enter your location">
-            <input id="destination" type="text" placeholder="Enter destination">
             <button onclick="calculateRoute()">Get Route</button>
         </div>
     </div>
-    <div id="map"></div>
+    <div id="map" data-latitude="{{ latitude }}" data-longitude="{{ longitude }}" data-address="{{ address }}, {{ borough }}, {{ state }} {{ zip_code }}"></div>
     <div id="output"></div>
-    <script src="{% static 'googleMaps/javascript/doctorMap.js' %}"></script>
 </body>
 
 </html>
