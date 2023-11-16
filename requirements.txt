@@ -9,3 +9,4 @@ coveralls
 pyyaml
 Pillow
 channels~=4.0.0
+daphne

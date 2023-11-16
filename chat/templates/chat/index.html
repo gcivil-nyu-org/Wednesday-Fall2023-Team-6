@@ -1,27 +1,52 @@
-<!-- chat/templates/chat/index.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <title>Chat Rooms</title>
-</head>
-<body>
-    What chat room would you like to enter?<br>
-    <input id="room-name-input" type="text" size="100"><br>
-    <input id="room-name-submit" type="button" value="Enter">
+<!-- chat/chat.html -->
 
-    <script>
-        document.querySelector('#room-name-input').focus();
-        document.querySelector('#room-name-input').onkeyup = function(e) {
-            if (e.key === 'Enter') {  // enter, return
-                document.querySelector('#room-name-submit').click();
-            }
-        };
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Chat with {{ recipient.username }}</title>
+ </head>
+ <body>
+     <h2>Chat with {{ recipient.username }}</h2>
+     <div id="chat-log">
+         {% for message in messages %}
+             <p>{{ message.sender.username }}: {{ message.content }}</p>
+         {% endfor %}
+     </div>
+     <form id="chat-form" method="post" action="">
+         {% csrf_token %}
+         {{ form.message }}
+         <button type="submit">Send</button>
+     </form>
 
-        document.querySelector('#room-name-submit').onclick = function(e) {
-            var roomName = document.querySelector('#room-name-input').value;
-            window.location.pathname = '/chat/' + roomName + '/';
-        };
-    </script>
-</body>
-</html>
+     <script>
+         // WebSocket connection setup
+         const chatSocket = new WebSocket(
+             'ws://' + window.location.host + '/ws/chat/{{ recipient.id }}/'
+         );
+
+         // Handle incoming messages from WebSocket
+         chatSocket.onmessage = function(e) {
+             const data = JSON.parse(e.data);
+             document.querySelector('#chat-log').innerHTML += '<p>' + data.message + '</p>';
+         };
+
+         // Handle form submission
+         document.querySelector('#chat-form').addEventListener('submit', function(e) {
+             e.preventDefault();
+             const messageInput = document.querySelector('#id_message');
+             const message = messageInput.value.trim();
+
+             if (message) {
+                 chatSocket.send(JSON.stringify({
+                     'message': message,
+                     'sender_id': {{ request.user.id }},
+                     'recipient_id': {{ recipient.id }}
+                 }));
+                 messageInput.value = '';
+             }
+         });
+     </script>
+ </body>
+ </html>
