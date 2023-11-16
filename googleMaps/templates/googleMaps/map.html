@@ -2,6 +2,8 @@
 
 <link rel="stylesheet" href="{% static 'googleMaps/css/map.css' %}">
 <script src="{% static 'googleMaps/javascript/map.js' %}"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!DOCTYPE html>
 <html>
@@ -17,6 +19,9 @@
 </head>
 
 <body>
+    <div id="goBackContainer">
+        <button onclick="goBack()"><i class="fa fa-arrow-circle-left" style="font-size:36px"></i></button>
+    </div>
     <div id="inputContainer">
         <div id="inputForm">
             <input id="origin" type="text" placeholder="Enter your location">
@@ -26,5 +31,11 @@
     <div id="map" data-latitude="{{ latitude }}" data-longitude="{{ longitude }}" data-address="{{ address }}, {{ borough }}, {{ state }} {{ zip_code }}"></div>
     <div id="output"></div>
 </body>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 
 </html>

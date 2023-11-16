@@ -44,7 +44,7 @@ input:focus {
     border: 1px solid rgb(114, 195, 241); 
 }
 
-button {
+#inputContainer button {
     width: 100%;
     padding: 5px;
     background-color: #f1f3f3;
@@ -61,4 +61,17 @@ button:hover {
     padding: 5px;
     background-color: #dbdfdf;
     cursor: pointer;
+}
+
+#goBackContainer {
+  position: absolute;
+  z-index: 10; /* Ensure it's above other elements */
+  background-color: transparent; 
+  border:0;
+}
+
+#goBackContainer button {
+  background-color: transparent; 
+  border:0;
+  cursor: pointer;
 }
