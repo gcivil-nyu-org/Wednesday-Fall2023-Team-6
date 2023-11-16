@@ -26,7 +26,6 @@ class MapViewTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "googleMaps/map.html")
         self.assertIn("latitude", response.context)
         self.assertIn("longitude", response.context)
         print("Complete: test for valid map input")

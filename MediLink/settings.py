@@ -25,11 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-z2if98e5x^l*zx4!r(72d^(_+ax0pwsflq_s)0pqiey(t_d3lv"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
-    "test-env-for-django.eba-8eck33mp.us-west-2.elasticbeanstalk.com",
+    "medilink-integration.eba-ywbzcdwm.us-west-2.elasticbeanstalk.com",
     "127.0.0.1",
+    "medilink-prod.us-west-2.elasticbeanstalk.com",
 ]
 
 MESSAGE_TAGS = {
