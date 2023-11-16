@@ -28,9 +28,8 @@ SECRET_KEY = "django-insecure-z2if98e5x^l*zx4!r(72d^(_+ax0pwsflq_s)0pqiey(t_d3lv
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "medilink-integration.eba-ywbzcdwm.us-west-2.elasticbeanstalk.com",
+    "test-env-for-django.eba-8eck33mp.us-west-2.elasticbeanstalk.com",
     "127.0.0.1",
-    "medilink-prod.us-west-2.elasticbeanstalk.com",
 ]
 
 MESSAGE_TAGS = {
