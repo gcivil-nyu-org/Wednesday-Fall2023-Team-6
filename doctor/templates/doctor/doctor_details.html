@@ -80,9 +80,14 @@
         </div>
         {% if object.associated_hospital.name and object.active_status == True %}
         <div class="navigator-item pr-3 container">
+        <div class="navigator-item pr-3 container">
             <h2>Hospital</h2>
             <p>{{object.associated_hospital.name}}</p>
         </div>
+        {% endif %}
+        <div class="navigator-item container">
+            <h2>Primary Speciality</h2>
+            <p>{{object.primary_speciality}}</p>
         {% endif %}
         <div class="navigator-item container">
             <h2>Primary Speciality</h2>
