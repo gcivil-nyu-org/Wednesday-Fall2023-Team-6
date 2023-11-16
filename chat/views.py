@@ -9,8 +9,10 @@ from django.db.models import Q
 @login_required
 def chat(request, recipient_id):
     recipient = get_object_or_404(User, id=recipient_id)
+    sent_messages_query = Q(sender=request.user, recipient=recipient)
+    received_messages_query = Q(sender=recipient, recipient=request.user)
     messages = Message.objects.filter(
-        Q(sender=request.user, recipient=recipient) | Q(sender=recipient, recipient=request.user)
+        sent_messages_query | received_messages_query
     ).order_by("timestamp")
 
     if request.method == "POST":
