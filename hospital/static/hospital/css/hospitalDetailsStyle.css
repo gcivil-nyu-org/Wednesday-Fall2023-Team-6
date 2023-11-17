@@ -1,22 +1,5 @@
-/* New features */
-
-.page {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  height: 100%;
-  background-color: #cfcece;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-  background-color: #f5f5f5;
-}
-
-.header span{
-  font-weight: bold;
-  font-size: 20px;
+.body {
+  font-family: Arial, sans-serif;  
 }
 
 .logo {
@@ -35,7 +18,7 @@ nav p {
 
 .main-content {
   background-color: #cfcece;
-  width: auto;
+  width: 100%;
 }
 
 .background-jpg{
@@ -122,28 +105,28 @@ nav p {
 }
 
 .review-card {
-  background-color: #fff;
   padding: 15px;
   margin-bottom: 15px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.pagination {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.page-arrow {
-  cursor: pointer;
-  font-size: 24px;
-  margin: 0 10px;
-  color: #333;
-}
-
-.page-arrow:hover {
-  color: #007bff;
 }
 
 .fa-star.checked {
   color: orange;
+}
+
+.review_fluid button:not(.book-appointment) {
+  margin-top: 120px;
+  margin-bottom: 120px;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: #3887c9;
+}
+
+#reviewCarousel {
+  height: 250px;
+  overflow-y: auto;
+}
+
+.hr {
+  background: #afafaf38;
+  height: 1px;
 }

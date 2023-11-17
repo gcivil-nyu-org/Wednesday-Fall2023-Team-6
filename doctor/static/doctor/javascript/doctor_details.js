@@ -82,3 +82,11 @@ document.getElementById("btn_confirm_details").onclick = function(url) {
 
     $("#book_appointment_modal").modal('hide');
 }
+
+function carousel_left() {
+    $('#reviewCarousel').carousel('prev');
+}
+
+function carousel_right() {
+    $('#reviewCarousel').carousel('next');
+}
