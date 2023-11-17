@@ -32,7 +32,12 @@ class HospitalDetailView(generic.DetailView):
         hospital_reviews = Hospital_Reviews.objects.filter(
             hospital=context["object"]
         ).order_by("-posted")
-        average_rating = round(float(hospital_reviews.aggregate(Avg("rating"))["rating__avg"]))
+        if hospital_reviews.aggregate(Avg("rating"))["rating__avg"]:
+            average_rating = round(
+                float(hospital_reviews.aggregate(Avg("rating"))["rating__avg"])
+            )
+        else:
+            average_rating = 0
 
         # Add hospital reviews to the context
         context["hospital_reviews"] = hospital_reviews
@@ -218,8 +223,9 @@ def add_review(request, hospital_id):
         if request.user.is_authenticated:
             user = request.user
             if not Patient.objects.filter(email=user.username).exists():
-                messages.error(request,
-                    "Error: You need to have a patient account to post reviews!"
+                messages.error(
+                    request,
+                    "Error: You need to have a patient account to post reviews!",
                 )
             else:
                 # Fetch items here from request like:

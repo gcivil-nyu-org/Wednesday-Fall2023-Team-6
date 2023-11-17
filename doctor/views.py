@@ -26,11 +26,11 @@ class DoctorDetailView(generic.DetailView):
         context = super().get_context_data(**kwargs)
 
         # Get doctor reviews related to the current doctor
-        doctor_reviews = Doctor_Reviews.objects.filter(
-            doctor=context["object"]
-        )
-        average_rating = doctor_reviews.aggregate(Avg("rating"))["rating__avg"]
-        print(average_rating)
+        doctor_reviews = Doctor_Reviews.objects.filter(doctor=context["object"])
+        if doctor_reviews.aggregate(Avg("rating"))["rating__avg"]:
+            average_rating = doctor_reviews.aggregate(Avg("rating"))["rating__avg"]
+        else:
+            average_rating = 0
         # Add doctor reviews to the context
         context["doctor_reviews"] = doctor_reviews
         context["average_rating"] = average_rating
@@ -190,14 +190,16 @@ def book_consultation(request, doctor_id):
 
     return HttpResponseBadRequest("Invalid Request Method")
 
+
 def add_review(request, doctor_id):
     if request.method == "POST":
         # Checks to ensure only patient can add reviews
         if request.user.is_authenticated:
             user = request.user
             if not Patient.objects.filter(email=user.username).exists():
-                messages.error(request,
-                    "Error: You need to have a patient account to post reviews!"
+                messages.error(
+                    request,
+                    "Error: You need to have a patient account to post reviews!",
                 )
             else:
                 # Fetch items here from request like:

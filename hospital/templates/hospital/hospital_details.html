@@ -4,11 +4,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Hospital {{object.name}} </title>
-    </head>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Hospital {{object.name}} </title>
+  </head>
+  
+  {% include "user/navbar.html" %}
 
   {% if messages %} 
     {% for message in messages %}
@@ -194,9 +196,6 @@
           </div>
         </div>
       </div>
-            <button style="font-size:18px" class="book-appointment mt-5" data-toggle="modal"
-                data-target="#book_appointment_modal">Book Appointment
-            </button>
         </div>
     </div>
   </div>
