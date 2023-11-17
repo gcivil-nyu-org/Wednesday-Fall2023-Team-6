@@ -177,3 +177,8 @@ body {
   background-color: #007bff; /* Use the desired shade of blue */
   color: white; /* Ensure text is readable on the hover background */
 }
+
+.error-message {
+  color: red;
+  font-size: 12px;
+}
