@@ -21,7 +21,7 @@ nav p {
   width: 100%;
 }
 
-.background-jpg{
+.background-jpg {
   width: 50%;
   height: 500px;
   position: absolute;
@@ -33,13 +33,13 @@ nav p {
   border-right: 1px solid #333;
 }
 
-.detail-info{
+.detail-info {
   margin-top: auto;
   margin-bottom: auto;
   margin-right: 3% !important;
 }
 
-.detail-info p{
+.detail-info p {
   font-weight: bold;
 }
 
@@ -70,27 +70,57 @@ nav p {
 .navigator-item h2 {
   font-size: 20px;
   font-weight: 800;
-  color:#f5f5f5;
+  color: #f5f5f5;
+}
+
+.location {
+  display: flex;
+  flex-direction: row;
+}
+
+.location-button {
+  background-color: transparent;
+  border: none;
+  color: transparent;
+  outline: none;
+}
+
+.location-button:hover,
+.location-button:focus {
+  background-color: transparent;
+  border: none;
+  color: transparent;
+  outline: none;
+  cursor: pointer; /* Change cursor on hover/focus to indicate it's clickable */
+}
+
+.material-icons {
+  color: white;
+  padding-left: 15px;
+}
+
+.material-icons:hover {
+  color: rgb(211, 24, 24);
+  padding-left: 15px;
 }
 
 .navigator-item p {
   margin: 5px 0;
-  color:#f5f5f5;
+  color: #f5f5f5;
 }
 
 .formbold-btn {
-    text-align: center;
-    font-size: 16px;
-    border-radius: 6px;
-    padding: 14px 32px;
-    border: none;
-    font-weight: 600;
-    background-color: #144907;
-    color: rgb(22, 13, 13);
-    width: 100%;
-    cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 6px;
+  padding: 14px 32px;
+  border: none;
+  font-weight: 600;
+  background-color: #144907;
+  color: rgb(22, 13, 13);
+  width: 100%;
+  cursor: pointer;
 }
-
 
 .fixed-alert {
   position: fixed;
