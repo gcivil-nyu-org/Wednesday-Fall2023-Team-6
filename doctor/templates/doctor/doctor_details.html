@@ -1,10 +1,12 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'doctor/css/doctorDetailsStyle.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 
 <div class="page">
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,8 +15,8 @@
 
     {% include "user/navbar.html" %}
 
-    <div class="alert alert-danger alert-dismissible shadow fade show" id="alert-container" 
-        role="alert" style="display: none">
+    <div class="alert alert-danger alert-dismissible shadow fade show" id="alert-container" role="alert"
+        style="display: none">
         <button type="button" class="close" onclick="$('#alert-container').hide();" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -31,7 +33,7 @@
                 <br>
                 <br>
                 <p class="h6 my-5">Dr. {{object.name}} is
-                    a doctor 
+                    a doctor
                     {% if object.associated_hospital.name and object.active_status == True %}
                     working at {{object.associated_hospital.name}}
                     {% endif %}
@@ -56,24 +58,35 @@
             <h2>Phone Number</h2>
             <p>{{object.phone}}</p>
         </div>
-        <div class="navigator-item pr-3">
-            <h2>Location</h2>
-            <p>{{object.address}}, {{object.borough}}, NY{{object.zip}}</p>
-        </div>
-        <div class="navigator-item pr-3">
-            <h2>Primary Speciality</h2>
-            <p>{{object.primary_speciality}}</p>
+        <div class="navigator-item pr-3 container">
+            <form action="{% url 'googleMaps:map' %}" method="get">
+                {% csrf_token %}
+                <button class="location-button" type="submit">
+                    <div class="location">
+                        <h2>Location </h2>
+                        <i class="material-icons">place</i>
+                    </div>
+                </button>
+                <input type="hidden" name="name" value="{{object.name}}">
+                <input type="hidden" name="address" value="{{object.address}}">
+                <input type="hidden" name="borough" value="{{object.borough}}">
+                <input type="hidden" name="zip" value="{{object.zip}}">
+                <input type="hidden" name="type" value="doctor">
+            </form>
+            <a
+                href="{% url 'googleMaps:map' %}?address={{ object.address }}&borough={{ object.borough }}&zip={{ object.zip }}&name={{ object.name }}&type=hospital">
+                <p>{{object.address}}, {{object.borough}}, NY{{object.zip}}</p>
+            </a>
         </div>
         {% if object.associated_hospital.name and object.active_status == True %}
-        <div class="navigator-item pr-3">
+        <div class="navigator-item pr-3 container">
             <h2>Hospital</h2>
             <p>{{object.associated_hospital.name}}</p>
         </div>
-        {% endif %}        
-        <div class="navigator-item">
-            <h2>Hours</h2>
-            <p>Mon - Fri: 11 am - 8 pm</p>
-            <p>Sat: 6 am - 8 pm</p>
+        {% endif %}
+        <div class="navigator-item container">
+            <h2>Primary Speciality</h2>
+            <p>{{object.primary_speciality}}</p>
         </div>
     </div>
 

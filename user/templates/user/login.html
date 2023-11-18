@@ -16,8 +16,8 @@
       </div>
   {% endfor %}
 {% endif %}
-
-<div class="login-box">
+<div class="login-container">
+  <div class="login-box">
     <h1>Welcome to <span>MediLink</span></h1>
     <form id="loginForm" method="post" action="{% url 'user:login' %}">
       {% csrf_token %}
@@ -34,3 +34,5 @@
     <p>Forgot your credentials? <a href="{% url "user:passwordReset" %}">Recover here</a></p>
     <p>Don't have an account? <a href="{% url "user:user_registration" %}">Register here</a></p>
   </div>
+</div>
+

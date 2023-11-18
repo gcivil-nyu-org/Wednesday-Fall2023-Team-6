@@ -8,3 +8,6 @@ black
 coveralls
 pyyaml
 Pillow
+requests
+channels~=4.0.0
+daphne

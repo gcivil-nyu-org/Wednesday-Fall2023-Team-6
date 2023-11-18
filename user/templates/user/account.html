@@ -23,12 +23,12 @@
 
     {% if messages %}
     {% for message in messages %}
-        <div class="alert {{ message.tags }} alert-dismissible shadow fade show" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            {{ message | safe }}
-        </div>
+    <div class="alert {{ message.tags }} alert-dismissible shadow fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message | safe }}
+    </div>
     {% endfor %}
     {% endif %}
 
@@ -41,7 +41,8 @@
                     <form method="POST" action="{% url 'user:account' %}" enctype="multipart/form-data">
                         {% csrf_token %}
                         {% if login_user.avatar %}
-                        <img src="{{login_user.avatar.url}}" alt="Background Image">
+                        <img id="profile_pic" src="{{login_user.avatar.url}}" alt=""
+                            onerror="loadDefaultImage('{% static 'user/images/default-avatar.png' %}')">
                         {% else %}
                         <img src="{% static 'user/images/default-avatar.png' %}" alt="Background Image">
                         {% endif %}
@@ -81,7 +82,8 @@
                             <div class="info-row">
                                 <label class="info-label">Phone</label>
                                 <input type="text" name="phone" class="info-field" disabled
-                                    value="{{ login_user.phone }}">
+                                    value="{{ login_user.phone }}" oninput="formatPhoneNumber(this)">
+                                <span id="phoneError" class="error-message"></span>
                             </div>
                         </div>
 
@@ -133,13 +135,14 @@
                             {% endif %}
                             {% if userType != "patient" %}
                             <div class="info-row-2">
-                                <label class="info-label"> 
+                                <label class="info-label">
                                     {% if login_user.active_status == False %}Requested {% else %}Associated {% endif %}
                                     Hospital
                                 </label>
-                                <input type="text" id="associatedHospital" name="associatedHospital" class="info-field" disabled
-                                    value="{{ login_user.associated_hospital.name }}">
-                                <input type="hidden" id="selectedId" name="hospital" value="{{ login_user.associated_hospital.id }}">
+                                <input type="text" id="associatedHospital" name="associatedHospital" class="info-field"
+                                    disabled value="{{ login_user.associated_hospital.name }}">
+                                <input type="hidden" id="selectedId" name="hospital"
+                                    value="{{ login_user.associated_hospital.id }}">
                             </div>
                             {% endif %}
                         </div>
@@ -150,7 +153,7 @@
                 <!-- edit button -->
                 <div class="buttons">
                     <button class="edit-btn">Edit</button>
-                    <button type="submit" class="save-btn" disabled>Save</button>
+                    <button type="submit" class="save-btn" id="saveButton" disabled>Save</button>
                 </div>
             </form>
         </div>
@@ -163,7 +166,8 @@
                     Consultations</div>
                 <div class="tab" name="appointments" onclick="showContent('appointments')">Onsite Appointments</div>
                 {% else %}
-                <div class="tab active-tab" name="appointments" onclick="showContent('appointments')">Onsite Appointments</div>
+                <div class="tab active-tab" name="appointments" onclick="showContent('appointments')">Onsite
+                    Appointments</div>
                 <div class="tab" name="requests" onclick="showContent('requests')">Requests</div>
                 {% endif %}
             </div>
@@ -280,7 +284,7 @@
                 {% endfor %}
                 {% else %}
                 <p class="no-result">
-                    No onsite appointments available.
+                    No online appointments available.
                 </p>
                 {% endif %}
             </div>
@@ -471,7 +475,7 @@
                                 <label class="display-label">Zip</label>
                                 <p>{{doctor.zip}}</p>
                             </div>
-                            
+
                             <div class="appointment-row">
                                 <label class="display-label">Address</label>
                                 <p>{{doctor.address}}</p>
@@ -491,7 +495,7 @@
                                 <button class="confirm-btn" type="submit"> Approve </button>
                             </form>
                         </div>
-                        
+
                     </div>
                     {% endfor %}
                     {% else %}

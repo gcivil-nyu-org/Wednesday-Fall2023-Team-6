@@ -82,3 +82,31 @@ $(document).ready(function () {
         }
     });
 });
+
+function formatPhoneNumber(input) {
+    var numbers = input.value.replace(/\D/g, ''); // Remove all non-digit characters
+    var char = {0:'(',3:') ',6:'-'};
+    input.value = '';
+  
+    for (var i = 0; i < numbers.length; i++) {
+        input.value += (char[i] || '') + numbers[i];
+    }
+  
+    // Validate and enable/disable the save button
+    validatePhone(input);
+  }
+  
+  function validatePhone(input) {
+    var value = input.value.replace(/\D/g, ''); // Remove all non-digit characters
+    var valid = value.length === 10; // Check if the length is 10 digits
+  
+    document.getElementById('phoneError').textContent = valid ? '' : 'Phone number must be 10 digits.';
+    document.getElementById('continueButton').disabled = !valid;
+  
+    // Update input field style
+    if (valid) {
+      input.style.borderColor = "green"; // or any style for valid input
+    } else {
+      input.style.borderColor = "red"; // or any style for invalid input
+    }
+  }
