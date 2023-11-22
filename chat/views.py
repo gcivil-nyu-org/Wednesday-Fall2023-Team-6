@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Message
-from doctor.models import DoctorAppointment
+from doctor.models import Doctor, DoctorAppointment
 from user.models import Patient
 from django.utils.timezone import now, localtime
 from django.contrib import messages
@@ -30,9 +30,12 @@ def chat(request, appointment_id):
     if Patient.objects.filter(email=request.user.username).exists():
         current_user = "pat"
         recipient = appointment.doctor
-    else:
+    elif Doctor.objects.filter(email=request.user.username).exists():
         current_user = "doc"
         recipient = appointment.patient
+    else:
+        messages.error(request, "Unauthorized User")
+        return redirect("user:account")
 
     if request.method == "POST":
         message = Message()
