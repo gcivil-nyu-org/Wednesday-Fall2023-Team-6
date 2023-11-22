@@ -4,4 +4,4 @@ from .models import Message
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ["sender", "recipient", "timestamp", "content", "attachment"]
+    list_display = ["appointment", "sender", "timestamp", "content", "attachment"]
