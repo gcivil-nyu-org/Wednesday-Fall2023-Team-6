@@ -106,13 +106,44 @@ class HospitalListView(generic.ListView):
         paginator.get_page(page_number)
         hospital_list = paginator.get_page(page_number)
         context["hospital_list"] = hospital_list
+        print(type(hospital_list[0]))
+        
 
+
+        hospital_reviews_dict=[]
+        hospital_ratings_dict=[]
+        for hospital in hospital_list:
+            
+            hospital_reviews = Hospital_Reviews.objects.filter(
+                hospital=hospital
+            ).order_by("-posted")
+
+            if hospital_reviews.aggregate(Avg("rating"))["rating__avg"]:
+                average_rating = round(
+                    float(hospital_reviews.aggregate(Avg("rating"))["rating__avg"])
+                )
+            else:
+                average_rating = 0
+            
+            # hospital_reviews_dict[hospital.id]=hospital_reviews[0]
+            # hospital_ratings_dict[hospital.id]=average_rating
+            hospital_ratings_dict.append(average_rating)
+            
+            # print(hospital.name,average_rating)
+        
+        context["hospital_reviews"]=hospital_reviews_dict
+        context["hospital_ratings"]=hospital_ratings_dict
+
+
+        # context["hospital_reviews"] = hospital_reviews
+        # context["average_rating"] = average_rating
         # Get filter parameters from the URL
         facility_type = self.request.GET.get("facility_type", "all")
         location = self.request.GET.get("location", "all")
         borough = self.request.GET.get("borough", "all")
         postal_code = self.request.GET.get("postal_code", "all")
         name = self.request.GET.get("name", "")
+
         context["filter_form"] = HospitalFilterForm(
             initial={
                 "facility_type": facility_type,
@@ -122,6 +153,7 @@ class HospitalListView(generic.ListView):
                 "name": name,
             }
         )
+
         return context
 
 

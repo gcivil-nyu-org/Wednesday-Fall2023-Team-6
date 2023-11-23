@@ -91,11 +91,20 @@
                             </h3>
                             <div class="ratings">
                                 <h3>Rating:
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star"></i>
+                                            {% if average_rating %}
+                                                {% for i in "12345" %}
+                                                    {% if i|add:"0" <= average_rating %}
+                                                        <span class="fa fa-star checked"></span>
+                                                    {% else %}
+                                                        <span class="fa fa-star"></span>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% else %}
+                                              {% for i in "12345" %}
+                                                  <span class="fa fa-star"></span>
+                                              {% endfor %}
+                                            {% endif %}
+                            
                                 </h3>
                             </div>
                         </a>
