@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load custom_filters %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <title>Doctor List Page</title>
@@ -71,6 +71,7 @@
     <div class="doctor-list">
         {% if doctor_list %}
         {% for doctor in doctor_list%}
+        {% with hid=forloop.counter0 %}
         <div class="doctor_link">
             <div class="card container">
                 <div class="card-row row">
@@ -90,23 +91,18 @@
                                 <span id="address">{{doctor.address}}</span>
                             </h3>
                             <div class="ratings">
-                                <h3>Rating:
-                                            {% if average_rating %}
-                                                {% for i in "12345" %}
-                                                    {% if i|add:"0" <= average_rating %}
-                                                        <span class="fa fa-star checked"></span>
-                                                    {% else %}
-                                                        <span class="fa fa-star"></span>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            {% else %}
-                                              {% for i in "12345" %}
-                                                  <span class="fa fa-star"></span>
-                                              {% endfor %}
-                                            {% endif %}
-                            
+                                <h3> Rating: 
+                                    {% for i in "12345" %}
+                                        {% if i|add:"-1" < doctor_ratings|get_item:hid %}
+                                            <span class="fa fa-star checked" style="color:orange"></span>
+                                        {% else %}
+                                            <span class="fa fa-star"></span>
+                                        {% endif %}
+                                    {% endfor %}
+
+
                                 </h3>
-                            </div>
+                              </div>
                         </a>
                         <div class="contact">
                             <button style="font-size:18px" class="book-appointment" data-toggle="modal"
@@ -118,11 +114,12 @@
                 </div>
                 <div class="card-row">
                     <h3 class="card-border">
-                        (most recent review from patient) Excellent doctor. Very good experience!
+                       {{doctor_reviews|get_item:hid}}
                     </h3>
                 </div>
             </div>
         </div>
+        {% endwith %}
         {% endfor %}
     </div>
 
