@@ -328,17 +328,18 @@ def accountView(request):  # noqa: C901
 
 def OutdatedAppointments(doctor_appointments, hospital_appointments):
     now = timezone.now()
+    end_time = timedelta(minutes=30)
     # check consultations
     if doctor_appointments:
         for appointment in doctor_appointments:
-            if appointment.status == "REQ" and appointment.start_time <= now:
+            if appointment.status == "REQ" and appointment.start_time + end_time < now:
                 appointment.status = "CCL"
                 appointment.cancel_msg = "Consultation outdated, please book a new one."
                 appointment.save()
     # check appointments
     if hospital_appointments:
         for appointment in hospital_appointments:
-            if appointment.status == "REQ" and appointment.start_time <= now:
+            if appointment.status == "REQ" and appointment.start_time + end_time < now:
                 appointment.status = "CCL"
                 appointment.cancel_msg = "Appointment outdated, please book a new one."
                 appointment.save()

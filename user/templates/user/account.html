@@ -227,7 +227,7 @@
                                 {% if appointment.status == "REQ" %}
                                 Requested
                                 {% elif appointment.status == "CNF" %}
-                                Confirmed
+                                Confirmed <a href="{% url "chat:chat" appointment.id %}">(Access Chat)</a>
                                 {% elif appointment.status == "CCL" %}
                                 Cancelled
                                 {% elif appointment.status == "REJ" %}

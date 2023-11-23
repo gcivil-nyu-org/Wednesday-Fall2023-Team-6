@@ -1,39 +1,69 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from .forms import MessageForm
 from .models import Message
-from django.db.models import Q
+from doctor.models import Doctor, DoctorAppointment
+from user.models import Patient
+from django.utils.timezone import now, localtime
+from django.contrib import messages
+
+import os
+from django.conf import settings
 
 
 @login_required
-def chat(request, recipient_id):
-    recipient = get_object_or_404(User, id=recipient_id)
-    sent_messages_query = Q(sender=request.user, recipient=recipient)
-    received_messages_query = Q(sender=recipient, recipient=request.user)
+def chat(request, appointment_id):
+    appointment = get_object_or_404(DoctorAppointment, id=appointment_id)
+    if appointment.status != "CNF":
+        messages.error(request, "Error: Appointment not confirmed.")
+        return redirect("user:account")
 
-    messages = Message.objects.filter(
-        sent_messages_query | received_messages_query
-    ).order_by("timestamp")
+    curr_time = localtime(now())
+    if curr_time < appointment.start_time:
+        messages.error(request, "Error: Appointment not started yet")
+        return redirect("user:account")
+
+    appointment_messages = Message.objects.filter(appointment=appointment).order_by(
+        "timestamp"
+    )
+
+    current_user = None
+    if Patient.objects.filter(email=request.user.username).exists():
+        current_user = "pat"
+        recipient = appointment.doctor
+    elif Doctor.objects.filter(email=request.user.username).exists():
+        current_user = "doc"
+        recipient = appointment.patient
+    else:
+        messages.error(request, "Unauthorized User")
+        return redirect("user:account")
 
     if request.method == "POST":
-        form = MessageForm(request.POST, request.FILES)
-        if form.is_valid():
-            message = form.save(commit=False)
-            message.sender = request.user
-            message.recipient = recipient
-            message.save()
-            return redirect("chat", recipient_id=recipient_id)
-    else:
-        form = MessageForm()
+        message = Message()
+        message.content = request.POST.get("content")
+        message.sender = current_user
+        message.appointment = appointment
+        if len(request.FILES["attachment"]) > 0:
+            attachment = request.FILES["attachment"]
+            message.attachment = attachment
+
+            file_path = os.path.join(
+                settings.MEDIA_ROOT, "attachments", message.attachment.name
+            )
+            # Save the uploaded file to the specified path
+            with open(file_path, "wb+") as destination:
+                for chunk in message.attachment.chunks():
+                    destination.write(chunk)
+
+        message.full_clean()
+        message.save()
 
     return render(
         request,
-        "chat/index.html",
+        "chat/chats.html",
         {
             "recipient": recipient,
-            "recipient_id": recipient_id,  # Ensure this context variable is set
-            "messages": messages,
-            "form": form,
+            "appointment_id": appointment_id,
+            "current_user": current_user,  # Ensure this context variable is set
+            "messages": appointment_messages,
         },
     )
