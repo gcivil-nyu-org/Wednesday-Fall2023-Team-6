@@ -47,15 +47,15 @@ def chat(request, appointment_id):
             message.attachment = attachment
 
             file_path = os.path.join(
-                settings.MEDIA_ROOT, "attachments", message.attachment.name
+                settings.MEDIA_ROOT, "attachments", attachment.name
             )
             # Save the uploaded file to the specified path
             with open(file_path, "wb+") as destination:
-                for chunk in message.attachment.chunks():
+                for chunk in attachment.chunks():
                     destination.write(chunk)
 
-        message.full_clean()
-        message.save()
+            message.full_clean()
+            message.save()
 
     return render(
         request,

@@ -174,3 +174,30 @@ function validatePhone(input) {
     input.style.borderColor = "red"; // or any style for invalid input
   }
 }
+
+function checkFileSize() {
+  var fileInput = document.getElementById('avatar-upload-input');
+  if (document.getElementById('avatar-upload-input').files.length > 0) {
+    var maxFileSizeMB = 5;
+
+    // Convert file size to megabytes
+    var fileSizeMB = fileInput.files[0].size / (1024 * 1024);
+
+    // Check if the file size is within the allowed limit
+    if (fileSizeMB > maxFileSizeMB) {
+        alert('Error: File size exceeds the maximum allowed size of ' + maxFileSizeMB + ' MB.');
+        return false; 
+    }
+  }
+
+  return true;
+}
+
+// avatar upload
+document.getElementById('avatar-upload-input').addEventListener('change', function () {    
+  if(!checkFileSize()) {
+    return false;
+  }
+
+  this.form.submit(); // Automatically submit the form when a file is selected
+});
