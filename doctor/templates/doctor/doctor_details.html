@@ -24,9 +24,11 @@
     </div>
 
     <div class="main-content row my-2 container-fluid">
-        <div class="background-jpg col">
-            <!-- <img src="{% static 'doctor/images/ww-min.jpg' %}" alt="Doctor" class="doctor-image"> -->
-        </div>
+        {% if object.avatar and "default-avatar.png" not in doctor.avatar.url %}
+        <div id="profile_pic" class="background-jpg col" style="background-image: url('{{ object.avatar.url }}');" ></div>
+        {% else %}
+        <div id="profile_pic" class="background-jpg col" style="background-image: url('{% static "doctor/images/doctor.jpg" %}');" ></div>
+        {% endif %}
         <div class="detail-info container col px-3">
             <div class="description">
                 <span class="h1">Dr. {{object.name}}</span>

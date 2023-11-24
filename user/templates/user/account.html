@@ -17,8 +17,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <script src="{% static 'user/javascript/account.js' %}"></script>
     <link rel="stylesheet" href="{% static 'user/css/account.css' %}">
 
     {% if messages %}
@@ -38,7 +36,7 @@
             <!-- Area to upload user image (avatar) -->
             <div class="avatar-card">
                 <div class="avatar-upload-area">
-                    <form method="POST" action="{% url 'user:account' %}" enctype="multipart/form-data">
+                    <form method="POST" action="{% url 'user:account' %}" enctype="multipart/form-data" onsubmit="return checkFileSize()">
                         {% csrf_token %}
                         {% if login_user.avatar %}
                         <img id="profile_pic" src="{{login_user.avatar.url}}" alt=""
@@ -648,9 +646,5 @@
             break;
         }
     }
-
-    // avatar upload
-    document.getElementById('avatar-upload-input').addEventListener('change', function () {
-        this.form.submit(); // Automatically submit the form when a file is selected
-    });
 </script>
+<script src="{% static 'user/javascript/account.js' %}"></script>

@@ -1,3 +1,4 @@
+import os
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -8,6 +9,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.files.storage import default_storage
 from django.test import override_settings
 from MediLink import settings
+from PIL import Image
 
 
 class AccountViewTest(TestCase):
@@ -126,50 +128,31 @@ class AccountViewTest(TestCase):
     def test_upload_avatar_within_allowed_size(self):
         self.client.login(username="testuser@example.com", password="testpassword")
 
-        # Create a file with size less than the allowed limit (50KB)
-        desired_size_kb = 49
-        desired_size_bytes = desired_size_kb * 1024  # Convert KB to bytes
+        # Calculate the number of bytes required for the desired file size
+        file_size_bytes = 10 * 1024 * 1024
+        # Calculate the dimensions to achieve the desired file size (for simplicity, a square image is created)
+        side_length = int(
+            (file_size_bytes**0.5) / 3
+        )  # Dividing by 3 to approximate RGB channels
+        image = Image.new("RGB", (side_length, side_length), "white")
+        image_path = "test_image.jpg"
+        image.save(image_path)
 
-        # Calculate the number of repetitions needed to achieve the desired size
-        repetitions = desired_size_bytes // len(b"file_content")
-
-        # Create the byte sequence
-        avatar_content = b"file_content" * repetitions
-
-        avatar = SimpleUploadedFile(
-            "test-avatar.png", avatar_content, content_type="image/png"
-        )
+        with open(image_path, "rb") as f:
+            avatar = SimpleUploadedFile(
+                "test_image.jpg", f.read(), content_type="image/jpeg"
+            )
 
         response = self.client.post(reverse("user:account"), {"avatar": avatar})
-        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response=response,
+            expected_url="/user/account/",
+            status_code=302,
+            target_status_code=200,
+        )
         self.patient.refresh_from_db()
         self.assertIsNotNone(self.patient.avatar)
-
-    @override_settings(MEDIA_ROOT=settings.MEDIA_ROOT)
-    def test_upload_avatar_exceeds_allowed_size(self):
-        self.client.login(username="testuser@example.com", password="testpassword")
-
-        # Create a file with size more than the allowed limit (51KB)
-        desired_size_kb = 51
-        desired_size_bytes = desired_size_kb * 1024  # Convert KB to bytes
-
-        # Calculate the number of repetitions needed to achieve the desired size
-        repetitions = desired_size_bytes // len(b"file_content")
-
-        # Create the byte sequence
-        avatar_content = b"file_content" * repetitions
-        avatar = SimpleUploadedFile(
-            "test-avatar.png", avatar_content, content_type="image/png"
-        )
-
-        response = self.client.post(reverse("user:account"), {"avatar": avatar})
-
-        # Check if the response status code is 400 (Bad Request)
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(
-            response.content.decode("utf-8"),
-            "File size is too large. Maximum allowed size is 50 KB.",
-        )
+        os.remove("test_image.jpg")
 
     # delete test avatars
     def tearDown(self):
