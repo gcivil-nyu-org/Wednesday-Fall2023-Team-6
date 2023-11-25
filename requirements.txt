@@ -10,4 +10,5 @@ pyyaml
 Pillow
 requests
 channels~=4.0.0
-daphne
+daphne>=4.0.0
+django_redis>=5.4.0
