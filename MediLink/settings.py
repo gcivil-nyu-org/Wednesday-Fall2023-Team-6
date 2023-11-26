@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [
     "medilink-integration.eba-ywbzcdwm.us-west-2.elasticbeanstalk.com",
     "127.0.0.1",
     "medilink-prod.us-west-2.elasticbeanstalk.com",
+    "redis-medilink.ut1ct7.ng.0001.usw2.cache.amazonaws.com"
 ]
 
 MESSAGE_TAGS = {
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "ebhealthcheck.apps.EBHealthCheckConfig",
     "hospital",
     "user",
     "doctor",
@@ -62,7 +64,10 @@ INSTALLED_APPS = [
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        'CONFIG': {
+           "hosts": [("redis-medilink.ut1ct7.ng.0001.usw2.cache.amazonaws.com", 6379)]
+        },
     },
 }
 
