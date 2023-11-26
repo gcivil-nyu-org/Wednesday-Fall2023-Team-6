@@ -2,7 +2,6 @@ from django.db import models
 from datetime import datetime
 import pytz
 
-
 class Choices:
     boroughs = [
         ("BKN", "Brooklyn"),

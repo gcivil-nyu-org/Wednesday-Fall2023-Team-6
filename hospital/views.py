@@ -30,6 +30,7 @@ class HospitalDetailView(generic.DetailView):
 
         # Get hospital reviews related to the current hospital
         hospital_reviews = Hospital_Reviews.objects.filter(
+<<<<<<< HEAD
             hospital=context["object"]
         ).order_by("-posted")
         if hospital_reviews.aggregate(Avg("rating"))["rating__avg"]:
@@ -42,6 +43,13 @@ class HospitalDetailView(generic.DetailView):
         # Add hospital reviews to the context
         context["hospital_reviews"] = hospital_reviews
         context["average_rating"] = average_rating
+=======
+            hospital_name=context["object"]
+        )
+
+        # Add hospital reviews to the context
+        context["hospital_reviews"] = hospital_reviews
+>>>>>>> 6912ffa (Autoformat code with Black)
         try:
             context["object"].borough = self.borough_converter[
                 context["object"].borough

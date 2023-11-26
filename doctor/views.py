@@ -26,6 +26,7 @@ class DoctorDetailView(generic.DetailView):
         context = super().get_context_data(**kwargs)
 
         # Get doctor reviews related to the current doctor
+<<<<<<< HEAD
         doctor_reviews = Doctor_Reviews.objects.filter(doctor=context["object"])
         if doctor_reviews.aggregate(Avg("rating"))["rating__avg"]:
             average_rating = doctor_reviews.aggregate(Avg("rating"))["rating__avg"]
@@ -34,6 +35,15 @@ class DoctorDetailView(generic.DetailView):
         # Add doctor reviews to the context
         context["doctor_reviews"] = doctor_reviews
         context["average_rating"] = average_rating
+=======
+        doctor_reviews = Doctor_Reviews.objects.filter(
+            doctor_name=context["object"].name
+        )
+
+        # Add doctor reviews to the context
+        context["doctor_reviews"] = doctor_reviews
+
+>>>>>>> 6912ffa (Autoformat code with Black)
         try:
             context["object"].borough = self.borough_converter[
                 context["object"].borough
