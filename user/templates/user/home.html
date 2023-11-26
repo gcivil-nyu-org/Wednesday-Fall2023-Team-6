@@ -36,6 +36,89 @@
         <div class="image-container">
             <img src="{% static 'user/images/home.jpg' %}" alt="Your Image Alt Text">
         </div>
+
+        <div class="container">
+            <div class="row">
+                {% if user.is_authenticated %}
+            <div class="col-md-12">
+                <h2>Your Borough: {{ user_borough }}</h2>
+            </div>
+        {% endif %}
+
+        
+                <!-- Doctor Reviews -->
+                <div class="col-md-6">
+                    <div class="reviews-section">
+                        <h2>Doctor Reviews</h2>
+                        <div class="carousel-container">
+                            {% if doctor_reviews %}
+                                <div id="doctorReviewCarousel" class="carousel slide" data-ride="carousel">
+                                    <div class="carousel-inner">
+                                        {% for review in doctor_reviews %}
+                                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                                <div class="review-card">
+                                                    <p>Title: {{ review.likes }}</p>
+                                                    <p>Patient Name: {{ review.review_from }}</p>
+                                                    <p>Rating: {{ review.rating }}</p>
+                                                    <p>{{ review.description }}</p>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <a class="carousel-control-prev" href="#doctorReviewCarousel" role="button" data-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#doctorReviewCarousel" role="button" data-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
+                            {% else %}
+                                <p>No doctor reviews available.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Hospital Reviews -->
+                <div class="col-md-6">
+                    <div class="reviews-section">
+                        <h2>Hospital Reviews</h2>
+                        <div class="carousel-container">
+                            {% if hospital_reviews %}
+                                <div id="hospitalReviewCarousel" class="carousel slide" data-ride="carousel">
+                                    <div class="carousel-inner">
+                                        {% for review in hospital_reviews %}
+                                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                                <div class="review-card">
+                                                    <p>Title: {{ review.likes }}</p>
+                                                    <p>Patient Name: {{ review.review_from }}</p>
+                                                    <p>Rating: {{ review.rating }}</p>
+                                                    <p>{{ review.description }}</p>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <a class="carousel-control-prev" href="#hospitalReviewCarousel" role="button" data-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#hospitalReviewCarousel" role="button" data-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
+                            {% else %}
+                                <p>No hospital reviews available.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
         <!-- Placeholder for Another Image -->
         <div class="image-container">
             <img src="{% static 'user/images/home1.png' %}" alt="Your Image Alt Text">
