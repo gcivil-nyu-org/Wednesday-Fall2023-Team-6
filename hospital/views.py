@@ -107,13 +107,10 @@ class HospitalListView(generic.ListView):
         hospital_list = paginator.get_page(page_number)
         context["hospital_list"] = hospital_list
         print(type(hospital_list[0]))
-        
 
-
-        hospital_reviews_dict=[]
-        hospital_ratings_dict=[]
+        hospital_reviews_dict = []
+        hospital_ratings_dict = []
         for hospital in hospital_list:
-            
             hospital_reviews = Hospital_Reviews.objects.filter(
                 hospital=hospital
             ).order_by("-posted")
@@ -124,15 +121,14 @@ class HospitalListView(generic.ListView):
                 )
             else:
                 average_rating = 0
-            
+
             hospital_ratings_dict.append(average_rating)
             hospital_reviews_dict.append(hospital_reviews[0].description)
-            
-            # print(hospital.name,average_rating)
-        
-        context["hospital_reviews"]=hospital_reviews_dict
-        context["hospital_ratings"]=hospital_ratings_dict
 
+            # print(hospital.name,average_rating)
+
+        context["hospital_reviews"] = hospital_reviews_dict
+        context["hospital_ratings"] = hospital_ratings_dict
 
         # context["hospital_reviews"] = hospital_reviews
         # context["average_rating"] = average_rating
