@@ -61,7 +61,8 @@ def chat(request, appointment_id):
         except Exception as e:
             logger = logging.getLogger(__name__)
             logger.error("Post error", e)
-            print("Post error", e)
+            messages.error(request, e)
+            return redirect("user:account")
 
     return render(
         request,
