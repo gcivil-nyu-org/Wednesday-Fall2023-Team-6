@@ -64,20 +64,24 @@ class ReviewsSectionTest(TestCase):
         )
 
     def test_doctor_reviews_rendering(self):
-        response = self.client.get(reverse('home'))  # Replace 'home' with the actual URL name
-        self.assertContains(response, 'Doctor Reviews')
-        self.assertContains(response, 'Positive Review')
-        self.assertContains(response, 'Negative Review')
-        self.assertContains(response, 'This doctor is amazing!')
-        self.assertContains(response, 'Not satisfied with the service.')
+        response = self.client.get(
+            reverse("home")
+        )  # Replace 'home' with the actual URL name
+        self.assertContains(response, "Doctor Reviews")
+        self.assertContains(response, "Positive Review")
+        self.assertContains(response, "Negative Review")
+        self.assertContains(response, "This doctor is amazing!")
+        self.assertContains(response, "Not satisfied with the service.")
 
     def test_hospital_reviews_rendering(self):
-        response = self.client.get(reverse('home'))  # Replace 'home' with the actual URL name
-        self.assertContains(response, 'Hospital Reviews')
-        self.assertContains(response, 'Positive Review')
-        self.assertContains(response, 'Neutral Review')
-        self.assertContains(response, 'Great hospital experience!')
-        self.assertContains(response, 'Average service.')
+        response = self.client.get(
+            reverse("home")
+        )  # Replace 'home' with the actual URL name
+        self.assertContains(response, "Hospital Reviews")
+        self.assertContains(response, "Positive Review")
+        self.assertContains(response, "Neutral Review")
+        self.assertContains(response, "Great hospital experience!")
+        self.assertContains(response, "Average service.")
 
     def tearDown(self):
         self.doctor.delete()

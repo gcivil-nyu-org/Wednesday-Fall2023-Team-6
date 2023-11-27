@@ -23,7 +23,6 @@ from django.contrib.auth import logout
 from .models import Doctor_Reviews, Hospital_Reviews
 
 
-
 # import for avatar changing
 import os
 from django.conf import settings
@@ -143,7 +142,9 @@ def home(request):
 
     if user_borough:
         # Filter doctor reviews for the user's borough
-        doctor_reviews = Doctor_Reviews.objects.filter(doctor_name__icontains=user_borough)
+        doctor_reviews = Doctor_Reviews.objects.filter(
+            doctor_name__icontains=user_borough
+        )
 
         # Filter hospital reviews for the user's borough
         hospital_reviews = Hospital_Reviews.objects.filter(borough=user_borough)
@@ -152,8 +153,15 @@ def home(request):
         doctor_reviews = Doctor_Reviews.objects.all()
         hospital_reviews = Hospital_Reviews.objects.all()
 
-    return render(request, "user/home.html", {'user_borough': user_borough, 'doctor_reviews': doctor_reviews, 'hospital_reviews': hospital_reviews})
-
+    return render(
+        request,
+        "user/home.html",
+        {
+            "user_borough": user_borough,
+            "doctor_reviews": doctor_reviews,
+            "hospital_reviews": hospital_reviews,
+        },
+    )
 
 
 def accountView(request):  # noqa: C901
