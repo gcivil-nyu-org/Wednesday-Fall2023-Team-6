@@ -143,10 +143,6 @@ function showContent(tabName) {
   selectedContent.style.display = "block";
 }
 
-function loadDefaultImage(default_img) {
-  document.getElementById("profile_pic").src = default_img;
-}
-
 function formatPhoneNumber(input) {
   var numbers = input.value.replace(/\D/g, ''); // Remove all non-digit characters
   var char = {0:'(',3:') ',6:'-'};

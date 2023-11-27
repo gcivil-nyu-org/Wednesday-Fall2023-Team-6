@@ -28,11 +28,7 @@ SECRET_KEY = "django-insecure-z2if98e5x^l*zx4!r(72d^(_+ax0pwsflq_s)0pqiey(t_d3lv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [
-    "medilink-integration.eba-ywbzcdwm.us-west-2.elasticbeanstalk.com",
-    "127.0.0.1",
-    "medilink-prod.us-west-2.elasticbeanstalk.com",
-]
+ALLOWED_HOSTS = ["*"]
 
 MESSAGE_TAGS = {
     messages.DEBUG: "alert-info",
@@ -62,7 +58,10 @@ INSTALLED_APPS = [
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis-medilink.ut1ct7.ng.0001.usw2.cache.amazonaws.com", 6379)]
+        },
     },
 }
 
@@ -129,7 +128,6 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

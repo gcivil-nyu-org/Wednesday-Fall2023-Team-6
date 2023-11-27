@@ -19,7 +19,9 @@ chatSocket.onmessage = function(e) {
         document.querySelector('#chat-log').appendChild(div);
     }
     scrollBottom(document.getElementById("chat-log"));
-    document.getElementById("no_message").style.display = 'none';
+    if(document.getElementById("no_message")) {
+        document.getElementById("no_message").style.display = 'none';
+    }
 };
 
 function scrollBottom(ele) {

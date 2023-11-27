@@ -19,6 +19,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'user/css/account.css' %}">
 
+    <script>
+        function loadDefaultImage(default_img) {
+            document.getElementById("profile_pic").src = default_img;
+        }
+    </script>
+
     {% if messages %}
     {% for message in messages %}
     <div class="alert {{ message.tags }} alert-dismissible shadow fade show" role="alert">
