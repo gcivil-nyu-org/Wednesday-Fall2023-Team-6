@@ -9,6 +9,8 @@ from doctor.models import Doctor, DoctorAppointment
 from hospital.models import HospitalAdmin, Hospital, HospitalAppointment
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+
 
 # import for email sending
 from django.template.loader import render_to_string
@@ -18,6 +20,9 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import EmailMessage
 from django.contrib import messages
 from django.contrib.auth import logout
+from .models import Doctor_Reviews, Hospital_Reviews
+
+
 
 # import for avatar changing
 import os
@@ -25,7 +30,6 @@ from django.conf import settings
 
 # import for checking appointment status
 from django.utils import timezone
-
 
 PASSWORD_RESET_SUBJECT = "MediLink Account Password Reset Request"
 DOCTOR_REJECT_SUBJECT = "MediLink Hospital Association Request Rejected"
@@ -126,7 +130,30 @@ def passwordResetConfirmView(request, uidb64, token):
 
 
 def home(request):
-    return render(request, "user/home.html")
+    user_borough = None
+
+    if request.user.is_authenticated:
+        # Assuming that the user's borough is stored in the User model
+        # Adjust this according to your actual model structure
+        try:
+            user_borough = request.user.borough
+        except AttributeError:
+            # Handle the case where the borough attribute is not found
+            pass
+
+    if user_borough:
+        # Filter doctor reviews for the user's borough
+        doctor_reviews = Doctor_Reviews.objects.filter(doctor_name__icontains=user_borough)
+
+        # Filter hospital reviews for the user's borough
+        hospital_reviews = Hospital_Reviews.objects.filter(borough=user_borough)
+    else:
+        # If user is not logged in, fetch all reviews without filtering by borough
+        doctor_reviews = Doctor_Reviews.objects.all()
+        hospital_reviews = Hospital_Reviews.objects.all()
+
+    return render(request, "user/home.html", {'user_borough': user_borough, 'doctor_reviews': doctor_reviews, 'hospital_reviews': hospital_reviews})
+
 
 
 def accountView(request):  # noqa: C901
