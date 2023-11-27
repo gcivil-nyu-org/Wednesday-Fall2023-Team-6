@@ -8,6 +8,7 @@ from django.contrib import messages
 
 import os
 from django.conf import settings
+import logging
 
 
 @login_required
@@ -58,6 +59,8 @@ def chat(request, appointment_id):
                 message.full_clean()
                 message.save()
         except Exception as e:
+            logger = logging.getLogger(__name__)
+            logger.error("Post error", e)
             print("Post error", e)
 
     return render(
