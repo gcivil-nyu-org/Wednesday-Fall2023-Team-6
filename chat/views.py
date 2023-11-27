@@ -1,3 +1,4 @@
+import uuid
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Message
@@ -48,8 +49,13 @@ def chat(request, appointment_id):
                 attachment = request.FILES["attachment"]
                 message.attachment = attachment
 
+                ext = attachment.name.split(".")[-1]
+                attachment_name = f"{uuid.uuid4().hex}.{ext}"
+                os.makedirs(
+                    os.path.join(settings.MEDIA_ROOT, "attachments"), exist_ok=True
+                )
                 file_path = os.path.join(
-                    settings.MEDIA_ROOT, "attachments", attachment.name
+                    settings.MEDIA_ROOT, "attachments", attachment_name
                 )
                 # Save the uploaded file to the specified path
                 with open(file_path, "wb+") as destination:
