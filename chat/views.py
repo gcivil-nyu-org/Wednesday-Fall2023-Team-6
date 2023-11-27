@@ -38,24 +38,27 @@ def chat(request, appointment_id):
         return redirect("user:account")
 
     if request.method == "POST":
-        message = Message()
-        message.content = request.POST.get("content")
-        message.sender = current_user
-        message.appointment = appointment
-        if len(request.FILES["attachment"]) > 0:
-            attachment = request.FILES["attachment"]
-            message.attachment = attachment
+        try:
+            message = Message()
+            message.content = request.POST.get("content")
+            message.sender = current_user
+            message.appointment = appointment
+            if len(request.FILES["attachment"]) > 0:
+                attachment = request.FILES["attachment"]
+                message.attachment = attachment
 
-            file_path = os.path.join(
-                settings.MEDIA_ROOT, "attachments", attachment.name
-            )
-            # Save the uploaded file to the specified path
-            with open(file_path, "wb+") as destination:
-                for chunk in attachment.chunks():
-                    destination.write(chunk)
+                file_path = os.path.join(
+                    settings.MEDIA_ROOT, "attachments", attachment.name
+                )
+                # Save the uploaded file to the specified path
+                with open(file_path, "wb+") as destination:
+                    for chunk in attachment.chunks():
+                        destination.write(chunk)
 
-            message.full_clean()
-            message.save()
+                message.full_clean()
+                message.save()
+        except Exception as e:
+            print("Post error", e)
 
     return render(
         request,
