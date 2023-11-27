@@ -9,7 +9,6 @@ from django.contrib import messages
 
 import os
 from django.conf import settings
-import logging
 
 
 @login_required
@@ -40,35 +39,27 @@ def chat(request, appointment_id):
         return redirect("user:account")
 
     if request.method == "POST":
-        try:
-            message = Message()
-            message.content = request.POST.get("content")
-            message.sender = current_user
-            message.appointment = appointment
-            if len(request.FILES["attachment"]) > 0:
-                attachment = request.FILES["attachment"]
-                message.attachment = attachment
+        message = Message()
+        message.content = request.POST.get("content")
+        message.sender = current_user
+        message.appointment = appointment
+        if len(request.FILES["attachment"]) > 0:
+            attachment = request.FILES["attachment"]
+            message.attachment = attachment
 
-                ext = attachment.name.split(".")[-1]
-                attachment_name = f"{uuid.uuid4().hex}.{ext}"
-                os.makedirs(
-                    os.path.join(settings.MEDIA_ROOT, "attachments"), exist_ok=True
-                )
-                file_path = os.path.join(
-                    settings.MEDIA_ROOT, "attachments", attachment_name
-                )
-                # Save the uploaded file to the specified path
-                with open(file_path, "wb+") as destination:
-                    for chunk in attachment.chunks():
-                        destination.write(chunk)
+            ext = attachment.name.split(".")[-1]
+            attachment_name = f"{uuid.uuid4().hex}.{ext}"
+            os.makedirs(os.path.join(settings.MEDIA_ROOT, "attachments"), exist_ok=True)
+            file_path = os.path.join(
+                settings.MEDIA_ROOT, "attachments", attachment_name
+            )
+            # Save the uploaded file to the specified path
+            with open(file_path, "wb+") as destination:
+                for chunk in attachment.chunks():
+                    destination.write(chunk)
 
-                message.full_clean()
-                message.save()
-        except Exception as e:
-            logger = logging.getLogger(__name__)
-            logger.error("Post error", e)
-            messages.error(request, e)
-            return redirect("user:account")
+            message.full_clean()
+            message.save()
 
     return render(
         request,
