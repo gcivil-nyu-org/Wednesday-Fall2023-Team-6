@@ -123,7 +123,10 @@ class HospitalListView(generic.ListView):
                 average_rating = 0
 
             hospital_ratings_dict.append(average_rating)
-            hospital_reviews_dict.append(hospital_reviews[0].description)
+            if len(hospital_reviews):
+                hospital_reviews_dict.append(hospital_reviews[0].description)
+            else:
+                hospital_reviews_dict.append("No Reviews Posted")
 
             # print(hospital.name,average_rating)
 
