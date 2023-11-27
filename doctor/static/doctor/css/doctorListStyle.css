@@ -289,8 +289,8 @@ legend {
 }
 
 .card-avatar {
-  min-width: 80%;
-  height: auto;
+  height: 200px;
+  width: 200px;
 }
 
 .card-border {

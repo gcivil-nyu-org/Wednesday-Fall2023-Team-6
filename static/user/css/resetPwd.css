@@ -13,7 +13,7 @@
 }
 
 span {
-  color: #29568a;
+  color: rgb(114, 195, 241)
 }
 
 body {
@@ -22,15 +22,21 @@ body {
   background: linear-gradient(#141e30, #243b55);
 }
 
+.reset-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; 
+  padding: 20px;
+  box-sizing: border-box;
+}
+
 .resetPwd-box {
-  margin-left: auto;
-  margin-right: auto;
   padding: 40px;
   width: 30%;
-  margin-top: 70px;
-  margin-bottom: 70px;
-  background: rgba(0, 0, 0, 0.5);
-  box-sizing: border-box;
+  min-width: 300px;
+  max-width: 500px;
+  background-color: #0a2049;
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
   border-radius: 10px;
 }
@@ -113,22 +119,22 @@ body {
 
 .select-label {
   font-size: 12px;
-  color: #8ae44d;
+  color: rgb(114, 195, 241);
 }
 
 .form-group input:focus ~ label,
 .form-group input:not(:placeholder-shown) ~ label {
   top: -20px;
   left: 0;
-  color: #8ae44d;
+  color: rgb(114, 195, 241);
   font-size: 12px;
 }
 
 button {
   position: relative;
   padding: 10px 20px;
-  color: #f9faf7;
-  background-color: rgba(0, 0, 0, 0.5);
+  color: #000000;
+  background-color: rgb(114, 195, 241);
   font-size: 16px;
   text-decoration: none;
   text-transform: uppercase;
@@ -139,13 +145,9 @@ button {
 }
 
 button:hover {
-  background: #8ae44d;
-  color: #ffffff;
+  background: rgb(43, 158, 235);
   border-radius: 5px;
-  /* box-shadow: 0 0 5px #9cc2c4,
-                  0 0 25px #9ab0b1,
-                  0 0 50px #5f6768,
-                  0 0 100px #262727; */
+  cursor: pointer;
 }
 
 .title2 {
@@ -154,5 +156,5 @@ button:hover {
 }
 
 .login {
-  color: #8ae44d;
+  color: rgb(114, 195, 241);
 }

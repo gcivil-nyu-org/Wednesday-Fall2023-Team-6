@@ -76,7 +76,12 @@
                 <div class="card-row row">
                     <div class="card-left-column col">
                         <a href="{%url 'doctor:detail_view' doctor.id %}">
-                            <img class="card-avatar" src="{% static 'doctor/images/avatar.jpg' %}" alt="placeholder">
+                            {% if not doctor.avatar or "default-avatar.png" in doctor.avatar.url %}
+                            <img id="profile_pic" class="card-avatar" src="{% static 'doctor/images/avatar.jpg' %}", alt="">
+                            {% else %}
+                            <img id="profile_pic" class="card-avatar" src="{{doctor.avatar.url}}" alt="placeholder" alt=""
+                                onerror="loadDefaultImage('{% static 'doctor/images/avatar.jpg' %}')">
+                            {% endif %}
                         </a>
                     </div>
                     <div class="card-right-column col">
