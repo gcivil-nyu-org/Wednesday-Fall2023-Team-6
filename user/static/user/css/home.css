@@ -81,3 +81,21 @@ button:hover, .user-actions a:hover {
 .dropdown-item {
   text-align: center !important;
 }
+
+.review_fluid button:not(.book-appointment) {
+  margin-top: 120px; /* Adjust margin-top */
+  margin-bottom: 120px; /* Adjust margin-bottom */
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: #3887c9;
+}
+
+.review_fluid #doctorLeftPageBtn,
+.review_fluid #doctorRightPageBtn,
+.review_fluid #hospitalLeftPageBtn,
+.review_fluid #hospitalRightPageBtn {
+  font-size: 1rem; /* Adjust the font size as needed */
+  width: 40px; /* Adjust the width as needed */
+  height: 40px; /* Adjust the height as needed */
+}
+
