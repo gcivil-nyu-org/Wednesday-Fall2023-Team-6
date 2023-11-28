@@ -107,3 +107,8 @@ body {
     width: 50%;
   }
 }
+
+.error-message {
+  color: red;
+  font-size: 12px;
+}  
