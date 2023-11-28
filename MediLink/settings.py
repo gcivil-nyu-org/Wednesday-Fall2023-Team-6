@@ -60,7 +60,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("redis-medilink.ut1ct7.ng.0001.usw2.cache.amazonaws.com", 6379)]
+            "hosts": [(os.environ.get("REDIS_URL"), 6379)]
         },
     },
 }
