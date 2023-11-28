@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filters %}
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -71,15 +72,17 @@
     <div class="hospital-list">
         {% if hospital_list %}
         {% for hospital in hospital_list%}
+        {% with hid=forloop.counter0 %}
+
         <div class="hospital_link">
             <div class="card container">
-                <div class="card-row row">
-                    <div class="card-left-column col">
+                <div class="card-row row mx-0">
+                    <div class="card-left-column">
                         <a href="{%url 'hospital:detail_view' hospital.id %}">
                             <img class="card-avatar" src="{% static 'hospital/images/hospital_profile_picture.jpeg' %}" alt="placeholder">
                         </a>
                     </div>
-                    <div class="card-right-column col">
+                    <div class="card-right-column d-flex flex-column">
                         <a href="{%url 'hospital:detail_view' hospital.id %}">
                             <p>{{hospital.name}}</p>
                             <h3><span id="speciality">{{hospital.facility_type}}</span></h3>
@@ -90,16 +93,18 @@
                                 <span id="address">{{hospital.location}}</span>
                             </h3>
                             <div class="ratings">
-                                <h3>Rating:
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star"></i>
+                                <h3> Rating: 
+                                    {% for i in "12345" %}
+                                        {% if i|add:"-1" < hospital_ratings|get_item:hid %}
+                                            <span class="fa fa-star checked" style="color:orange"></span>
+                                        {% else %}
+                                            <span class="fa fa-star"></span>
+                                        {% endif %}
+                                    {% endfor %}
                                 </h3>
-                            </div>
+                              </div>
                         </a>
-                        <div class="contact">
+                        <div class="contact mt-auto">
                             <button style="font-size:18px" class="book-appointment" data-toggle="modal"
                              data-target="#contact_modal" data-phone="{{hospital.phone}}">
                                 Contact
@@ -109,11 +114,12 @@
                 </div>
                 <div class="card-row">
                     <h3 class="card-border">
-                        (most recent review from patient) Excellent hospital. Very good experience!
+                        {{hospital_reviews|get_item:hid}}
                     </h3>
                 </div>
             </div>
         </div>
+        {% endwith %}
         {% endfor %}
     </div>
 

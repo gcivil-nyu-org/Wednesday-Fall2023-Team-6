@@ -1,6 +1,6 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'doctor/css/doctorDetailsStyle.css' %}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -8,12 +8,25 @@
 <div class="page">
 
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Doctor {{object.name}} </title>
     </head>
 
     {% include "user/navbar.html" %}
+
+    {% if messages %} 
+        {% for message in messages %}
+        <div
+        class="alert {{ message.tags }} alert-dismissible shadow fade show"
+        role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message | safe }}
+        </div>
+        {% endfor %} 
+    {% endif %}
 
     <div class="alert alert-danger alert-dismissible shadow fade show" id="alert-container" role="alert"
         style="display: none">
@@ -32,8 +45,8 @@
         <div class="detail-info container col px-3">
             <div class="description">
                 <span class="h1">Dr. {{object.name}}</span>
-                <br>
-                <br>
+                <br />
+                <br />
                 <p class="h6 my-5">Dr. {{object.name}} is
                     a doctor
                     {% if object.associated_hospital.name and object.active_status == True %}
@@ -41,21 +54,32 @@
                     {% endif %}
                     whose primary speciality is {{object.primary_speciality}}. </p>
             </div>
+
             <div class="ratings">
-                <p>ratings
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
+                <p>Average User Rating: 
+                    {% if average_rating %}
+                        {% for i in "12345" %}
+                            {% if i|add:"0" <= average_rating %}
+                                <span class="fa fa-star checked"></span>
+                            {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                      {% for i in "12345" %}
+                          <span class="fa fa-star"></span>
+                      {% endfor %}
+                    {% endif %}
                 </p>
             </div>
+        
             <button style="font-size:18px" class="book-appointment mt-5" data-toggle="modal"
                 data-target="#book_appointment_modal">Book Online Appointment
             </button>
         </div>
     </div>
-    <div class="navigator">
+
+    <div class="navigator container">
         <div class="navigator-item">
             <h2>Phone Number</h2>
             <p>{{object.phone}}</p>
@@ -92,13 +116,104 @@
         </div>
     </div>
 
-    <!-- <h1 id="doctor_heading" class="display-4">{{ object.first_name }}</h1>
+    <hr class="hr mx-5 my-5" />
 
-    <div class="details-main-wrapper">
-        <button id="btn_book_online_consultation" class="formbold-btn" data-toggle="modal" data-target="#book_appointment_modal">Book Online Appointment</button>
-    </div> -->
+    <div class="row container review_fluid ml-auto mr-auto">
+        <button class="btn btn-primary" id="leftPageBtn" onclick="carousel_left()"><i class="fas fa-chevron-left col"></i></button>
+        <div class="reviews-section col container px-0 py-0 card">
+            <nav class="navbar navbar-light bg-light justify-content-between" id="reviews_nav">
+              <h2 class='display-4'>Patient Reviews</h2>
+              <button
+                style="font-size: 18px"
+                class="book-appointment my-0 form-inline"
+                data-toggle="modal"
+                data-target="#add_review_model">
+                Add Review
+              </button>
+            </nav>
+            <div class="carousel-container">
+                {% if doctor_reviews %}
+                <div id="reviewCarousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for review in doctor_reviews %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                <div class="review-card mb-0">
+                                    <p><span class="h6">Title: </span>{{ review.title }}</p>
+                                    <p><span class="h6">Patient Name: </span>{{ review.review_from }}</p>
+                                    <p><span class="h6">Rating: </span>{{ review.rating }}/5</p>
+                                    <p class="lead">{{ review.description }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                    <p class="mx-5 my-5 h2">No reviews available.</p>
+                {% endif %}
+            </div>
+        </div>
+        <button class="btn btn-primary" id="rightPageBtn" onclick="carousel_right()"><i class="fas fa-chevron-right col"></i></button>
+    </div>
+    
+
+    <div class="pb-5" style="justify-content: center; display: flex; align-items: center;">
+        <div
+        class="modal fade"
+        id="add_review_model"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="add_review_model"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="formbold-main-wrapper">
+                <div class="formbold-form-wrapper">
+                <h1>Add Reviews</h1>
+                <!-- form action needed -->
+                <form
+                    action="{% url 'doctor:add_review' doctor.id %}"
+                    method="post">
+                    {% csrf_token %}
+                    <div class="formbold-mb-5">
+                    <label for="Tile" class="formbold-form-label"> Title* </label>
+                    <input
+                        type="text"
+                        name="Title"
+                        id="Title"
+                        placeholder="Title"
+                        class="formbold-form-input"/>
+                    </div>
+
+                    <label for="rating">Rating:</label>
+                    <br />
+                    <select name="rating" id="rating" placeholder="Scale">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    </select>
+                    <div class="formbold-mb-5">
+                    <label for="Description" class="formbold-form-label">
+                        Description*
+                    </label>
+                    <textarea
+                        type="Description"
+                        name="Description"
+                        id="Description"
+                        placeholder="Please write down any description"
+                        class="formbold-form-input"></textarea>
+                    </div>
+                    <button class="formbold-btn" class="formbold-btn">
+                    Submit
+                    </button>
+                </form>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
     {% include "doctor/online_appointment_form.html" %}
-
     <script src="{% static 'doctor/javascript/doctor_details.js' %}"></script>
-    <footer class="filled"></footer>
-</div>
