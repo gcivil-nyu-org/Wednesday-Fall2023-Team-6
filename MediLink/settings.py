@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from django.contrib.messages import constants as messages
 import os
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,11 +28,7 @@ SECRET_KEY = "django-insecure-z2if98e5x^l*zx4!r(72d^(_+ax0pwsflq_s)0pqiey(t_d3lv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [
-    "medilink-integration.eba-ywbzcdwm.us-west-2.elasticbeanstalk.com",
-    "127.0.0.1",
-    "medilink-prod.us-west-2.elasticbeanstalk.com",
-]
+ALLOWED_HOSTS = ["*"]
 
 MESSAGE_TAGS = {
     messages.DEBUG: "alert-info",
@@ -44,6 +41,7 @@ MESSAGE_TAGS = {
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -53,7 +51,17 @@ INSTALLED_APPS = [
     "hospital",
     "user",
     "doctor",
+    "googleMaps",
+    "chat",
+    "channels",
 ]
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [(os.environ.get("REDIS_URL"), 6379)]},
+    },
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -87,6 +95,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "MediLink.wsgi.application"
+ASGI_APPLICATION = "MediLink.asgi.application"
 
 
 # Database
@@ -117,7 +126,6 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -154,3 +162,4 @@ EMAIL_USE_SSL = False
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+LOGIN_URL = reverse_lazy("user:login")

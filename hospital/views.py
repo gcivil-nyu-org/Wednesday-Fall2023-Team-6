@@ -1,16 +1,18 @@
 from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views import generic
 from .models import Hospital, HospitalAppointment
-from user.models import Choices, Patient
+from user.models import Choices, Hospital_Reviews, Patient
 from doctor.models import Doctor
 from django.utils import timezone
 import json
 from django.core.paginator import Paginator
 from .forms import HospitalFilterForm
 from django.db.models import Q
+from django.db.models import Avg
+from django.contrib import messages
 
 
 class HospitalDetailView(generic.DetailView):
@@ -26,6 +28,20 @@ class HospitalDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(HospitalDetailView, self).get_context_data(**kwargs)
 
+        # Get hospital reviews related to the current hospital
+        hospital_reviews = Hospital_Reviews.objects.filter(
+            hospital=context["object"]
+        ).order_by("-posted")
+        if hospital_reviews.aggregate(Avg("rating"))["rating__avg"]:
+            average_rating = round(
+                float(hospital_reviews.aggregate(Avg("rating"))["rating__avg"])
+            )
+        else:
+            average_rating = 0
+
+        # Add hospital reviews to the context
+        context["hospital_reviews"] = hospital_reviews
+        context["average_rating"] = average_rating
         try:
             context["object"].borough = self.borough_converter[
                 context["object"].borough
@@ -87,8 +103,32 @@ class HospitalListView(generic.ListView):
         """
         paginator = Paginator(context["hospital_list"], 12)
         page_number = self.request.GET.get("page")
+        paginator.get_page(page_number)
         hospital_list = paginator.get_page(page_number)
         context["hospital_list"] = hospital_list
+
+        hospital_reviews = []
+        hospital_ratings = []
+        for hospital in hospital_list:
+            reviews = Hospital_Reviews.objects.filter(hospital=hospital).order_by(
+                "-posted"
+            )
+
+            if reviews.aggregate(Avg("rating"))["rating__avg"]:
+                average_rating = round(
+                    float(reviews.aggregate(Avg("rating"))["rating__avg"])
+                )
+            else:
+                average_rating = 0
+
+            hospital_ratings.append(average_rating)
+            if len(reviews):
+                hospital_reviews.append(reviews[0].description)
+            else:
+                hospital_reviews.append("")
+
+        context["hospital_reviews"] = hospital_reviews
+        context["hospital_ratings"] = hospital_ratings
 
         # Get filter parameters from the URL
         facility_type = self.request.GET.get("facility_type", "all")
@@ -96,6 +136,7 @@ class HospitalListView(generic.ListView):
         borough = self.request.GET.get("borough", "all")
         postal_code = self.request.GET.get("postal_code", "all")
         name = self.request.GET.get("name", "")
+
         context["filter_form"] = HospitalFilterForm(
             initial={
                 "facility_type": facility_type,
@@ -105,6 +146,7 @@ class HospitalListView(generic.ListView):
                 "name": name,
             }
         )
+
         return context
 
 
@@ -151,7 +193,6 @@ def book_appointment(request, hospital_id):
                 return HttpResponseBadRequest(overlap_message)
 
             preferred_doctor = None
-            print(body["preferred_doctor"])
             if body["preferred_doctor"]:
                 preferred_doctor = get_object_or_404(
                     Doctor, pk=int(body["preferred_doctor"])
@@ -198,3 +239,34 @@ def autocomplete_hospitals(request):
     objects = Hospital.objects.filter(name__icontains=search_term)[:5]
     data = [{"id": obj.id, "name": obj.name} for obj in objects]
     return JsonResponse(data, safe=False)
+
+
+def add_review(request, hospital_id):
+    if request.method == "POST":
+        # Checks to ensure only patient can add reviews
+        if request.user.is_authenticated:
+            user = request.user
+            if not Patient.objects.filter(email=user.username).exists():
+                messages.error(
+                    request,
+                    "Error: You need to have a patient account to post reviews!",
+                )
+            else:
+                # Fetch items here from request like:
+                patient = Patient.objects.filter(email=user.username).first()
+                title = request.POST.get("Title")
+                rating = request.POST.get("rating")
+                description = request.POST.get("Description")
+                hospital = get_object_or_404(Hospital, pk=hospital_id)
+
+                review = Hospital_Reviews()
+                review.hospital = hospital
+                review.review_from = patient.name
+                review.rating = rating
+                review.description = description
+                review.title = title
+                review.posted = datetime.today()
+                review.save()
+        else:
+            messages.error(request, "Error: You need to be logged-in to post reviews!")
+    return redirect("hospital:detail_view", pk=hospital_id)

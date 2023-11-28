@@ -1,0 +1,115 @@
+/* chat.css */
+
+/* General page styles */
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #e9ebee;
+  margin: 0;
+}
+
+#recipient {
+  color: #3887c9;
+  font-weight: 700;
+}
+
+/* Chat log styles */
+#chat-log {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1);
+  padding: 20px;
+  background-color: white;
+  margin-bottom: 24px;
+  overflow-y: auto;
+  max-height: 500px;
+  margin-top: 50px;
+  align-self: center;
+
+  display: inline-flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: space-between;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#chat-log p:not(.h5) {
+  background-color: #f7f7f7;
+  padding: 12px 16px;
+  border-radius: 15px;
+  line-height: 1.5;
+  margin: 8px 0;
+  border: 1px solid #ebebeb;
+  position: relative;
+  max-width: 75%;
+}
+
+/* Differentiate between sent and received messages */
+#chat-log p.sent {
+  background-color: rgba(139, 222, 255, 0.185);
+  align-self: flex-end;
+  border-color: rgb(139, 222, 255);
+  width: 80%;
+}
+
+#chat-log p.received {
+  background-color: #f7f7f7;
+  align-self: flex-start;
+  border-color: #ebebeb;
+  width: 80%;
+}
+
+/* Chat form styles */
+#chat-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+
+#chat-form input[type="text"], #chat-form input[type="file"] {
+  padding: 12px 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+#chat-form button {
+  padding: 12px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#chat-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+  #chat-form {
+    grid-template-columns: 1fr;
+  }
+
+  #chat-form button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+  }
+}
+
+.message-input {
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.attach-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}

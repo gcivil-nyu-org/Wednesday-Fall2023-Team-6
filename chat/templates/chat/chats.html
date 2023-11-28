@@ -1,0 +1,66 @@
+<!-- chat/chat.html -->
+{% load static %}
+<link rel="stylesheet" href="{% static 'chat/css/chat.css' %}">
+
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Chat with {{ recipient.name }}</title>
+ </head>
+<body>
+    {% include "user/navbar.html" %}
+    <p class="display-3 mx-3 my-3">Chat with <span id="recipient">{{ recipient.name }}</span></p>
+    <div class="container-fluid" style="display:flex;">
+        <div id="chat-log" class="container">
+            {% for message in messages %}
+                {% if current_user == message.sender %}
+                <p class="sent"><b>You:</b> {{ message.content }}
+                    {% if message.attachment %}
+                    <br/>
+                    <a href="{{ message.attachment.url }}">Download Attachment</a>
+                    {% endif %}
+                </p>
+                {% else %}
+                <p class="received"><b>{{ recipient.name }}:</b> {{ message.content }}
+                    {% if message.attachment %}
+                    <br/>
+                    <a href="{{ message.attachment.url }}">Download Attachment</a>
+                    {% endif %}
+                </p>
+                {% endif %}
+            {% empty %}
+            <p id="no_message" class='h5' style="text-align: center;">No Messages Available</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <hr></hr>
+
+    <form id="chat-form" method="post" action="{% url 'chat:chat' appointment_id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="container chat-container my-4">
+            <!-- Chat Message Space -->
+            <div class="message-input">
+              <textarea id="id_message" class="form-control" rows="3" name="content" placeholder="Type your message..."></textarea>
+              <div class="custom-file mt-2">
+                <input type="file" class="custom-file-input form-control" id="id_attachment" name="attachment">
+                <label id="selected_file" class="custom-file-label" for="id_attachment">Choose file</label>
+              </div>
+            </div>
+        
+            <!-- Blue Button -->
+            <button type="submit" class="btn btn-primary attach-button">Send Message</button>
+          </div>
+    </form>
+
+    <script>
+        const sender = "{{ recipient.name }}";
+        const reload_url = '{% url "chat:chat" appointment_id %}';
+        const current_user = "{{ current_user }}" ;
+        const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/{{appointment_id}}/');
+    </script>
+    <script src="{% static 'chat/javascript/chats.js' %}"></script>
+ </body>
+ </html>
