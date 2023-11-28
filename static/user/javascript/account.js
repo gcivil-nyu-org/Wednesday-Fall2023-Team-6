@@ -197,3 +197,58 @@ document.getElementById('avatar-upload-input').addEventListener('change', functi
 
   this.form.submit(); // Automatically submit the form when a file is selected
 });
+
+function formatPhoneNumber(input) {
+  var numbers = input.value.replace(/\D/g, ''); // Remove all non-digit characters
+  var char = {0:'(',3:') ',6:'-'};
+  input.value = '';
+
+  for (var i = 0; i < numbers.length; i++) {
+      input.value += (char[i] || '') + numbers[i];
+  }
+
+  // Validate and enable/disable the save button
+  validatePhone(input);
+}
+
+function validatePhone(input) {
+  var value = input.value.replace(/\D/g, ''); // Remove all non-digit characters
+  var valid = value.length === 10; // Check if the length is 10 digits
+
+  document.getElementById('phoneError').textContent = valid ? '' : 'Phone number must be 10 digits.';
+  document.getElementById('saveButton').disabled = !valid;
+
+  // Update input field style
+  if (valid) {
+    input.style.borderColor = "green"; // or any style for valid input
+  } else {
+    input.style.borderColor = "red"; // or any style for invalid input
+  }
+}
+
+function checkFileSize() {
+  var fileInput = document.getElementById('avatar-upload-input');
+  if (document.getElementById('avatar-upload-input').files.length > 0) {
+    var maxFileSizeMB = 5;
+
+    // Convert file size to megabytes
+    var fileSizeMB = fileInput.files[0].size / (1024 * 1024);
+
+    // Check if the file size is within the allowed limit
+    if (fileSizeMB > maxFileSizeMB) {
+        alert('Error: File size exceeds the maximum allowed size of ' + maxFileSizeMB + ' MB.');
+        return false; 
+    }
+  }
+
+  return true;
+}
+
+// avatar upload
+document.getElementById('avatar-upload-input').addEventListener('change', function () {    
+  if(!checkFileSize()) {
+    return false;
+  }
+
+  this.form.submit(); // Automatically submit the form when a file is selected
+});
