@@ -106,35 +106,30 @@ class HospitalListView(generic.ListView):
         paginator.get_page(page_number)
         hospital_list = paginator.get_page(page_number)
         context["hospital_list"] = hospital_list
-        print(type(hospital_list[0]))
 
-        hospital_reviews_dict = []
-        hospital_ratings_dict = []
+        hospital_reviews = []
+        hospital_ratings = []
         for hospital in hospital_list:
-            hospital_reviews = Hospital_Reviews.objects.filter(
-                hospital=hospital
-            ).order_by("-posted")
+            reviews = Hospital_Reviews.objects.filter(hospital=hospital).order_by(
+                "-posted"
+            )
 
-            if hospital_reviews.aggregate(Avg("rating"))["rating__avg"]:
+            if reviews.aggregate(Avg("rating"))["rating__avg"]:
                 average_rating = round(
-                    float(hospital_reviews.aggregate(Avg("rating"))["rating__avg"])
+                    float(reviews.aggregate(Avg("rating"))["rating__avg"])
                 )
             else:
                 average_rating = 0
 
-            hospital_ratings_dict.append(average_rating)
-            if len(hospital_reviews):
-                hospital_reviews_dict.append(hospital_reviews[0].description)
+            hospital_ratings.append(average_rating)
+            if len(reviews):
+                hospital_reviews.append(reviews[0].description)
             else:
-                hospital_reviews_dict.append("No Reviews Posted")
+                hospital_reviews.append("")
 
-            # print(hospital.name,average_rating)
+        context["hospital_reviews"] = hospital_reviews
+        context["hospital_ratings"] = hospital_ratings
 
-        context["hospital_reviews"] = hospital_reviews_dict
-        context["hospital_ratings"] = hospital_ratings_dict
-
-        # context["hospital_reviews"] = hospital_reviews
-        # context["average_rating"] = average_rating
         # Get filter parameters from the URL
         facility_type = self.request.GET.get("facility_type", "all")
         location = self.request.GET.get("location", "all")
@@ -198,7 +193,6 @@ def book_appointment(request, hospital_id):
                 return HttpResponseBadRequest(overlap_message)
 
             preferred_doctor = None
-            print(body["preferred_doctor"])
             if body["preferred_doctor"]:
                 preferred_doctor = get_object_or_404(
                     Doctor, pk=int(body["preferred_doctor"])
