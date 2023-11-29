@@ -36,7 +36,7 @@
         <strong><span id="alert_message">Error</span></strong>
     </div>
 
-    <div class="main-content row my-2 container-fluid">
+    <div class="main-content row mx-0">
         {% if object.avatar and "default-avatar.png" not in doctor.avatar.url %}
         <div id="profile_pic" class="background-jpg col" style="background-image: url('{{ object.avatar.url }}');" ></div>
         {% else %}
@@ -119,7 +119,9 @@
     <hr class="hr mx-5 my-5" />
 
     <div class="row container review_fluid ml-auto mr-auto">
+        {% if doctor_reviews %}
         <button class="btn btn-primary" id="leftPageBtn" onclick="carousel_left()"><i class="fas fa-chevron-left col"></i></button>
+        {% endif %}
         <div class="reviews-section col container px-0 py-0 card">
             <nav class="navbar navbar-light bg-light justify-content-between" id="reviews_nav">
               <h2 class='display-4'>Patient Reviews</h2>
@@ -152,7 +154,9 @@
                 {% endif %}
             </div>
         </div>
+        {% if doctor_reviews %}
         <button class="btn btn-primary" id="rightPageBtn" onclick="carousel_right()"><i class="fas fa-chevron-right col"></i></button>
+        {% endif %}
     </div>
     
 

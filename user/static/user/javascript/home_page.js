@@ -71,3 +71,11 @@ function setSelection(selection) {
         document.getElementById("search_selector").textContent = "Hospitals ";
     }
 }
+
+function carousel_left(carouselId) {
+    $(`#${carouselId}`).carousel('prev');
+}
+
+function carousel_right(carouselId) {
+    $(`#${carouselId}`).carousel('next');
+}
