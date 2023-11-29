@@ -22,7 +22,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import EmailMessage
 from django.contrib import messages
 from django.contrib.auth import logout
-from .models import Doctor_Reviews, Hospital_Reviews, Choices
+from .models import Doctor_Reviews, Hospital_Reviews
 
 
 # import for avatar changing
@@ -139,21 +139,21 @@ def home(request):
         elif Doctor.objects.filter(email=request.user.username).exists():
             user_borough = Doctor.objects.get(email=request.user.username).borough
         elif HospitalAdmin.objects.filter(email=request.user.username).exists():
-            user_borough = HospitalAdmin.objects.get(email=request.user.username).borough
+            user_borough = HospitalAdmin.objects.get(
+                email=request.user.username
+            ).borough
 
     if user_borough:
         # Filter doctor reviews for the user's borough
-        doctor_reviews = Doctor_Reviews.objects.filter(
-            doctor__borough=user_borough
-        )
+        doctor_reviews = Doctor_Reviews.objects.filter(doctor__borough=user_borough)
 
         # Filter hospital reviews for the user's borough
         hospital_reviews = Hospital_Reviews.objects.filter(
             hospital__borough=user_borough
         )
-        
+
         user_borough = dict(Choices.boroughs)[user_borough]
-        
+
     else:
         # If user is not logged in, fetch all reviews without filtering by borough
         doctor_reviews = Doctor_Reviews.objects.all()
