@@ -45,6 +45,10 @@ class AddReviewTestCase(TestCase):
             self.url,
             {"Title": "Test Review", "rating": 4, "Description": "Test Description"},
         )
+        response = self.client.post(
+            self.url,
+            {"Title": "Test Review", "rating": 4, "Description": "Test Description"},
+        )
 
         # Check that the review was added successfully
         self.assertEqual(response.status_code, 302)  # Redirect status code
@@ -52,6 +56,10 @@ class AddReviewTestCase(TestCase):
 
     def test_unauthenticated_user_cannot_add_review(self):
         # Make a POST request to add a review without logging in
+        response = self.client.post(
+            self.url,
+            {"Title": "Test Review", "rating": 4, "Description": "Test Description"},
+        )
         response = self.client.post(
             self.url,
             {"Title": "Test Review", "rating": 4, "Description": "Test Description"},
