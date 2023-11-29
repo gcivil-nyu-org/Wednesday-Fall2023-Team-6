@@ -95,6 +95,27 @@ class DoctorListView(generic.ListView):
         doctor_list = paginator.get_page(page_number)
         context["doctor_list"] = doctor_list
 
+        doctor_reviews = []
+        doctor_ratings = []
+        for doctor in doctor_list:
+            reviews = Doctor_Reviews.objects.filter(doctor=doctor).order_by("-posted")
+
+            if reviews.aggregate(Avg("rating"))["rating__avg"]:
+                average_rating = round(
+                    float(reviews.aggregate(Avg("rating"))["rating__avg"])
+                )
+            else:
+                average_rating = 0
+
+            doctor_ratings.append(average_rating)
+            if len(reviews):
+                doctor_reviews.append(reviews[0].description)
+            else:
+                doctor_reviews.append("")
+
+        context["doctor_reviews"] = doctor_reviews
+        context["doctor_ratings"] = doctor_ratings
+
         # Get filter parameters from the URL
         primary_speciality = self.request.GET.get("primary_speciality", "all")
         address = self.request.GET.get("address", "all")

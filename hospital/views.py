@@ -107,12 +107,36 @@ class HospitalListView(generic.ListView):
         hospital_list = paginator.get_page(page_number)
         context["hospital_list"] = hospital_list
 
+        hospital_reviews = []
+        hospital_ratings = []
+        for hospital in hospital_list:
+            reviews = Hospital_Reviews.objects.filter(hospital=hospital).order_by(
+                "-posted"
+            )
+
+            if reviews.aggregate(Avg("rating"))["rating__avg"]:
+                average_rating = round(
+                    float(reviews.aggregate(Avg("rating"))["rating__avg"])
+                )
+            else:
+                average_rating = 0
+
+            hospital_ratings.append(average_rating)
+            if len(reviews):
+                hospital_reviews.append(reviews[0].description)
+            else:
+                hospital_reviews.append("")
+
+        context["hospital_reviews"] = hospital_reviews
+        context["hospital_ratings"] = hospital_ratings
+
         # Get filter parameters from the URL
         facility_type = self.request.GET.get("facility_type", "all")
         location = self.request.GET.get("location", "all")
         borough = self.request.GET.get("borough", "all")
         postal_code = self.request.GET.get("postal_code", "all")
         name = self.request.GET.get("name", "")
+
         context["filter_form"] = HospitalFilterForm(
             initial={
                 "facility_type": facility_type,
@@ -122,6 +146,7 @@ class HospitalListView(generic.ListView):
                 "name": name,
             }
         )
+
         return context
 
 
@@ -168,7 +193,6 @@ def book_appointment(request, hospital_id):
                 return HttpResponseBadRequest(overlap_message)
 
             preferred_doctor = None
-            print(body["preferred_doctor"])
             if body["preferred_doctor"]:
                 preferred_doctor = get_object_or_404(
                     Doctor, pk=int(body["preferred_doctor"])
