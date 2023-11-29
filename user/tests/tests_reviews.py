@@ -33,14 +33,14 @@ class ReviewsSectionTest(TestCase):
 
         # Create sample reviews for the doctor
         Doctor_Reviews.objects.create(
-            likes="Positive Review",
+            title="Positive Review",
             review_from="Patient 1",
             rating=5,
             description="This doctor is amazing!",
             doctor=self.doctor,
         )
         Doctor_Reviews.objects.create(
-            likes="Negative Review",
+            title="Negative Review",
             review_from="Patient 2",
             rating=2,
             description="Not satisfied with the service.",
@@ -49,14 +49,14 @@ class ReviewsSectionTest(TestCase):
 
         # Create sample reviews for the hospital
         Hospital_Reviews.objects.create(
-            likes="Positive Review",
+            title="Positive Review",
             review_from="Patient 3",
             rating=4,
             description="Great hospital experience!",
             hospital=self.hospital,
         )
         Hospital_Reviews.objects.create(
-            likes="Neutral Review",
+            title="Neutral Review",
             review_from="Patient 4",
             rating=3,
             description="Average service.",
@@ -65,7 +65,7 @@ class ReviewsSectionTest(TestCase):
 
     def test_doctor_reviews_rendering(self):
         response = self.client.get(
-            reverse("home")
+            reverse("user:home")
         )  # Replace 'home' with the actual URL name
         self.assertContains(response, "Doctor Reviews")
         self.assertContains(response, "Positive Review")
@@ -75,7 +75,7 @@ class ReviewsSectionTest(TestCase):
 
     def test_hospital_reviews_rendering(self):
         response = self.client.get(
-            reverse("home")
+            reverse("user:home")
         )  # Replace 'home' with the actual URL name
         self.assertContains(response, "Hospital Reviews")
         self.assertContains(response, "Positive Review")
