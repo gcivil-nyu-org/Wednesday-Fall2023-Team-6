@@ -8,7 +8,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'user/javascript/home_page.js' %}"></script>
     <link rel="stylesheet" href="{% static 'user/css/home.css' %}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     {% include "user/navbar.html" %}
@@ -38,92 +39,93 @@
         <img src="{% static 'user/images/home.jpg' %}" alt="Your Image Alt Text">
     </div>
 
-    <div class="container">
-        <div class="row">
-            {% if user.is_authenticated %}
-                <!-- Additional content for authenticated users if needed -->
-            {% endif %}
- <!-- Doctor Reviews -->
-<div class="col-md-12">
-    <div class="row container review_fluid mx-auto">
-        <button class="btn btn-primary btn-sm" id="doctorLeftPageBtn" onclick="carousel_left('doctorReviewCarousel')">
-            &lt;
-            
-        </button>
-        <div class="reviews-section col container px-0 py-0 card">
-            <nav class="navbar navbar-light bg-light justify-content-between" id="doctorReviewsNav">
-                <h2 class='display-4'>Doctor Reviews</h2>
-                
-            </nav>
-            <div class="carousel-container">
-                {% if doctor_reviews %}
-                    <div id="doctorReviewCarousel" class="carousel slide" data-ride="carousel">
-                        <div class="carousel-inner">
-                            {% for review in doctor_reviews %}
-                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                    <div class="review-card mb-0">
-                                        <p><span class="h6">Title: </span>{{ review.title }}</p>
-                                        <p><span class="h6">Patient Name: </span>{{ review.review_from }}</p>
-                                        <p><span class="h6">Rating: </span>{{ review.rating }}/5</p>
-                                        <p class="lead">{{ review.description }}</p>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% else %}
-                    <p class="mx-5 my-5 h2">No doctor reviews available.</p>
-                {% endif %}
-            </div>
-        </div>
-        <button class="btn btn-primary btn-sm" id="doctorRightPageBtn" onclick="carousel_right('doctorReviewCarousel')">
-            &gt;
-        
-        </button>
-    </div>
-</div>
+    <div class="container-fluid">
 
-<!-- Hospital Reviews -->
-<div class="col-md-12">
-    <div class="row container review_fluid mx-auto">
-        <button class="btn btn-primary btn-sm" id="hospitalLeftPageBtn" onclick="carousel_left('hospitalReviewCarousel')">
-            &lt;
-        
-        </button>
-        <div class="reviews-section col container px-0 py-0 card">
-            <nav class="navbar navbar-light bg-light justify-content-between" id="hospitalReviewsNav">
-                <h2 class='display-4'>Hospital Reviews</h2>
-                <!-- Add Review button for hospitals if needed -->
-            </nav>
-            <div class="carousel-container">
-                {% if hospital_reviews %}
-                    <div id="hospitalReviewCarousel" class="carousel slide" data-ride="carousel">
-                        <div class="carousel-inner">
-                            {% for review in hospital_reviews %}
-                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                    <div class="review-card mb-0">
-                                        <p><span class="h6">Title: </span>{{ review.title }}</p>
-                                        <p><span class="h6">Patient Name: </span>{{ review.review_from }}</p>
-                                        <p><span class="h6">Rating: </span>{{ review.rating }}/5</p>
-                                        <p class="lead">{{ review.description }}</p>
+        {% if user_borough %}
+        <p class="display-3 my-5 px-5 review_heading">Patient reviews near you in <span>{{ user_borough }}:</span></p>
+        {% else %}
+        <p class="display-3 my-5 px-5 review_heading">Patient reviews</p>
+        {% endif %}
+
+        <hr class="mb-5 mx-5"/>
+
+        <!-- Doctor Reviews -->
+        <div class="row container review_fluid mx-auto">
+            <button class="btn btn-primary" id="doctorLeftPageBtn" onclick="carousel_left('doctorReviewCarousel')">
+                <i class="fas fa-chevron-left col"></i>
+            </button>
+            <div class="reviews-section col container px-0 py-0 card">
+                <nav class="navbar navbar-light bg-light justify-content-between" id="doctorReviewsNav">
+                    <h2 class='display-4'>Doctor Reviews</h2>
+                </nav>
+                <div class="carousel-container">
+                    {% if doctor_reviews %}
+                        <div id="doctorReviewCarousel" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                {% for review in doctor_reviews %}
+                                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                        <div class="review-card mb-0">
+                                            <p><a href={% url "doctor:detail_view" review.doctor.id %}><span class="h4 mb-1">Dr. {{ review.doctor.name }}</span></a></p>
+                                            <p><span class="h6">Title: </span>{{ review.title }}</p>
+                                            <p><span class="h6">Patient Name: </span>{{ review.review_from }}</p>
+                                            <p><span class="h6">Rating: </span>{{ review.rating }}/5</p>
+                                            <p class="lead">{{ review.description }}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            {% endfor %}
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
-                {% else %}
-                    <p class="mx-5 my-5 h2">No hospital reviews available.</p>
-                {% endif %}
+                    {% else %}
+                        <p class="mx-5 my-5 h2">No doctor reviews available.</p>
+                    {% endif %}
+                </div>
             </div>
+            <button class="btn btn-primary" id="doctorRightPageBtn" onclick="carousel_right('doctorReviewCarousel')">
+                <i class="fas fa-chevron-right col"></i>
+            </button>
         </div>
-        <button class="btn btn-primary btn-sm" id="hospitalRightPageBtn" onclick="carousel_right('hospitalReviewCarousel')">
-            &gt;
-            
-        </button>
-    </div>
-</div>
+
+        <!-- Hospital Reviews -->
+        <div class="row container review_fluid mx-auto my-5">
+            <button class="btn btn-primary" id="hospitalLeftPageBtn" onclick="carousel_left('hospitalReviewCarousel')">
+                <i class="fas fa-chevron-left col"></i>
+            </button>
+            <div class="reviews-section col container px-0 py-0 card">
+                <nav class="navbar navbar-light bg-light justify-content-between" id="hospitalReviewsNav">
+                    <h2 class='display-4'>Hospital Reviews</h2>
+                    <!-- Add Review button for hospitals if needed -->
+                </nav>
+                <div class="carousel-container">
+                    {% if hospital_reviews %}
+                        <div id="hospitalReviewCarousel" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                {% for review in hospital_reviews %}
+                                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                        <div class="review-card mb-0">
+                                            <p><a href={% url "hospital:detail_view" review.hospital.id %}><span class="h4 mb-1">Dr. {{ review.hospital.name }}</span></a></p>
+                                            <p><span class="h6">Title: </span>{{ review.title }}</p>
+                                            <p><span class="h6">Patient Name: </span>{{ review.review_from }}</p>
+                                            <p><span class="h6">Rating: </span>{{ review.rating }}/5</p>
+                                            <p class="lead">{{ review.description }}</p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <p class="mx-5 my-5 h2">No hospital reviews available.</p>
+                    {% endif %}
+                </div>
+            </div>
+            <button class="btn btn-primary" id="hospitalRightPageBtn" onclick="carousel_right('hospitalReviewCarousel')">
+                <i class="fas fa-chevron-right col"></i>
+            </button>
         </div>
+
+        <hr class="mb-5 mx-5"/>
+
     </div>
+
     <!-- Placeholder for Another Image -->
     <div class="image-container">
         <img src="{% static 'user/images/home1.png' %}" alt="Your Image Alt Text">

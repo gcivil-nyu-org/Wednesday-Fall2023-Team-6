@@ -73,7 +73,8 @@ button:hover, .user-actions a:hover {
 #search-type.form-control {
   width: 200px;
 }
-.btn-primary {
+
+.dropdown-toggle {
   min-height: 50px;
   text-align: center;
   width: 200px;
@@ -82,20 +83,33 @@ button:hover, .user-actions a:hover {
   text-align: center !important;
 }
 
-.review_fluid button:not(.book-appointment) {
-  margin-top: 120px; /* Adjust margin-top */
-  margin-bottom: 120px; /* Adjust margin-bottom */
+.user-reviews {
+  margin: 20px 0;
+}
+
+.review-card {
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.review_fluid button {
+  margin-top: 120px;
+  margin-bottom: 120px;
   margin-left: 10px;
   margin-right: 10px;
   background-color: #3887c9;
 }
 
-.review_fluid #doctorLeftPageBtn,
-.review_fluid #doctorRightPageBtn,
-.review_fluid #hospitalLeftPageBtn,
-.review_fluid #hospitalRightPageBtn {
-  font-size: 1rem; /* Adjust the font size as needed */
-  width: 40px; /* Adjust the width as needed */
-  height: 40px; /* Adjust the height as needed */
+#hospitalReviewCarousel, #doctorReviewCarousel {
+  height: 300px;
+  overflow-y: auto;
 }
 
+.review_heading {
+  font-weight: 600 !important;
+  text-align: center;
+}
+
+.review_heading span {
+  color: #2a6596;
+}
