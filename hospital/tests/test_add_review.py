@@ -3,7 +3,8 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from hospital.models import Hospital
 from user.models import Patient, Hospital_Reviews
- #  from hospital.views import add_review
+
+#  from hospital.views import add_review
 
 
 class AddReviewTestCase(TestCase):
@@ -79,6 +80,8 @@ class AddReviewTestCase(TestCase):
     #     # Check that the user is redirected and no review is added
     #     self.assertEqual(response.status_code, 302)  # Redirect status code
     #     self.assertEqual(Hospital_Reviews.objects.count(), 0)
+
+
 # from django.test import TestCase, Client
 # from django.urls import reverse
 # from django.contrib.auth.models import User
