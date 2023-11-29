@@ -22,6 +22,8 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import EmailMessage
 from django.contrib import messages
 from django.contrib.auth import logout
+from .models import Doctor_Reviews, Hospital_Reviews
+
 
 # import for avatar changing
 import os
@@ -29,7 +31,6 @@ from django.conf import settings
 
 # import for checking appointment status
 from django.utils import timezone
-
 
 PASSWORD_RESET_SUBJECT = "MediLink Account Password Reset Request"
 DOCTOR_REJECT_SUBJECT = "MediLink Hospital Association Request Rejected"
@@ -130,7 +131,43 @@ def passwordResetConfirmView(request, uidb64, token):
 
 
 def home(request):
-    return render(request, "user/home.html")
+    user_borough = None
+
+    if request.user.is_authenticated:
+        if Patient.objects.filter(email=request.user.username).exists():
+            user_borough = Patient.objects.get(email=request.user.username).borough
+        elif Doctor.objects.filter(email=request.user.username).exists():
+            user_borough = Doctor.objects.get(email=request.user.username).borough
+        elif HospitalAdmin.objects.filter(email=request.user.username).exists():
+            user_borough = HospitalAdmin.objects.get(
+                email=request.user.username
+            ).borough
+
+    if user_borough:
+        # Filter doctor reviews for the user's borough
+        doctor_reviews = Doctor_Reviews.objects.filter(doctor__borough=user_borough)
+
+        # Filter hospital reviews for the user's borough
+        hospital_reviews = Hospital_Reviews.objects.filter(
+            hospital__borough=user_borough
+        )
+
+        user_borough = dict(Choices.boroughs)[user_borough]
+
+    else:
+        # If user is not logged in, fetch all reviews without filtering by borough
+        doctor_reviews = Doctor_Reviews.objects.all()
+        hospital_reviews = Hospital_Reviews.objects.all()
+
+    return render(
+        request,
+        "user/home.html",
+        {
+            "user_borough": user_borough,
+            "doctor_reviews": doctor_reviews[:15],
+            "hospital_reviews": hospital_reviews[:15],
+        },
+    )
 
 
 def accountView(request):  # noqa: C901
