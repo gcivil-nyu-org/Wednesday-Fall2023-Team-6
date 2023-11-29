@@ -76,13 +76,13 @@
 
         <div class="hospital_link">
             <div class="card container">
-                <div class="card-row row">
-                    <div class="card-left-column col">
+                <div class="card-row row mx-0">
+                    <div class="card-left-column">
                         <a href="{%url 'hospital:detail_view' hospital.id %}">
                             <img class="card-avatar" src="{% static 'hospital/images/hospital_profile_picture.jpeg' %}" alt="placeholder">
                         </a>
                     </div>
-                    <div class="card-right-column col">
+                    <div class="card-right-column d-flex flex-column">
                         <a href="{%url 'hospital:detail_view' hospital.id %}">
                             <p>{{hospital.name}}</p>
                             <h3><span id="speciality">{{hospital.facility_type}}</span></h3>
@@ -101,12 +101,10 @@
                                             <span class="fa fa-star"></span>
                                         {% endif %}
                                     {% endfor %}
-
-
                                 </h3>
                               </div>
                         </a>
-                        <div class="contact">
+                        <div class="contact mt-auto">
                             <button style="font-size:18px" class="book-appointment" data-toggle="modal"
                              data-target="#contact_modal" data-phone="{{hospital.phone}}">
                                 Contact

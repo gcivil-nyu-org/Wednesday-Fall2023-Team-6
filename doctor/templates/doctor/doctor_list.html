@@ -74,8 +74,8 @@
         {% with hid=forloop.counter0 %}
         <div class="doctor_link">
             <div class="card container">
-                <div class="card-row row">
-                    <div class="card-left-column col">
+                <div class="card-row row mx-0">
+                    <div class="card-left-column">
                         <a href="{%url 'doctor:detail_view' doctor.id %}">
                             {% if not doctor.avatar or "default-avatar.png" in doctor.avatar.url %}
                             <img id="profile_pic" class="card-avatar" src="{% static 'doctor/images/avatar.jpg' %}", alt="">
@@ -85,7 +85,7 @@
                             {% endif %}
                         </a>
                     </div>
-                    <div class="card-right-column col">
+                    <div class="card-right-column d-flex flex-column">
                         <a href="{%url 'doctor:detail_view' doctor.id %}">
                             <p>Dr {{doctor.name}}</p>
                             <h3><span id="speciality">{{doctor.primary_speciality}}</span></h3>
@@ -109,7 +109,7 @@
                                 </h3>
                               </div>
                         </a>
-                        <div class="contact">
+                        <div class="contact mt-auto">
                             <button style="font-size:18px" class="book-appointment" data-toggle="modal"
                              data-target="#contact_modal" data-email="{{doctor.email}}" data-phone="{{doctor.phone}}">
                                 Contact
