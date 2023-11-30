@@ -3,6 +3,7 @@ import shutil
 import tempfile
 from unittest.mock import patch, MagicMock
 import datetime
+import uuid
 
 from django.contrib.messages import get_messages
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -15,10 +16,13 @@ from doctor.models import Doctor, DoctorAppointment
 from hospital.models import Hospital, HospitalAdmin
 from user.models import Patient
 
+from MediLink.settings import MEDIA_ROOT
+
 
 class BaseChatViewTest(TestCase):
     def setUp(self):
         self.client = Client()
+        self.created_attachments = []
 
         # Create a patient user
         self.user = User.objects.create_user(
@@ -60,7 +64,15 @@ class BaseChatViewTest(TestCase):
         self.temp_media_root = tempfile.mkdtemp()
 
     def tearDown(self):
-        shutil.rmtree(self.temp_media_root)
+        shutil.rmtree(self.temp_media_root, ignore_errors=True)
+
+        attachments_folder = os.path.join(MEDIA_ROOT, "attachments")
+
+        if os.path.exists(attachments_folder):
+            for filename in os.listdir(attachments_folder):
+                file_path = os.path.join(attachments_folder, filename)
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
 
 
 class TestAppointmentStatus(BaseChatViewTest):
@@ -112,9 +124,15 @@ class TestPostAttachment(BaseChatViewTest):
         self.appointment.status = "CNF"
         self.appointment.save()
         url = reverse("chat:chat", args=[self.appointment.id])
-        mock_file = SimpleUploadedFile(
-            "file.txt", b"file_content", content_type="text/plain"
-        )
+
+        file_name = "test_file.txt"
+        ext = file_name.split(".")[-1]
+        attachment_name = f"{uuid.uuid4().hex}.{ext}"
+        file_path = os.path.join(MEDIA_ROOT, "attachments", attachment_name)
+        self.created_attachments.append(file_path)
+
+        mock_file = SimpleUploadedFile(file_name, b"file_content", "text/plain")
+
         data = {"content": "test message", "attachment": mock_file}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
