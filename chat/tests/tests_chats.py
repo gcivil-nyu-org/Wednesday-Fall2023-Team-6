@@ -45,34 +45,6 @@ class BaseChatViewTest(TestCase):
             zip="12345",
         )
 
-        # Create an hospitalAdmin user
-        self.hospital = Hospital.objects.create(
-            name="Test Hospital",
-            facility_type="General",
-            borough="MHT",
-            phone="1112223333",
-            location="789 Street",
-            postal_code=67890,
-            latitude=40.7128,
-            longitude=-74.0060,
-        )
-
-        self.hospital_admin_user = User.objects.create_user(
-            username="testadmin@example.com",
-            password="testpassword",
-            email="testadmin@example.com",
-        )
-
-        self.hospital_admin = HospitalAdmin.objects.create(
-            email="testadmin@example.com",
-            name="Test Admin",
-            phone="1234567890",
-            address="123 Street",
-            borough="MHT",
-            zip="54321",
-            associated_hospital=self.hospital,
-        )
-
         # Create an appointment
         self.appointment = DoctorAppointment.objects.create(
             doctor=self.doctor,
@@ -163,13 +135,6 @@ class TestLogoutUserAccess(BaseChatViewTest):
         )
 
 
-class TestDoctorUserAccess(BaseChatViewTest):
-    def test_doctor_user_access(self):
-        self.client.login(username="testdoctor@example.com", password="testpassword")
-        response = self.client.get(reverse("chat:chat", args=(self.appointment.id,)))
-        self.assertEqual(response.status_code, 302)
-
-
 class TestHospitalAdminAccess(TestCase):
     def setUp(self):
         self.client = Client()
@@ -193,6 +158,7 @@ class TestHospitalAdminAccess(TestCase):
             password="testpassword",
             email="testdoctor@example.com",
         )
+
         self.doctor = Doctor.objects.create(
             email="testdoctor@example.com",
             name="Test Doctor",
@@ -247,3 +213,8 @@ class TestHospitalAdminAccess(TestCase):
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), "Unauthorized User")
+
+    def test_doctor_user_access(self):
+        self.client.login(username="testdoctor@example.com", password="testpassword")
+        response = self.client.get(reverse("chat:chat", args=(self.appointment.id,)))
+        self.assertEqual(response.status_code, 200)
