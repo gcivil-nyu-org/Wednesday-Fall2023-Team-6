@@ -110,7 +110,7 @@ ASGI_APPLICATION = "MediLink.asgi.application"
 # }
 DATABASES = {
     "default": {
-        "ENGINE": "medilinkdev",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": "medilink_database",  # The database you just created
         "USER": "medilink",  # Your new role
         "PASSWORD": "abc123xyz",  # Your role's password
