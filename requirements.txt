@@ -16,3 +16,4 @@ daphne
 supervisor
 gunicorn
 psycopg
+psycopg2
