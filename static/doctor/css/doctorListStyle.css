@@ -289,8 +289,8 @@ legend {
 }
 
 .card-avatar {
-  min-width: 80%;
-  height: auto;
+  height: 200px;
+  width: 200px;
 }
 
 .card-border {
@@ -316,7 +316,7 @@ legend {
 .card h3 {
   font-size: 15px;
   display: -webkit-box;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -337,8 +337,6 @@ legend {
 }
 
 .contact {
-  position: absolute;
-  bottom: 0;
   width: 80%;
 }
 

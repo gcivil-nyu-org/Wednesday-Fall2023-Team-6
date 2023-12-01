@@ -89,6 +89,12 @@
   .w-full {
     width: 100%;
   }
+
+  .error-message {
+    color: red;
+    font-size: 12px;
+  }  
+
   @media (min-width: 540px) {
     .sm\:w-half {
       width: 50%;

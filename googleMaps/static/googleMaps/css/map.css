@@ -1,0 +1,77 @@
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #ebf1f3;
+}
+
+#inputContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  flex: 1;
+  max-width: 300px; 
+}
+
+#inputForm {
+  width: 80%;
+}
+
+#map {
+  flex: 3; /* Adjust the proportion of the map */
+  height: 100%;
+}
+
+/* Additional styling for the form elements */
+input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border-width: 1px;
+    margin-bottom: 30px;
+    background-color: rgb(255, 255, 255, 0.8);
+    box-shadow: 2px 2px 5px rgba(17, 16, 16, 0.7);
+    font-size: 20px;
+    font-weight: bold;
+    border: 1px solid rgb(255, 255, 255, 0.8); 
+}
+
+input:focus {
+    outline: none;      
+    border: 1px solid rgb(114, 195, 241); 
+}
+
+#inputContainer button {
+    width: 100%;
+    padding: 5px;
+    background-color: #f1f3f3;
+    font-size: 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    border: 0px;
+    box-shadow: 2px 2px 5px rgba(17, 16, 16, 0.7);
+}
+
+
+button:hover {
+    width: 100%;
+    padding: 5px;
+    background-color: #dbdfdf;
+    cursor: pointer;
+}
+
+#goBackContainer {
+  position: absolute;
+  z-index: 10; /* Ensure it's above other elements */
+  background-color: transparent; 
+  border:0;
+}
+
+#goBackContainer button {
+  background-color: transparent; 
+  border:0;
+  cursor: pointer;
+}

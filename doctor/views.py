@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
-from typing import Any
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views import generic
-from user.models import Choices, Patient
+from user.models import Choices, Doctor_Reviews, Patient
 from django.utils import timezone
 import json
 from .models import Doctor, DoctorAppointment
@@ -11,21 +10,30 @@ from django.core.paginator import Paginator
 from .forms import DoctorFilterForm
 from django.core.exceptions import ValidationError
 from django.db.models import Q
+from django.db.models import Avg
+from django.contrib import messages
 
 
 class DoctorDetailView(generic.DetailView):
     model = Doctor
     template_name = "doctor/doctor_details.html"
     borough_converter = {}
+
     for borough in Choices.boroughs:
         borough_converter[borough[0]] = borough[1]
 
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # Get doctor reviews related to the current doctor
+        doctor_reviews = Doctor_Reviews.objects.filter(doctor=context["object"])
+        if doctor_reviews.aggregate(Avg("rating"))["rating__avg"]:
+            average_rating = doctor_reviews.aggregate(Avg("rating"))["rating__avg"]
+        else:
+            average_rating = 0
+        # Add doctor reviews to the context
+        context["doctor_reviews"] = doctor_reviews
+        context["average_rating"] = average_rating
         try:
             context["object"].borough = self.borough_converter[
                 context["object"].borough
@@ -86,6 +94,27 @@ class DoctorListView(generic.ListView):
         page_number = self.request.GET.get("page")
         doctor_list = paginator.get_page(page_number)
         context["doctor_list"] = doctor_list
+
+        doctor_reviews = []
+        doctor_ratings = []
+        for doctor in doctor_list:
+            reviews = Doctor_Reviews.objects.filter(doctor=doctor).order_by("-posted")
+
+            if reviews.aggregate(Avg("rating"))["rating__avg"]:
+                average_rating = round(
+                    float(reviews.aggregate(Avg("rating"))["rating__avg"])
+                )
+            else:
+                average_rating = 0
+
+            doctor_ratings.append(average_rating)
+            if len(reviews):
+                doctor_reviews.append(reviews[0].description)
+            else:
+                doctor_reviews.append("")
+
+        context["doctor_reviews"] = doctor_reviews
+        context["doctor_ratings"] = doctor_ratings
 
         # Get filter parameters from the URL
         primary_speciality = self.request.GET.get("primary_speciality", "all")
@@ -181,3 +210,34 @@ def book_consultation(request, doctor_id):
             )
 
     return HttpResponseBadRequest("Invalid Request Method")
+
+
+def add_review(request, doctor_id):
+    if request.method == "POST":
+        # Checks to ensure only patient can add reviews
+        if request.user.is_authenticated:
+            user = request.user
+            if not Patient.objects.filter(email=user.username).exists():
+                messages.error(
+                    request,
+                    "Error: You need to have a patient account to post reviews!",
+                )
+            else:
+                # Fetch items here from request like:
+                patient = Patient.objects.filter(email=user.username).first()
+                title = request.POST.get("Title")
+                rating = request.POST.get("rating")
+                description = request.POST.get("Description")
+                doctor = get_object_or_404(Doctor, pk=doctor_id)
+
+                review = Doctor_Reviews()
+                review.doctor = doctor
+                review.review_from = patient.name
+                review.rating = rating
+                review.description = description
+                review.title = title
+                review.posted = datetime.now()
+                review.save()
+        else:
+            messages.error(request, "Error: You need to be logged-in to post reviews!")
+    return redirect("doctor:detail_view", pk=doctor_id)

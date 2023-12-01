@@ -8,4 +8,11 @@ black
 coveralls
 pyyaml
 Pillow
+pytz
+requests
+channels~=4.0.0
+channels-redis
+daphne
+supervisor
+gunicorn
 psycopg

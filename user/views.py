@@ -1,7 +1,9 @@
+import io
 import re
 from datetime import timedelta
+import uuid
 from django.shortcuts import redirect, render
-from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
 from user.models import Choices, Patient
@@ -9,6 +11,8 @@ from doctor.models import Doctor, DoctorAppointment
 from hospital.models import HospitalAdmin, Hospital, HospitalAppointment
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from PIL import Image
 
 # import for email sending
 from django.template.loader import render_to_string
@@ -18,6 +22,8 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import EmailMessage
 from django.contrib import messages
 from django.contrib.auth import logout
+from .models import Doctor_Reviews, Hospital_Reviews
+
 
 # import for avatar changing
 import os
@@ -25,7 +31,6 @@ from django.conf import settings
 
 # import for checking appointment status
 from django.utils import timezone
-
 
 PASSWORD_RESET_SUBJECT = "MediLink Account Password Reset Request"
 DOCTOR_REJECT_SUBJECT = "MediLink Hospital Association Request Rejected"
@@ -126,7 +131,43 @@ def passwordResetConfirmView(request, uidb64, token):
 
 
 def home(request):
-    return render(request, "user/home.html")
+    user_borough = None
+
+    if request.user.is_authenticated:
+        if Patient.objects.filter(email=request.user.username).exists():
+            user_borough = Patient.objects.get(email=request.user.username).borough
+        elif Doctor.objects.filter(email=request.user.username).exists():
+            user_borough = Doctor.objects.get(email=request.user.username).borough
+        elif HospitalAdmin.objects.filter(email=request.user.username).exists():
+            user_borough = HospitalAdmin.objects.get(
+                email=request.user.username
+            ).borough
+
+    if user_borough:
+        # Filter doctor reviews for the user's borough
+        doctor_reviews = Doctor_Reviews.objects.filter(doctor__borough=user_borough)
+
+        # Filter hospital reviews for the user's borough
+        hospital_reviews = Hospital_Reviews.objects.filter(
+            hospital__borough=user_borough
+        )
+
+        user_borough = dict(Choices.boroughs)[user_borough]
+
+    else:
+        # If user is not logged in, fetch all reviews without filtering by borough
+        doctor_reviews = Doctor_Reviews.objects.all()
+        hospital_reviews = Hospital_Reviews.objects.all()
+
+    return render(
+        request,
+        "user/home.html",
+        {
+            "user_borough": user_borough,
+            "doctor_reviews": doctor_reviews[:15],
+            "hospital_reviews": hospital_reviews[:15],
+        },
+    )
 
 
 def accountView(request):  # noqa: C901
@@ -204,28 +245,48 @@ def accountView(request):  # noqa: C901
             else:
                 # -------------- Upload Avatar --------------
                 if len(request.FILES) > 0:
+                    IMG_SIZE = 500
                     uploaded_file = request.FILES["avatar"]
-                    MAX_FILE_SIZE_KB = 50
-                    # Check if the uploaded file size exceeds the maximum allowed size
-                    if (
-                        uploaded_file.size > MAX_FILE_SIZE_KB * 1024
-                    ):  # Convert KB to bytes
-                        return HttpResponseBadRequest(
-                            "File size is too large. Maximum allowed size is {} KB.".format(
-                                MAX_FILE_SIZE_KB
-                            )
-                        )
+                    img = Image.open(uploaded_file)
+                    w, h = img.size
 
-                    login_user.avatar = uploaded_file
-                    login_user.save()
-                    file_path = os.path.join(
-                        settings.MEDIA_ROOT, "avatars", uploaded_file.name
+                    if w > h:
+                        resize_width = IMG_SIZE
+                        resize_height = int((h / w) * IMG_SIZE)
+                    else:
+                        resize_height = IMG_SIZE
+                        resize_width = int((w / h) * IMG_SIZE)
+
+                    img = img.resize((resize_width, resize_height))
+
+                    profile_pic = Image.new("RGB", (IMG_SIZE, IMG_SIZE), "white")
+                    x_offset = (IMG_SIZE - resize_width) // 2
+                    y_offset = (IMG_SIZE - resize_height) // 2
+                    profile_pic.paste(img, (x_offset, y_offset))
+
+                    output_image_stream = io.BytesIO()
+                    profile_pic.save(output_image_stream, format="JPEG")
+
+                    # Create an InMemoryUploadedFile from the BytesIO object
+                    image_name = f"{uuid.uuid4().hex}.jpg"
+                    file_path = os.path.join(settings.MEDIA_ROOT, "avatars", image_name)
+                    avatar_image = InMemoryUploadedFile(
+                        output_image_stream,
+                        None,
+                        file_path,
+                        "image/jpeg",
+                        output_image_stream.tell(),
+                        None,
                     )
 
-                    # Save the uploaded file to the specified path
-                    with open(file_path, "wb+") as destination:
-                        for chunk in uploaded_file.chunks():
-                            destination.write(chunk)
+                    if login_user.avatar and "default" not in login_user.avatar.url:
+                        try:
+                            os.remove(login_user.avatar.path)
+                        except Exception as e:
+                            print("Could not delete profile picture", e)
+
+                    login_user.avatar.save(image_name, avatar_image)
+                    profile_pic.save(file_path)
 
                     return redirect("user:account")
 
@@ -328,17 +389,18 @@ def accountView(request):  # noqa: C901
 
 def OutdatedAppointments(doctor_appointments, hospital_appointments):
     now = timezone.now()
+    end_time = timedelta(minutes=30)
     # check consultations
     if doctor_appointments:
         for appointment in doctor_appointments:
-            if appointment.status == "REQ" and appointment.start_time <= now:
+            if appointment.status == "REQ" and appointment.start_time + end_time < now:
                 appointment.status = "CCL"
                 appointment.cancel_msg = "Consultation outdated, please book a new one."
                 appointment.save()
     # check appointments
     if hospital_appointments:
         for appointment in hospital_appointments:
-            if appointment.status == "REQ" and appointment.start_time <= now:
+            if appointment.status == "REQ" and appointment.start_time + end_time < now:
                 appointment.status = "CCL"
                 appointment.cancel_msg = "Appointment outdated, please book a new one."
                 appointment.save()

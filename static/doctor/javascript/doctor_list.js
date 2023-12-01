@@ -63,4 +63,7 @@ $('#contact_modal').on('show.bs.modal', function (event) {
   document.getElementById("modal_phone").setAttribute("href", `tel:${phone}`);
   document.getElementById("modal_phone").textContent = phone;
 });
-  
+
+function loadDefaultImage(default_img) {
+  document.getElementById("profile_pic").src = default_img;
+}

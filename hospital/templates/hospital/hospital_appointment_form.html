@@ -1,10 +1,12 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'hospital/css/hospitalApplicationFormStyle.css' %}">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-<div class="modal fade" id="book_appointment_modal" tabindex="-1" role="dialog" aria-labelledby="book_appointment_modal" aria-hidden="true">
+<div class="modal fade" id="book_appointment_modal" tabindex="-1" role="dialog" aria-labelledby="book_appointment_modal"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
+        <div class="modal-content">
             <div class="formbold-main-wrapper">
 
                 <div class="formbold-form-wrapper">
@@ -14,63 +16,64 @@
                         {% csrf_token %}
                         <div class="formbold-mb-5">
                             <label for="name" class="formbold-form-label"> Full Name* </label>
-                            <input type="text" name="name" id="name" placeholder="Full Name" class="formbold-form-input" required/>
+                            <input type="text" name="name" id="name" placeholder="Full Name" class="formbold-form-input"
+                                required />
                         </div>
                         <div class="formbold-mb-5">
                             <label for="phone" class="formbold-form-label"> Phone Number* </label>
-                            <input type="phone" name="phone" id="phone" placeholder="Enter your phone number"
-                                class="formbold-form-input" required/>
+                            <input type="text" name="phone" id="phone" placeholder="Enter your phone number"
+                                oninput="formatPhoneNumber(this)" class="formbold-form-input" required />
+                            <span id="phoneError" class="error-message"></span>
                         </div>
                         <div class="formbold-mb-5">
                             <label for="email" class="formbold-form-label"> Email Address* </label>
                             <input type="email" name="email" id="email" placeholder="Enter your email"
-                                class="formbold-form-input" required/>
+                                class="formbold-form-input" required />
                         </div>
                         <div class="formbold-mb-5">
                             <label for="reason" class="formbold-form-label"> Reason for Appointment </label>
-                            <input type="text" name="reason" id="reason" placeholder="Enter your reason for appointment "
-                                class="formbold-form-input">
+                            <input type="text" name="reason" id="reason"
+                                placeholder="Enter your reason for appointment " class="formbold-form-input">
                             </select>
                         </div>
                         <div class="formbold-mb-5">
                             <label for="specialist" class="formbold-form-label"> Preferred Specialist </label>
-                            <select type="specialist" name="specialist" id="specialist" placeholder="Select your preferred specialist"
-                                class="formbold-form-input">
+                            <select type="specialist" name="specialist" id="specialist"
+                                placeholder="Select your preferred specialist" class="formbold-form-input">
                                 <option value="0">None</option>
                                 {% for doctor in doctors%}
-                                    <option value={{doctor.id}}>Dr. {{doctor.name}}</option>
+                                <option value={{doctor.id}}>Dr. {{doctor.name}}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="formbold-mb-5">
                             <label for="accessibility" class="formbold-form-label"> Accessibility Request </label>
                             <textarea type="accessibility" name="accessibility" id="accessibility"
-                                placeholder="Please write down any accessibility request if needed" class="formbold-form-input" required> </textarea>
+                                placeholder="Please write down any accessibility request if needed" class="formbold-form-input" required></textarea>
                         </div>
                         <div class="flex flex-wrap formbold--mx-3">
                             <div class="w-full sm:w-half formbold-px-3">
                                 <div class="formbold-mb-5 w-full">
                                     <label for="date" class="formbold-form-label"> Date* </label>
-                                    <input type="date" name="date" id="date" class="formbold-form-input" required/>
+                                    <input type="date" name="date" id="date" class="formbold-form-input" required />
                                 </div>
                             </div>
                             <div class="w-full sm:w-half formbold-px-3">
                                 <div class="formbold-mb-5">
                                     <label for="time" class="formbold-form-label"> Time* </label>
-                                    <input type="time" name="time" id="time" class="formbold-form-input" required/>
+                                    <input type="time" name="time" id="time" class="formbold-form-input" required />
                                 </div>
                             </div>
                         </div>
-            
+
                         <div>
-                            <button id="btn_confirm_details" data-url="{% url 'hospital:book_appointment' hospital.id %}" class="formbold-btn">Confirm Details</button>
+                            <button id="btn_confirm_details"
+                                data-url="{% url 'hospital:book_appointment' hospital.id %}"
+                                class="formbold-btn">Confirm Details</button>
                         </div>
                     </form>
                 </div>
             </div>
-          </div>
+        </div>
     </div>
 </div>
-
-<script src="{% static 'hospital/javascript/hospital_details.js' %}">
-</script>
