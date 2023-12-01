@@ -15,4 +15,4 @@ channels-redis
 daphne
 supervisor
 gunicorn
-psycopg2
+psycopg2-binary
