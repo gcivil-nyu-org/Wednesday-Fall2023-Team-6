@@ -80,7 +80,7 @@ class HospitalListView(generic.ListView):
                 """
                 to make the name contains the input name
                 """
-                hospitals = hospitals.filter(name__contains=name)
+                hospitals = hospitals.filter(name__icontains=name)
             if facility_type and facility_type != "All":
                 hospitals = hospitals.filter(facility_type=facility_type)
             # if location and location != "All":
