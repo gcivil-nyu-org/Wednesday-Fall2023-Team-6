@@ -1,9 +1,7 @@
 import os
-import shutil
 import tempfile
 from unittest.mock import patch, MagicMock
 import datetime
-import uuid
 
 from django.contrib.messages import get_messages
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -16,13 +14,10 @@ from doctor.models import Doctor, DoctorAppointment
 from hospital.models import Hospital, HospitalAdmin
 from user.models import Patient
 
-from MediLink.settings import MEDIA_ROOT
-
 
 class BaseChatViewTest(TestCase):
     def setUp(self):
         self.client = Client()
-        self.created_attachments = []
 
         # Create a patient user
         self.user = User.objects.create_user(
@@ -62,17 +57,6 @@ class BaseChatViewTest(TestCase):
 
         # Temporary media root for file uploads
         self.temp_media_root = tempfile.mkdtemp()
-
-    def tearDown(self):
-        shutil.rmtree(self.temp_media_root, ignore_errors=True)
-
-        attachments_folder = os.path.join(MEDIA_ROOT, "attachments")
-
-        if os.path.exists(attachments_folder):
-            for filename in os.listdir(attachments_folder):
-                file_path = os.path.join(attachments_folder, filename)
-                if os.path.isfile(file_path):
-                    os.unlink(file_path)
 
 
 class TestAppointmentStatus(BaseChatViewTest):
@@ -126,11 +110,6 @@ class TestPostAttachment(BaseChatViewTest):
         url = reverse("chat:chat", args=[self.appointment.id])
 
         file_name = "test_file.txt"
-        ext = file_name.split(".")[-1]
-        attachment_name = f"{uuid.uuid4().hex}.{ext}"
-        file_path = os.path.join(MEDIA_ROOT, "attachments", attachment_name)
-        self.created_attachments.append(file_path)
-
         mock_file = SimpleUploadedFile(file_name, b"file_content", "text/plain")
 
         data = {"content": "test message", "attachment": mock_file}
@@ -140,7 +119,7 @@ class TestPostAttachment(BaseChatViewTest):
         message = Message.objects.get(content="test message")
         self.assertTrue(message.attachment.name.endswith(".txt"))
         self.assertTrue(os.path.exists(message.attachment.path))
-        message.attachment.delete()  # Clean up
+        message.attachment.delete(save=False)  # Clean up
 
 
 class TestLogoutUserAccess(BaseChatViewTest):

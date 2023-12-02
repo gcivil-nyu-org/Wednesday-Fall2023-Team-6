@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-z2if98e5x^l*zx4!r(72d^(_+ax0pwsflq_s)0pqiey(t_d3lv"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "storages",
     "hospital",
     "user",
     "doctor",
@@ -98,18 +99,25 @@ TEMPLATES = [
 WSGI_APPLICATION = "MediLink.wsgi.application"
 ASGI_APPLICATION = "MediLink.asgi.application"
 
-
-# Database
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_NAME", "medilink_database"),
-        "USER": os.environ.get("DB_USER", "medilink"),
-        "PASSWORD": os.environ.get("DB_PASSWORD", "abc123xyz"),
-        "HOST": os.environ.get("DB_HOST", "127.0.0.1"),
-        "PORT": os.environ.get("DB_PORT", "5432"),
+if os.environ.get("DB_NAME", "False") != "False":
+    # Database
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get("DB_NAME", "medilink_database"),
+            "USER": os.environ.get("DB_USER", "medilink"),
+            "PASSWORD": os.environ.get("DB_PASSWORD", "abc123xyz"),
+            "HOST": os.environ.get("DB_HOST", "127.0.0.1"),
+            "PORT": os.environ.get("DB_PORT", "5432"),
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 if "test" in sys.argv:
     DATABASES = {
@@ -174,3 +182,12 @@ EMAIL_USE_SSL = False
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 LOGIN_URL = reverse_lazy("user:login")
+
+if os.environ.get("use_s3", "False") == "True":
+    AWS_ACCESS_KEY_ID = "AKIARRZ5U5VCROJD4UWP"
+    AWS_SECRET_ACCESS_KEY = "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"
+    AWS_STORAGE_BUCKET_NAME = "elasticbeanstalk-us-west-2-106966609221"
+    AWS_S3_REGION_NAME = "us-west-2"
+    AWS_QUERYSTRING_AUTH = False
+    AWS_DEFAULT_ACL = "public-read"
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
