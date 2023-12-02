@@ -184,10 +184,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 LOGIN_URL = reverse_lazy("user:login")
 
 if os.environ.get("use_s3", "False") == "True":
-    AWS_ACCESS_KEY_ID = "AKIARRZ5U5VCROJD4UWP"
-    AWS_SECRET_ACCESS_KEY = "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"
-    AWS_STORAGE_BUCKET_NAME = "elasticbeanstalk-us-west-2-106966609221"
-    AWS_S3_REGION_NAME = "us-west-2"
+    AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME")
     AWS_QUERYSTRING_AUTH = False
     AWS_DEFAULT_ACL = "public-read"
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
