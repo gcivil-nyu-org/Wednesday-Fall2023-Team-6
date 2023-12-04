@@ -24,7 +24,7 @@ class HospitalFilterForm(forms.Form):
         widget=forms.Select(attrs={"class": "custom-select"}),
         required=False,
     )
-    
+
     ratings = forms.ChoiceField(
         choices=[
             ("0", "More than 0 (0-5 ratings)"),
@@ -36,8 +36,6 @@ class HospitalFilterForm(forms.Form):
         widget=forms.Select(attrs={"class": "custom-select"}),
         required=False,
     )
-
-
 
     borough = forms.ChoiceField(
         widget=forms.Select(attrs={"class": "custom-select"}),

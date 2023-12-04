@@ -15,7 +15,7 @@ class DoctorFilterForm(forms.Form):
         ),
         required=False,
     )
-    
+
     ratings = forms.ChoiceField(
         choices=[
             ("0", "More than 0 (0-5 ratings)"),
@@ -27,7 +27,6 @@ class DoctorFilterForm(forms.Form):
         widget=forms.Select(attrs={"class": "custom-select"}),
         required=False,
     )
-    
 
     primary_speciality = forms.ChoiceField(
         # queryset=Doctor.objects.values_list("primary_speciality", flat=True).distinct(),

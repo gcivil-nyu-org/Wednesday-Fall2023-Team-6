@@ -61,7 +61,7 @@ class DoctorListView(generic.ListView):
         if filter_form.is_valid():
             name = filter_form.cleaned_data.get("name")
             primary_speciality = filter_form.cleaned_data.get("primary_speciality")
-            #address = filter_form.cleaned_data.get("address")
+            # address = filter_form.cleaned_data.get("address")
             borough = filter_form.cleaned_data.get("borough")
             zip = filter_form.cleaned_data.get("zip")
 
@@ -78,15 +78,17 @@ class DoctorListView(generic.ListView):
                 doctors = doctors.filter(borough=borough)
             if zip and zip != "All":
                 doctors = doctors.filter(zip=zip)
-            
+
             ratings = filter_form.cleaned_data.get("ratings")
             try:
                 ratings = int(ratings)
                 if ratings > 0:
-                    doctors = doctors.annotate(avg_rating=Avg('doctor_reviews__rating')).filter(avg_rating__gte=ratings)
+                    doctors = doctors.annotate(
+                        avg_rating=Avg("doctor_reviews__rating")
+                    ).filter(avg_rating__gte=ratings)
             except (TypeError, ValueError):
                 # Handle the case where ratings is not a valid number
-                pass 
+                pass
         return doctors
 
     def get_context_data(self, **kwargs):
@@ -109,7 +111,9 @@ class DoctorListView(generic.ListView):
             reviews = Doctor_Reviews.objects.filter(doctor=doctor).order_by("-posted")
 
             if reviews.aggregate(Avg("rating"))["rating__avg"]:
-                average_rating = round(float(reviews.aggregate(Avg("rating"))["rating__avg"]))
+                average_rating = round(
+                    float(reviews.aggregate(Avg("rating"))["rating__avg"])
+                )
             else:
                 average_rating = 0
 

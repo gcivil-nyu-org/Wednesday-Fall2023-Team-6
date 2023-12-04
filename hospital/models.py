@@ -32,7 +32,7 @@ class Hospital(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     def filter_ratings(self, rating_filter):
         if rating_filter == "0":
             return self.filter_reviews(min_rating=0)
@@ -48,9 +48,9 @@ class Hospital(models.Model):
             return self.all()
 
     def filter_reviews(self, min_rating):
-        return self.annotate(
-            avg_rating=models.Avg("hospital_reviews__rating")
-        ).filter(avg_rating__gte=min_rating)
+        return self.annotate(avg_rating=models.Avg("hospital_reviews__rating")).filter(
+            avg_rating__gte=min_rating
+        )
 
 
 class HospitalAdmin(User):

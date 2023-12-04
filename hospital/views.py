@@ -72,7 +72,7 @@ class HospitalListView(generic.ListView):
         if filter_form.is_valid():
             name = filter_form.cleaned_data.get("name")
             facility_type = filter_form.cleaned_data.get("facility_type")
-            #location = filter_form.cleaned_data.get("location")
+            # location = filter_form.cleaned_data.get("location")
             borough = filter_form.cleaned_data.get("borough")
             postal_code = filter_form.cleaned_data.get("postal_code")
 
@@ -89,12 +89,14 @@ class HospitalListView(generic.ListView):
                 hospitals = hospitals.filter(borough=borough)
             if postal_code and postal_code != "All":
                 hospitals = hospitals.filter(postal_code=postal_code)
-            
+
             ratings = filter_form.cleaned_data.get("ratings")
             try:
                 ratings = int(ratings)
                 if ratings > 0:
-                    hospitals = hospitals.annotate(avg_rating=Avg('hospital_reviews__rating')).filter(avg_rating__gte=ratings)
+                    hospitals = hospitals.annotate(
+                        avg_rating=Avg("hospital_reviews__rating")
+                    ).filter(avg_rating__gte=ratings)
             except (TypeError, ValueError):
                 # Handle the case where ratings is not a valid number
                 pass
