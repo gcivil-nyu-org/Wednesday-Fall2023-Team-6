@@ -72,7 +72,7 @@ class HospitalListView(generic.ListView):
         if filter_form.is_valid():
             name = filter_form.cleaned_data.get("name")
             facility_type = filter_form.cleaned_data.get("facility_type")
-            location = filter_form.cleaned_data.get("location")
+            #location = filter_form.cleaned_data.get("location")
             borough = filter_form.cleaned_data.get("borough")
             postal_code = filter_form.cleaned_data.get("postal_code")
 
@@ -83,13 +83,21 @@ class HospitalListView(generic.ListView):
                 hospitals = hospitals.filter(name__contains=name)
             if facility_type and facility_type != "All":
                 hospitals = hospitals.filter(facility_type=facility_type)
-            if location and location != "All":
-                hospitals = hospitals.filter(location=location)
+            # if location and location != "All":
+            #     hospitals = hospitals.filter(location=location)
             if borough and borough != "All":
                 hospitals = hospitals.filter(borough=borough)
             if postal_code and postal_code != "All":
                 hospitals = hospitals.filter(postal_code=postal_code)
-
+            
+            ratings = filter_form.cleaned_data.get("ratings")
+            try:
+                ratings = int(ratings)
+                if ratings > 0:
+                    hospitals = hospitals.annotate(avg_rating=Avg('hospital_reviews__rating')).filter(avg_rating__gte=ratings)
+            except (TypeError, ValueError):
+                # Handle the case where ratings is not a valid number
+                pass
         return hospitals
 
     def get_context_data(self, **kwargs):
@@ -136,7 +144,7 @@ class HospitalListView(generic.ListView):
         borough = self.request.GET.get("borough", "all")
         postal_code = self.request.GET.get("postal_code", "all")
         name = self.request.GET.get("name", "")
-
+        rating_filter = self.request.GET.get("ratings", None)
         context["filter_form"] = HospitalFilterForm(
             initial={
                 "facility_type": facility_type,
@@ -144,6 +152,7 @@ class HospitalListView(generic.ListView):
                 "borough": borough,
                 "postal_code": postal_code,
                 "name": name,
+                "ratings": rating_filter or "",
             }
         )
 
