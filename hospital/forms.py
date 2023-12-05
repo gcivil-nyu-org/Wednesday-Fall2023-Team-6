@@ -27,11 +27,12 @@ class HospitalFilterForm(forms.Form):
 
     ratings = forms.ChoiceField(
         choices=[
-            ("0", "More than 0 (0-5 ratings)"),
-            ("1", "More than 1 (2-5 ratings)"),
-            ("2", "More than 2 (3-5 ratings)"),
-            ("3", "More than 3 (4-5 ratings)"),
-            ("4", "More than 4 (5 ratings)"),
+            ("", "Select Rating"),
+            ("0", "More than 0"),
+            ("2", "More than 1"),
+            ("3", "More than 2"),
+            ("4", "More than 3"),
+            ("5", "More than 4"),
         ],
         widget=forms.Select(attrs={"class": "custom-select"}),
         required=False,
