@@ -15,3 +15,6 @@ channels-redis
 daphne
 supervisor
 gunicorn
+psycopg2-binary
+boto3
+django-storages

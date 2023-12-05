@@ -69,7 +69,7 @@ class DoctorListView(generic.ListView):
                 """
                 to make the name contains the input name
                 """
-                doctors = doctors.filter(name__contains=name)
+                doctors = doctors.filter(name__icontains=name)
             if primary_speciality and primary_speciality != "All":
                 doctors = doctors.filter(primary_speciality=primary_speciality)
             if address and address != "All":

@@ -23,6 +23,7 @@ from django.core.mail import EmailMessage
 from django.contrib import messages
 from django.contrib.auth import logout
 from .models import Doctor_Reviews, Hospital_Reviews
+from django.core.files.base import ContentFile
 
 
 # import for avatar changing
@@ -268,7 +269,10 @@ def accountView(request):  # noqa: C901
                     profile_pic.save(output_image_stream, format="JPEG")
 
                     # Create an InMemoryUploadedFile from the BytesIO object
-                    image_name = f"{uuid.uuid4().hex}.jpg"
+                    use_s3 = os.environ.get("use_s3")
+                    image_name = (
+                        f"{uuid.uuid4().hex}.jpg" if use_s3 else uploaded_file.name
+                    )
                     file_path = os.path.join(settings.MEDIA_ROOT, "avatars", image_name)
                     avatar_image = InMemoryUploadedFile(
                         output_image_stream,
@@ -281,12 +285,22 @@ def accountView(request):  # noqa: C901
 
                     if login_user.avatar and "default" not in login_user.avatar.url:
                         try:
-                            os.remove(login_user.avatar.path)
+                            login_user.avatar.delete(save=False)
                         except Exception as e:
                             print("Could not delete profile picture", e)
 
-                    login_user.avatar.save(image_name, avatar_image)
-                    profile_pic.save(file_path)
+                    if use_s3:
+                        login_user.avatar.save(
+                            image_name,
+                            ContentFile(output_image_stream.getvalue()),
+                            save=True,
+                        )
+                    else:
+                        os.makedirs(
+                            os.path.join(settings.MEDIA_ROOT, "avatars"), exist_ok=True
+                        )
+                        login_user.avatar.save(image_name, avatar_image)
+                        profile_pic.save(file_path)
 
                     return redirect("user:account")
 
