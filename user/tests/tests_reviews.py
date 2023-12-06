@@ -32,36 +32,36 @@ class ReviewsSectionTest(TestCase):
         )
 
         # Create sample reviews for the doctor
-        Doctor_Reviews.objects.create(
+        positive_review = Doctor_Reviews.objects.create(
             title="Positive Review",
             review_from="Patient 1",
             rating=5,
             description="This doctor is amazing!",
-            doctor=self.doctor,
         )
-        Doctor_Reviews.objects.create(
+        negative_review = Doctor_Reviews.objects.create(
             title="Negative Review",
             review_from="Patient 2",
             rating=2,
             description="Not satisfied with the service.",
-            doctor=self.doctor,
         )
+        positive_review.doctor.add(self.doctor)
+        negative_review.doctor.add(self.doctor)
 
         # Create sample reviews for the hospital
-        Hospital_Reviews.objects.create(
+        positive_review_hospital = Hospital_Reviews.objects.create(
             title="Positive Review",
             review_from="Patient 3",
             rating=4,
             description="Great hospital experience!",
-            hospital=self.hospital,
         )
-        Hospital_Reviews.objects.create(
+        neutral_review_hospital = Hospital_Reviews.objects.create(
             title="Neutral Review",
             review_from="Patient 4",
             rating=3,
             description="Average service.",
-            hospital=self.hospital,
         )
+        positive_review_hospital.hospital.add(self.hospital)
+        neutral_review_hospital.hospital.add(self.hospital)
 
     def test_doctor_reviews_rendering(self):
         response = self.client.get(
