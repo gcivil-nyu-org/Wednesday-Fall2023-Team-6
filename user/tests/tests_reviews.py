@@ -37,15 +37,15 @@ class ReviewsSectionTest(TestCase):
             review_from="Patient 1",
             rating=5,
             description="This doctor is amazing!",
-            doctor=self.doctor,
         )
         negative_review_doctor = Doctor_Reviews.objects.create(
             title="Negative Review",
             review_from="Patient 2",
             rating=2,
             description="Not satisfied with the service.",
-            doctor=self.doctor,
         )
+        positive_review_doctor.doctor.add(self.doctor)
+        negative_review_doctor.doctor.add(self.doctor)
 
         # Create sample reviews for the hospital
         positive_review_hospital = Hospital_Reviews.objects.create(
@@ -53,15 +53,15 @@ class ReviewsSectionTest(TestCase):
             review_from="Patient 3",
             rating=4,
             description="Great hospital experience!",
-            hospital=self.hospital,
         )
         neutral_review_hospital = Hospital_Reviews.objects.create(
             title="Neutral Review",
             review_from="Patient 4",
             rating=3,
             description="Average service.",
-            hospital=self.hospital,
         )
+        positive_review_hospital.hospital.add(self.hospital)
+        neutral_review_hospital.hospital.add(self.hospital)
 
     def test_doctor_reviews_rendering(self):
         response = self.client.get(reverse("user:home"))
@@ -80,7 +80,14 @@ class ReviewsSectionTest(TestCase):
         self.assertContains(response, "Average service.")
 
     def tearDown(self):
+        positive_review_doctor = Doctor_Reviews.objects.get(title="Positive Review")
+        negative_review_doctor = Doctor_Reviews.objects.get(title="Negative Review")
+        positive_review_hospital = Hospital_Reviews.objects.get(title="Positive Review")
+        neutral_review_hospital = Hospital_Reviews.objects.get(title="Neutral Review")
+
+        positive_review_doctor.delete()
+        negative_review_doctor.delete()
+        positive_review_hospital.delete()
+        neutral_review_hospital.delete()
         self.doctor.delete()
         self.hospital.delete()
-        Doctor_Reviews.objects.all().delete()
-        Hospital_Reviews.objects.all().delete()
