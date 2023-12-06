@@ -61,7 +61,7 @@ class DoctorListView(generic.ListView):
         if filter_form.is_valid():
             name = filter_form.cleaned_data.get("name")
             primary_speciality = filter_form.cleaned_data.get("primary_speciality")
-            address = filter_form.cleaned_data.get("address")
+            # address = filter_form.cleaned_data.get("address")
             borough = filter_form.cleaned_data.get("borough")
             zip = filter_form.cleaned_data.get("zip")
 
@@ -72,13 +72,23 @@ class DoctorListView(generic.ListView):
                 doctors = doctors.filter(name__icontains=name)
             if primary_speciality and primary_speciality != "All":
                 doctors = doctors.filter(primary_speciality=primary_speciality)
-            if address and address != "All":
-                doctors = doctors.filter(address=address)
+            # if address and address != "All":
+            #     doctors = doctors.filter(address=address)
             if borough and borough != "All":
                 doctors = doctors.filter(borough=borough)
             if zip and zip != "All":
                 doctors = doctors.filter(zip=zip)
 
+            ratings = filter_form.cleaned_data.get("ratings")
+            try:
+                ratings = int(ratings)
+                if ratings > 0:
+                    doctors = doctors.annotate(
+                        avg_rating=Avg("doctor_reviews__rating")
+                    ).filter(avg_rating__gte=ratings)
+            except (TypeError, ValueError):
+                # Handle the case where ratings is not a valid number
+                pass
         return doctors
 
     def get_context_data(self, **kwargs):
@@ -115,7 +125,6 @@ class DoctorListView(generic.ListView):
 
         context["doctor_reviews"] = doctor_reviews
         context["doctor_ratings"] = doctor_ratings
-
         # Get filter parameters from the URL
         primary_speciality = self.request.GET.get("primary_speciality", "all")
         address = self.request.GET.get("address", "all")

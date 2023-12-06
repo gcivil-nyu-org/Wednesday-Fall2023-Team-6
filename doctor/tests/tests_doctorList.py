@@ -134,55 +134,55 @@ class TestDoctorListView(TestCase):
 
         print("Completed: test for filtering doctors by borough")
 
-    def test_filter_doctors_by_address(self):
-        print("\nRunning: test for filtering doctors by address")
+    # def test_filter_doctors_by_address(self):
+    #     print("\nRunning: test for filtering doctors by address")
 
-        # Create doctors with different specialities
-        Doctor.objects.create(
-            name="Doctor A",
-            email="doctorA@example.com",
-            phone="987-654-3210",
-            sex="Female",
-            address="Test Address A",
-            borough="Queens",
-            zip=54321,
-            primary_speciality="Cardiology",
-        )
+    #     # Create doctors with different specialities
+    #     Doctor.objects.create(
+    #         name="Doctor A",
+    #         email="doctorA@example.com",
+    #         phone="987-654-3210",
+    #         sex="Female",
+    #         address="Test Address A",
+    #         borough="Queens",
+    #         zip=54321,
+    #         primary_speciality="Cardiology",
+    #    )
 
-        Doctor.objects.create(
-            name="Doctor B",
-            email="doctorB@example.com",
-            phone="987-654-3210",
-            sex="Female",
-            address="Test Address B",
-            borough="Queens",
-            zip=54321,
-            primary_speciality="Dermatology",
-        )
+    # Doctor.objects.create(
+    #     name="Doctor B",
+    #     email="doctorB@example.com",
+    #     phone="987-654-3210",
+    #     sex="Female",
+    #     address="Test Address B",
+    #     borough="Queens",
+    #     zip=54321,
+    #     primary_speciality="Dermatology",
+    # )
 
-        Doctor.objects.create(
-            name="Doctor C",
-            email="doctorC@example.com",
-            phone="987-654-3210",
-            sex="Female",
-            address="Test Address C",
-            borough="Queens",
-            zip=12345,
-            primary_speciality="Cardiology",
-        )
+    # Doctor.objects.create(
+    #     name="Doctor C",
+    #     email="doctorC@example.com",
+    #     phone="987-654-3210",
+    #     sex="Female",
+    #     address="Test Address C",
+    #     borough="Queens",
+    #     zip=12345,
+    #     primary_speciality="Cardiology",
+    # )
 
-        url = "/doctor/"
-        url += "?page=1&primary_speciality=All&borough=All&address=Test Address C&zip=All&name="
-        response = self.client.get(url)
+    # url = "/doctor/"
+    # url += "?page=1&primary_speciality=All&borough=All&address=Test Address C&zip=All&name="
+    # response = self.client.get(url)
 
-        self.assertEqual(response.status_code, 200)
+    # self.assertEqual(response.status_code, 200)
 
-        # Check if only address doctors are displayed
-        self.assertNotContains(response, "Doctor A")
-        self.assertNotContains(response, "Doctor B")
-        self.assertContains(response, "Doctor C")
+    # # Check if only address doctors are displayed
+    # self.assertNotContains(response, "Doctor A")
+    # self.assertNotContains(response, "Doctor B")
+    # self.assertContains(response, "Doctor C")
 
-        print("Completed: test for filtering doctors by address")
+    # print("Completed: test for filtering doctors by address")
 
     def test_filter_doctors_by_zip(self):
         print("\nRunning: test for filtering doctors by zip")
