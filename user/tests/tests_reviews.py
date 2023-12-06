@@ -64,9 +64,7 @@ class ReviewsSectionTest(TestCase):
         neutral_review_hospital.hospital.add(self.hospital)
 
     def test_doctor_reviews_rendering(self):
-        response = self.client.get(
-            reverse("user:home")
-        )  # Replace 'home' with the actual URL name
+        response = self.client.get(reverse("user:home"))
         self.assertContains(response, "Doctor Reviews")
         self.assertContains(response, "Positive Review")
         self.assertContains(response, "Negative Review")
@@ -74,9 +72,7 @@ class ReviewsSectionTest(TestCase):
         self.assertContains(response, "Not satisfied with the service.")
 
     def test_hospital_reviews_rendering(self):
-        response = self.client.get(
-            reverse("user:home")
-        )  # Replace 'home' with the actual URL name
+        response = self.client.get(reverse("user:home"))
         self.assertContains(response, "Hospital Reviews")
         self.assertContains(response, "Positive Review")
         self.assertContains(response, "Neutral Review")
