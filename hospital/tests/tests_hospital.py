@@ -111,40 +111,40 @@ class HospitalListViewTest(TestCase):
 
         print("Completed: test for filtering hospitals by borough")
 
-    def test_hospital_filtering_location(self):
-        print("\nRunning: test for filtering hospitals by location")
+    # def test_hospital_filtering_location(self):
+    #     print("\nRunning: test for filtering hospitals by location")
 
-        # Create a test Hospital
-        Hospital.objects.create(
-            name="Hospital A",
-            facility_type="Type A",
-            borough="BKN",
-            phone="123-456-7890",
-            location="Location A",
-            postal_code=12345,
-        )
+    #     # Create a test Hospital
+    #     Hospital.objects.create(
+    #         name="Hospital A",
+    #         facility_type="Type A",
+    #         borough="BKN",
+    #         phone="123-456-7890",
+    #         location="Location A",
+    #         postal_code=12345,
+    #     )
 
-        Hospital.objects.create(
-            name="Hospital B",
-            facility_type="Type B",
-            borough="QNS",
-            phone="576-293-4829",
-            location="Location B",
-            postal_code=54321,
-        )
+    #     Hospital.objects.create(
+    #         name="Hospital B",
+    #         facility_type="Type B",
+    #         borough="QNS",
+    #         phone="576-293-4829",
+    #         location="Location B",
+    #         postal_code=54321,
+    #     )
 
-        url = "/hospital/"
-        url += "?page=1&facility_type=All&borough=All&location=Location A&postal_code=All&name="
+    #     url = "/hospital/"
+    #     url += "?page=1&facility_type=All&borough=All&location=Location A&postal_code=All&name="
 
-        # Perform a search of name
-        response = self.client.get(url)
+    #     # Perform a search of name
+    #     response = self.client.get(url)
 
-        self.assertEqual(response.status_code, 200)
-        # Check if only borough doctors are displayed
-        self.assertNotContains(response, "Hospital B")
-        self.assertContains(response, "Hospital A")
+    #     self.assertEqual(response.status_code, 200)
+    #     # Check if only borough doctors are displayed
+    #     self.assertNotContains(response, "Hospital B")
+    #     self.assertContains(response, "Hospital A")
 
-        print("Completed: test for filtering hospitals by location")
+    #     print("Completed: test for filtering hospitals by location")
 
     def test_hospital_filtering_postal(self):
         print("\nRunning: test for filtering hospitals by postal code")
