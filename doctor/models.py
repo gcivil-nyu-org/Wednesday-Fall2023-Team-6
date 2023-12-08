@@ -21,6 +21,7 @@ class Doctor(User):
         on_delete=models.SET_NULL,
         related_name="doctor_doctors",
     )
+
     def filter_ratings(self, rating_filter):
         if rating_filter == "0":
             return self.filter_reviews(min_rating=0)
@@ -39,7 +40,6 @@ class Doctor(User):
         return self.annotate(avg_rating=models.Avg("hospital_reviews__rating")).filter(
             avg_rating__gte=min_rating
         )
-
 
 
 class DoctorAppointment(models.Model):
