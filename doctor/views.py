@@ -131,6 +131,7 @@ class DoctorListView(generic.ListView):
         borough = self.request.GET.get("borough", "all")
         zip = self.request.GET.get("zip", "all")
         name = self.request.GET.get("name", "")
+        ratings = self.request.GET.get("ratings", "")
         context["filter_form"] = DoctorFilterForm(
             initial={
                 "primary_speciality": primary_speciality,
@@ -138,6 +139,7 @@ class DoctorListView(generic.ListView):
                 "borough": borough,
                 "zip": zip,
                 "name": name,
+                "ratings": ratings,
             }
         )
         return context
