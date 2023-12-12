@@ -107,3 +107,13 @@ body {
     width: 50%;
   }
 }
+
+.error-message {
+  color: red;
+}
+
+@media (min-width: 540px) {
+  .sm\:w-half {
+    width: 50%;
+  }
+}
