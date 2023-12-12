@@ -9,6 +9,7 @@ from django.contrib import messages
 
 import os
 from django.conf import settings
+from django.core.files.base import ContentFile
 
 
 @login_required
@@ -45,21 +46,30 @@ def chat(request, appointment_id):
         message.appointment = appointment
         if len(request.FILES["attachment"]) > 0:
             attachment = request.FILES["attachment"]
-            message.attachment = attachment
+            use_s3 = os.environ.get("use_s3")
 
             ext = attachment.name.split(".")[-1]
-            attachment_name = f"{uuid.uuid4().hex}.{ext}"
-            os.makedirs(os.path.join(settings.MEDIA_ROOT, "attachments"), exist_ok=True)
-            file_path = os.path.join(
-                settings.MEDIA_ROOT, "attachments", attachment_name
-            )
-            # Save the uploaded file to the specified path
-            with open(file_path, "wb+") as destination:
-                for chunk in attachment.chunks():
-                    destination.write(chunk)
+            attachment_name = f"{uuid.uuid4().hex}.{ext}" if use_s3 else attachment.name
 
-            message.full_clean()
-            message.save()
+            if use_s3:
+                message.attachment.save(
+                    attachment_name, ContentFile(attachment.read()), save=True
+                )
+            else:
+                os.makedirs(
+                    os.path.join(settings.MEDIA_ROOT, "attachments"), exist_ok=True
+                )
+                file_path = os.path.join(
+                    settings.MEDIA_ROOT, "attachments", attachment_name
+                )
+                # Save the uploaded file to the specified path
+                with open(file_path, "wb+") as destination:
+                    for chunk in attachment.chunks():
+                        destination.write(chunk)
+
+                message.attachment = attachment
+                message.full_clean()
+                message.save()
 
     return render(
         request,
